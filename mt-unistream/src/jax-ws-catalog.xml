@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?wsdl" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.wsdl"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd0" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd0.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd1" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd1.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd2" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd2.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd3" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd3.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd4" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd4.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd5" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd5.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd6" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd6.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd7" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd7.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd8" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd8.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd9" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd9.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd10" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd10.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd11" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd11.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd12" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd12.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd13" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd13.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?xsd=xsd14" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.xsd_xsd14.xsd"/>
+    <system systemId="http://test2.unistream.com:82/wcflib-tc/service.svc?wsdl=wsdl0" uri="wsdl/test2.unistream.com_82/wcflib-tc/service.svc.wsdl_wsdl0.wsdl"/>
+</catalog>
