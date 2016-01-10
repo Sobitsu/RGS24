@@ -44,8 +44,6 @@ import org.datacontract.schemas._2004._07.wcfservicelib.GetTransfersChangesReque
 import org.datacontract.schemas._2004._07.wcfservicelib.GetTransfersChangesResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.GetTransfersListRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.GetTransfersListResponseMessage;
-import org.datacontract.schemas._2004._07.wcfservicelib.IdentifyPersonByCardRequestMessage;
-import org.datacontract.schemas._2004._07.wcfservicelib.IdentifyPersonByCardResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.InsertNoticeRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.InsertNoticeResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.InsertTransfer2RequestMessage;
@@ -62,8 +60,6 @@ import org.datacontract.schemas._2004._07.wcfservicelib.RejectNoticeRequestMessa
 import org.datacontract.schemas._2004._07.wcfservicelib.RejectNoticeResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.ReturnTransferRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.ReturnTransferResponseMessage;
-import org.datacontract.schemas._2004._07.wcfservicelib.SellPrepaidCardRequestMessage;
-import org.datacontract.schemas._2004._07.wcfservicelib.SellPrepaidCardResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.FindRegionRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.FindRegionResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetBankByIDRequestMessage;
@@ -172,20 +168,6 @@ public interface IWebService {
 
     /**
      * 
-     * @param requestMessage
-     * @return
-     *     returns org.datacontract.schemas._2004._07.wcfservicelib.IdentifyPersonByCardResponseMessage
-     */
-    @WebMethod(operationName = "IdentifyPersonByCard", action = "http://test.unistream.com/wcflib/IClientsStore/IdentifyPersonByCard")
-    @WebResult(name = "IdentifyPersonByCardResult", targetNamespace = "http://test.unistream.com/wcflib/")
-    @RequestWrapper(localName = "IdentifyPersonByCard", targetNamespace = "http://test.unistream.com/wcflib/", className = "com.unistream.test.wcflib.IdentifyPersonByCard")
-    @ResponseWrapper(localName = "IdentifyPersonByCardResponse", targetNamespace = "http://test.unistream.com/wcflib/", className = "com.unistream.test.wcflib.IdentifyPersonByCardResponse")
-    public IdentifyPersonByCardResponseMessage identifyPersonByCard(
-        @WebParam(name = "requestMessage", targetNamespace = "http://test.unistream.com/wcflib/")
-        IdentifyPersonByCardRequestMessage requestMessage);
-
-    /**
-     * 
      * @param requestMsg
      * @return
      *     returns org.datacontract.schemas._2004._07.wcfservicelib.GetLastTransferTemplatesResponseMessage
@@ -281,20 +263,6 @@ public interface IWebService {
     public InsertTransferResponseMessage insertTransfer(
         @WebParam(name = "requestMessage", targetNamespace = "http://test.unistream.com/wcflib/")
         InsertTransferRequestMessage requestMessage);
-
-    /**
-     * 
-     * @param requestMessage
-     * @return
-     *     returns org.datacontract.schemas._2004._07.wcfservicelib.SellPrepaidCardResponseMessage
-     */
-    @WebMethod(operationName = "SellPrepaidCard", action = "http://test.unistream.com/wcflib/ITransferProvider/SellPrepaidCard")
-    @WebResult(name = "SellPrepaidCardResult", targetNamespace = "http://test.unistream.com/wcflib/")
-    @RequestWrapper(localName = "SellPrepaidCard", targetNamespace = "http://test.unistream.com/wcflib/", className = "com.unistream.test.wcflib.SellPrepaidCard")
-    @ResponseWrapper(localName = "SellPrepaidCardResponse", targetNamespace = "http://test.unistream.com/wcflib/", className = "com.unistream.test.wcflib.SellPrepaidCardResponse")
-    public SellPrepaidCardResponseMessage sellPrepaidCard(
-        @WebParam(name = "requestMessage", targetNamespace = "http://test.unistream.com/wcflib/")
-        SellPrepaidCardRequestMessage requestMessage);
 
     /**
      * 

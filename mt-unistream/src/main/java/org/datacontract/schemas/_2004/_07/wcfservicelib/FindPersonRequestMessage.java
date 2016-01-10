@@ -46,7 +46,14 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "lastname",
     "middlename",
     "phone",
-    "unistreamCardNumber"
+    "unistreamCardNumber"/*,
+    "FullName",
+    "DocTypeID",
+    "DocIssueDate",
+    "DocExpiryDate",
+    "PhoneCountryID",
+    "PhoneArea",
+    "PhoneNumber"*/
 })
 public class FindPersonRequestMessage
     extends WsRequest
@@ -69,7 +76,24 @@ public class FindPersonRequestMessage
     protected JAXBElement<String> phone;
     @XmlElementRef(name = "UnistreamCardNumber", namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", type = JAXBElement.class, required = false)
     protected JAXBElement<String> unistreamCardNumber;
-
+    
+   /* @XmlElement(name = "DocTypeID")
+    protected Integer docTypeID;
+    @XmlElement(name = "PhoneCountryID")
+    protected Integer phoneCountryID;
+    @XmlElement(name = "DocIssueDate")
+    @XmlSchemaType(name = "dateTime")
+    protected XMLGregorianCalendar docIssueDate;
+    @XmlElement(name = "DocExpiryDate")
+    @XmlSchemaType(name = "dateTime")
+    protected XMLGregorianCalendar docExpiryDate;
+    @XmlElementRef(name = "PhoneArea", namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", type = JAXBElement.class, required = false)
+    protected JAXBElement<String> phoneArea;
+    @XmlElementRef(name = "PhoneNumber", namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", type = JAXBElement.class, required = false)
+    protected JAXBElement<String> phoneNumber;
+    @XmlElementRef(name = "FullName", namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", type = JAXBElement.class, required = false)
+    protected JAXBElement<String> fullName;
+*/
     /**
      * Gets the value of the birthDate property.
      * 
@@ -93,7 +117,56 @@ public class FindPersonRequestMessage
     public void setBirthDate(XMLGregorianCalendar value) {
         this.birthDate = value;
     }
+    
 
+    /**
+     * Gets the value of the docIssueDate property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
+     */
+ /*   public XMLGregorianCalendar getDocIssueDate() {
+        return docIssueDate;
+    }
+
+    /**
+     * Sets the value of the docIssueDate property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
+     */
+   /* public void setDocIssueDate(XMLGregorianCalendar value) {
+        this.docIssueDate = value;
+    }
+
+    /**
+     * Gets the value of the DocExpiryDate property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLGregorianCalendar }
+     *     
+     */
+   /* public XMLGregorianCalendar getDocExpiryDate() {
+        return docExpiryDate;
+    }
+
+    /**
+     * Sets the value of the birthDate property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLGregorianCalendar }
+     *     
+     */
+   /* public void setDocExpiryDate(XMLGregorianCalendar value) {
+        this.docExpiryDate = value;
+    }
+  
     /**
      * Gets the value of the docNumber property.
      * 
@@ -261,5 +334,128 @@ public class FindPersonRequestMessage
     public void setUnistreamCardNumber(JAXBElement<String> value) {
         this.unistreamCardNumber = ((JAXBElement<String> ) value);
     }
+
+        /**
+     * Gets the value of the phoneArea property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+/*    public JAXBElement<String> getPhoneArea() {
+        return phoneArea;
+    }
+
+    /**
+     * Sets the value of the phoneArea property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+  /*  public void setPhoneArea(JAXBElement<String> value) {
+        this.phoneArea = ((JAXBElement<String> ) value);
+    }
+
+    
+    
+        /**
+     * Gets the value of the phoneNumber property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+ /*   public JAXBElement<String> getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    /**
+     * Sets the value of the phoneNumber property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+ /*   public void setPhoneNumber(JAXBElement<String> value) {
+        this.phoneNumber = ((JAXBElement<String> ) value);
+    }
+    
+        /**
+     * Gets the value of the fullName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+ /*   public JAXBElement<String> getFullName() {
+        return fullName;
+    }
+
+    /**
+     * Sets the value of the fullName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link String }{@code >}
+     *     
+     */
+ /*   public void setFullName(JAXBElement<String> value) {
+        this.fullName = ((JAXBElement<String> ) value);
+    }
+    
+;
+
+ /**
+     * Gets the value of the docTypeID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+ /*   public Integer getDocTypeID() {
+        return docTypeID;
+    }
+
+    /**
+     * Sets the value of the docTypeID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+  /*  public void setDocTypeID(Integer value) {
+        this.docTypeID = value;
+    }
+ /**
+     * Gets the value of the phoneCountryID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+ /*   public Integer getPhoneCountryID() {
+        return phoneCountryID;
+    }
+
+    /**
+     * Sets the value of the phoneCountryID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+ /*   public void setPhoneCountryID(Integer value) {
+        this.phoneCountryID = value;
+    }*/
 
 }

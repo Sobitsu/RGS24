@@ -44,7 +44,6 @@ import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetRegionsC
 @XmlSeeAlso({
     GetBankByIDResponseMessage.class,
     AddPersonDocumentResponseMessage.class,
-    IdentifyPersonByCardResponseMessage.class,
     GetTransferByIDResponseMessage.class,
     InsertTransfer2ResponseMessage.class,
     GetNoticeByIDResponseMessage.class,
@@ -53,7 +52,6 @@ import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetRegionsC
     GetTransfersChangesResponseMessage.class,
     GetDocumentTypeChangesResponseMessage.class,
     RejectNoticeResponseMessage.class,
-    SellPrepaidCardResponseMessage.class,
     PrepareNoticeResponseMessage.class,
     ConfirmClearingReportResponseMessage.class,
     GetRegionsChangesResponseMessage.class,

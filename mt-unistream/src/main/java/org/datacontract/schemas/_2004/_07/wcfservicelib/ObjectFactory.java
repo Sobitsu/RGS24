@@ -30,7 +30,6 @@ public class ObjectFactory {
     private final static QName _TransactionType_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "TransactionType");
     private final static QName _FindTransferRequestMessage_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "FindTransferRequestMessage");
     private final static QName _AddPersonDocumentRequestMessage_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "AddPersonDocumentRequestMessage");
-    private final static QName _SellPrepaidCardRequestMessage_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "SellPrepaidCardRequestMessage");
     private final static QName _ConfirmClearingReportResponseMessage_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "ConfirmClearingReportResponseMessage");
     private final static QName _GetLastTransferTemplatesRequestMessage_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "GetLastTransferTemplatesRequestMessage");
     private final static QName _GetNoticesChangesRequestMessage_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "GetNoticesChangesRequestMessage");
@@ -112,7 +111,6 @@ public class ObjectFactory {
     private final static QName _AddPersonDocumentResponseMessage_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "AddPersonDocumentResponseMessage");
     private final static QName _InsertTransfer2RequestMessage_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "InsertTransfer2RequestMessage");
     private final static QName _AuthenticationHeader_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "AuthenticationHeader");
-    private final static QName _SellPrepaidCardResponseMessage_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "SellPrepaidCardResponseMessage");
     private final static QName _ArrayOfTemplate_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib.Clients", "ArrayOfTemplate");
     private final static QName _GetTransferByIDResponseMessage_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "GetTransferByIDResponseMessage");
     private final static QName _WsRequest_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib.Utils", "WsRequest");
@@ -135,8 +133,6 @@ public class ObjectFactory {
     private final static QName _ArrayOfResidentship_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib.Clients", "ArrayOfResidentship");
     private final static QName _AddPersonAddressRequestMessage_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "AddPersonAddressRequestMessage");
     private final static QName _FinDetail_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib.Clients", "FinDetail");
-    private final static QName _SellPrepaidCardRequestMessageBuyer_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Buyer");
-    private final static QName _SellPrepaidCardResponseMessageCardNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "CardNumber");
     private final static QName _DocumentSeries_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Series");
     private final static QName _DocumentIssuer_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Issuer");
     private final static QName _DocumentIssuerCode_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "IssuerCode");
@@ -225,14 +221,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SellPrepaidCardResponseMessage }
-     * 
-     */
-    public SellPrepaidCardResponseMessage createSellPrepaidCardResponseMessage() {
-        return new SellPrepaidCardResponseMessage();
-    }
-
-    /**
      * Create an instance of {@link Document }
      * 
      */
@@ -246,14 +234,6 @@ public class ObjectFactory {
      */
     public GetTransferBySourceIDRequestMessage createGetTransferBySourceIDRequestMessage() {
         return new GetTransferBySourceIDRequestMessage();
-    }
-
-    /**
-     * Create an instance of {@link CardCredentials }
-     * 
-     */
-    public CardCredentials createCardCredentials() {
-        return new CardCredentials();
     }
 
     /**
@@ -382,14 +362,6 @@ public class ObjectFactory {
      */
     public GetNoticesChangesResponseMessage createGetNoticesChangesResponseMessage() {
         return new GetNoticesChangesResponseMessage();
-    }
-
-    /**
-     * Create an instance of {@link IdentifyPersonByCardResponseMessage }
-     * 
-     */
-    public IdentifyPersonByCardResponseMessage createIdentifyPersonByCardResponseMessage() {
-        return new IdentifyPersonByCardResponseMessage();
     }
 
     /**
@@ -654,14 +626,6 @@ public class ObjectFactory {
      */
     public GetTransferBySourceIDResponseMessage createGetTransferBySourceIDResponseMessage() {
         return new GetTransferBySourceIDResponseMessage();
-    }
-
-    /**
-     * Create an instance of {@link SellPrepaidCardRequestMessage }
-     * 
-     */
-    public SellPrepaidCardRequestMessage createSellPrepaidCardRequestMessage() {
-        return new SellPrepaidCardRequestMessage();
     }
 
     /**
@@ -945,14 +909,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link IdentifyPersonByCardRequestMessage }
-     * 
-     */
-    public IdentifyPersonByCardRequestMessage createIdentifyPersonByCardRequestMessage() {
-        return new IdentifyPersonByCardRequestMessage();
-    }
-
-    /**
      * Create an instance of {@link Fault }
      * 
      */
@@ -1044,15 +1000,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "AddPersonDocumentRequestMessage")
     public JAXBElement<AddPersonDocumentRequestMessage> createAddPersonDocumentRequestMessage(AddPersonDocumentRequestMessage value) {
         return new JAXBElement<AddPersonDocumentRequestMessage>(_AddPersonDocumentRequestMessage_QNAME, AddPersonDocumentRequestMessage.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SellPrepaidCardRequestMessage }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "SellPrepaidCardRequestMessage")
-    public JAXBElement<SellPrepaidCardRequestMessage> createSellPrepaidCardRequestMessage(SellPrepaidCardRequestMessage value) {
-        return new JAXBElement<SellPrepaidCardRequestMessage>(_SellPrepaidCardRequestMessage_QNAME, SellPrepaidCardRequestMessage.class, null, value);
     }
 
     /**
@@ -1164,15 +1111,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link IdentifyPersonByCardResponseMessage }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "IdentifyPersonByCardResponseMessage")
-    public JAXBElement<IdentifyPersonByCardResponseMessage> createIdentifyPersonByCardResponseMessage(IdentifyPersonByCardResponseMessage value) {
-        return new JAXBElement<IdentifyPersonByCardResponseMessage>(_IdentifyPersonByCardResponseMessage_QNAME, IdentifyPersonByCardResponseMessage.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Response }{@code >}}
      * 
      */
@@ -1271,16 +1209,7 @@ public class ObjectFactory {
         return new JAXBElement<ClearingReport>(_ClearingReport_QNAME, ClearingReport.class, null, value);
     }
 
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfFinDetail }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib.Clients", name = "ArrayOfFinDetail")
-    public JAXBElement<ArrayOfFinDetail> createArrayOfFinDetail(ArrayOfFinDetail value) {
-        return new JAXBElement<ArrayOfFinDetail>(_ArrayOfFinDetail_QNAME, ArrayOfFinDetail.class, null, value);
-    }
-
-    /**
+     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CreatePersonRequestMessage }{@code >}}
      * 
      */
@@ -1315,16 +1244,7 @@ public class ObjectFactory {
     public JAXBElement<Service> createService(Service value) {
         return new JAXBElement<Service>(_Service_QNAME, Service.class, null, value);
     }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CardCredentials }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "CardCredentials")
-    public JAXBElement<CardCredentials> createCardCredentials(CardCredentials value) {
-        return new JAXBElement<CardCredentials>(_CardCredentials_QNAME, CardCredentials.class, null, value);
-    }
-
+ 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link InsertNoticeResponseMessage }{@code >}}
      * 
@@ -1794,15 +1714,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SellPrepaidCardResponseMessage }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "SellPrepaidCardResponseMessage")
-    public JAXBElement<SellPrepaidCardResponseMessage> createSellPrepaidCardResponseMessage(SellPrepaidCardResponseMessage value) {
-        return new JAXBElement<SellPrepaidCardResponseMessage>(_SellPrepaidCardResponseMessage_QNAME, SellPrepaidCardResponseMessage.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfTemplate }{@code >}}
      * 
      */
@@ -1956,15 +1867,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link IdentifyPersonByCardRequestMessage }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "IdentifyPersonByCardRequestMessage")
-    public JAXBElement<IdentifyPersonByCardRequestMessage> createIdentifyPersonByCardRequestMessage(IdentifyPersonByCardRequestMessage value) {
-        return new JAXBElement<IdentifyPersonByCardRequestMessage>(_IdentifyPersonByCardRequestMessage_QNAME, IdentifyPersonByCardRequestMessage.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link InsertTransferRequestMessage }{@code >}}
      * 
      */
@@ -2010,33 +1912,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Person }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "Buyer", scope = SellPrepaidCardRequestMessage.class)
-    public JAXBElement<Person> createSellPrepaidCardRequestMessageBuyer(Person value) {
-        return new JAXBElement<Person>(_SellPrepaidCardRequestMessageBuyer_QNAME, Person.class, SellPrepaidCardRequestMessage.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "CardNumber", scope = SellPrepaidCardResponseMessage.class)
-    public JAXBElement<String> createSellPrepaidCardResponseMessageCardNumber(String value) {
-        return new JAXBElement<String>(_SellPrepaidCardResponseMessageCardNumber_QNAME, String.class, SellPrepaidCardResponseMessage.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Person }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "Buyer", scope = SellPrepaidCardResponseMessage.class)
-    public JAXBElement<Person> createSellPrepaidCardResponseMessageBuyer(Person value) {
-        return new JAXBElement<Person>(_SellPrepaidCardRequestMessageBuyer_QNAME, Person.class, SellPrepaidCardResponseMessage.class, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
      * 
      */
@@ -2079,24 +1954,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "SourceID", scope = GetTransferBySourceIDRequestMessage.class)
     public JAXBElement<String> createGetTransferBySourceIDRequestMessageSourceID(String value) {
         return new JAXBElement<String>(_GetTransferBySourceIDRequestMessageSourceID_QNAME, String.class, GetTransferBySourceIDRequestMessage.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link byte[]}{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "PinHash", scope = CardCredentials.class)
-    public JAXBElement<byte[]> createCardCredentialsPinHash(byte[] value) {
-        return new JAXBElement<byte[]>(_CardCredentialsPinHash_QNAME, byte[].class, CardCredentials.class, ((byte[]) value));
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "CardNumber", scope = CardCredentials.class)
-    public JAXBElement<String> createCardCredentialsCardNumber(String value) {
-        return new JAXBElement<String>(_SellPrepaidCardResponseMessageCardNumber_QNAME, String.class, CardCredentials.class, value);
     }
 
     /**
@@ -2622,24 +2479,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ArrayOfTemplate }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "Templates", scope = IdentifyPersonByCardResponseMessage.class)
-    public JAXBElement<ArrayOfTemplate> createIdentifyPersonByCardResponseMessageTemplates(ArrayOfTemplate value) {
-        return new JAXBElement<ArrayOfTemplate>(_GetLastTransferTemplatesResponseMessageTemplates_QNAME, ArrayOfTemplate.class, IdentifyPersonByCardResponseMessage.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "CardholderSession", scope = IdentifyPersonByCardResponseMessage.class)
-    public JAXBElement<String> createIdentifyPersonByCardResponseMessageCardholderSession(String value) {
-        return new JAXBElement<String>(_InsertTransfer2RequestMessageCardholderSession_QNAME, String.class, IdentifyPersonByCardResponseMessage.class, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link Notice }{@code >}}
      * 
      */
@@ -3060,15 +2899,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "Report", scope = GetClearingReportResponseMessage.class)
     public JAXBElement<ClearingReport> createGetClearingReportResponseMessageReport(ClearingReport value) {
         return new JAXBElement<ClearingReport>(_GetClearingReportResponseMessageReport_QNAME, ClearingReport.class, GetClearingReportResponseMessage.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CardCredentials }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", name = "CardCredentials", scope = IdentifyPersonByCardRequestMessage.class)
-    public JAXBElement<CardCredentials> createIdentifyPersonByCardRequestMessageCardCredentials(CardCredentials value) {
-        return new JAXBElement<CardCredentials>(_CardCredentials_QNAME, CardCredentials.class, IdentifyPersonByCardRequestMessage.class, value);
     }
 
     /**

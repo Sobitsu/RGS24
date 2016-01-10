@@ -42,12 +42,10 @@ import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetRegionsC
     "authenticationHeader"
 })
 @XmlSeeAlso({
-    SellPrepaidCardRequestMessage.class,
     ConfirmClearingReportRequestMessage.class,
     GetDocumentTypeChangesRequestMessage.class,
     FindRegionRequestMessage.class,
     GetBankByIDRequestMessage.class,
-    IdentifyPersonByCardRequestMessage.class,
     GetClearingReportRequestMessage.class,
     GetLastTransferTemplatesRequestMessage.class,
     EstimateMainAmountRequestMessage.class,

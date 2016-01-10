@@ -41,8 +41,6 @@ import org.datacontract.schemas._2004._07.wcfservicelib.GetTransfersChangesReque
 import org.datacontract.schemas._2004._07.wcfservicelib.GetTransfersChangesResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.GetTransfersListRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.GetTransfersListResponseMessage;
-import org.datacontract.schemas._2004._07.wcfservicelib.IdentifyPersonByCardRequestMessage;
-import org.datacontract.schemas._2004._07.wcfservicelib.IdentifyPersonByCardResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.InsertNoticeRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.InsertNoticeResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.InsertTransfer2RequestMessage;
@@ -59,8 +57,6 @@ import org.datacontract.schemas._2004._07.wcfservicelib.RejectNoticeRequestMessa
 import org.datacontract.schemas._2004._07.wcfservicelib.RejectNoticeResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.ReturnTransferRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.ReturnTransferResponseMessage;
-import org.datacontract.schemas._2004._07.wcfservicelib.SellPrepaidCardRequestMessage;
-import org.datacontract.schemas._2004._07.wcfservicelib.SellPrepaidCardResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.FindRegionRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.FindRegionResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetBankByIDRequestMessage;
@@ -159,14 +155,6 @@ public class ObjectFactory {
      */
     public InsertNotice createInsertNotice() {
         return new InsertNotice();
-    }
-
-    /**
-     * Create an instance of {@link IdentifyPersonByCard }
-     * 
-     */
-    public IdentifyPersonByCard createIdentifyPersonByCard() {
-        return new IdentifyPersonByCard();
     }
 
     /**
@@ -432,15 +420,7 @@ public class ObjectFactory {
     public GetDocumentTypeChanges createGetDocumentTypeChanges() {
         return new GetDocumentTypeChanges();
     }
-
-    /**
-     * Create an instance of {@link SellPrepaidCardResponse }
-     * 
-     */
-    public SellPrepaidCardResponse createSellPrepaidCardResponse() {
-        return new SellPrepaidCardResponse();
-    }
-
+ 
     /**
      * Create an instance of {@link EstimateMainAmountResponse }
      * 
@@ -487,14 +467,6 @@ public class ObjectFactory {
      */
     public ApproveNotice createApproveNotice() {
         return new ApproveNotice();
-    }
-
-    /**
-     * Create an instance of {@link SellPrepaidCard }
-     * 
-     */
-    public SellPrepaidCard createSellPrepaidCard() {
-        return new SellPrepaidCard();
     }
 
     /**
@@ -698,14 +670,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link IdentifyPersonByCardResponse }
-     * 
-     */
-    public IdentifyPersonByCardResponse createIdentifyPersonByCardResponse() {
-        return new IdentifyPersonByCardResponse();
-    }
-
-    /**
      * Create an instance of {@link AddPersonDocumentResponse }
      * 
      */
@@ -773,24 +737,7 @@ public class ObjectFactory {
         return new JAXBElement<InsertNoticeRequestMessage>(_GetDocumentTypeChangesRequestMessage_QNAME, InsertNoticeRequestMessage.class, InsertNotice.class, value);
     }
 
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link IdentifyPersonByCardRequestMessage }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://test.unistream.com/wcflib/", name = "requestMessage", scope = IdentifyPersonByCard.class)
-    public JAXBElement<IdentifyPersonByCardRequestMessage> createIdentifyPersonByCardRequestMessage(IdentifyPersonByCardRequestMessage value) {
-        return new JAXBElement<IdentifyPersonByCardRequestMessage>(_GetDocumentTypeChangesRequestMessage_QNAME, IdentifyPersonByCardRequestMessage.class, IdentifyPersonByCard.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SellPrepaidCardResponseMessage }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://test.unistream.com/wcflib/", name = "SellPrepaidCardResult", scope = SellPrepaidCardResponse.class)
-    public JAXBElement<SellPrepaidCardResponseMessage> createSellPrepaidCardResponseSellPrepaidCardResult(SellPrepaidCardResponseMessage value) {
-        return new JAXBElement<SellPrepaidCardResponseMessage>(_SellPrepaidCardResponseSellPrepaidCardResult_QNAME, SellPrepaidCardResponseMessage.class, SellPrepaidCardResponse.class, value);
-    }
-
+  
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link EstimateMainAmountResponseMessage }{@code >}}
      * 
@@ -879,15 +826,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://test.unistream.com/wcflib/", name = "GetBankByIDResult", scope = GetBankByIDResponse.class)
     public JAXBElement<GetBankByIDResponseMessage> createGetBankByIDResponseGetBankByIDResult(GetBankByIDResponseMessage value) {
         return new JAXBElement<GetBankByIDResponseMessage>(_GetBankByIDResponseGetBankByIDResult_QNAME, GetBankByIDResponseMessage.class, GetBankByIDResponse.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link SellPrepaidCardRequestMessage }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://test.unistream.com/wcflib/", name = "requestMessage", scope = SellPrepaidCard.class)
-    public JAXBElement<SellPrepaidCardRequestMessage> createSellPrepaidCardRequestMessage(SellPrepaidCardRequestMessage value) {
-        return new JAXBElement<SellPrepaidCardRequestMessage>(_GetDocumentTypeChangesRequestMessage_QNAME, SellPrepaidCardRequestMessage.class, SellPrepaidCard.class, value);
     }
 
     /**
@@ -1311,15 +1249,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://test.unistream.com/wcflib/", name = "GetTransferBySourceIDResult", scope = GetTransferBySourceIDResponse.class)
     public JAXBElement<GetTransferBySourceIDResponseMessage> createGetTransferBySourceIDResponseGetTransferBySourceIDResult(GetTransferBySourceIDResponseMessage value) {
         return new JAXBElement<GetTransferBySourceIDResponseMessage>(_GetTransferBySourceIDResponseGetTransferBySourceIDResult_QNAME, GetTransferBySourceIDResponseMessage.class, GetTransferBySourceIDResponse.class, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link IdentifyPersonByCardResponseMessage }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://test.unistream.com/wcflib/", name = "IdentifyPersonByCardResult", scope = IdentifyPersonByCardResponse.class)
-    public JAXBElement<IdentifyPersonByCardResponseMessage> createIdentifyPersonByCardResponseIdentifyPersonByCardResult(IdentifyPersonByCardResponseMessage value) {
-        return new JAXBElement<IdentifyPersonByCardResponseMessage>(_IdentifyPersonByCardResponseIdentifyPersonByCardResult_QNAME, IdentifyPersonByCardResponseMessage.class, IdentifyPersonByCardResponse.class, value);
     }
 
     /**
