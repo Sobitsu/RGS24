@@ -28,26 +28,6 @@
                 <groupId>org.jvnet.jax-ws-commons</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
                 <version>2.3</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlFiles>
-                                <wsdlFile>test2.unistream.com_82/wcflib-tc/service.svc.wsdl</wsdlFile>
-                            </wsdlFiles>
-                            <packageName>com.grs24.mt.unistream.wsclient</packageName>
-                            <vmArgs>
-                                <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
-                            </vmArgs>
-                            <wsdlLocation>http://test2.unistream.com:82/wcflib-tc/service.svc?wsdl</wsdlLocation>
-                            <staleFile>${project.build.directory}/jaxws/stale/service.svc.stale</staleFile>
-                        </configuration>
-                        <id>wsimport-generate-service.svc</id>
-                        <phase>generate-sources</phase>
-                    </execution>
-                </executions>
                 <dependencies>
                     <dependency>
                         <groupId>javax.xml</groupId>
@@ -80,6 +60,17 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>mt-adapter</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    
+    <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.7</version>
+    </dependency>
+    <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.7</version>
     </dependency>
   </dependencies>
 </project>

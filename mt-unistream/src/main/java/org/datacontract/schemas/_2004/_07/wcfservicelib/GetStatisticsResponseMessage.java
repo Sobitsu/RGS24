@@ -1,0 +1,65 @@
+
+package org.datacontract.schemas._2004._07.wcfservicelib;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlType;
+
+
+/**
+ * <p>Java class for GetStatisticsResponseMessage complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType name="GetStatisticsResponseMessage">
+ *   &lt;complexContent>
+ *     &lt;extension base="{http://schemas.datacontract.org/2004/07/WcfServiceLib.Utils}WsResponse">
+ *       &lt;sequence>
+ *         &lt;element name="Rows" type="{http://schemas.datacontract.org/2004/07/WcfServiceLib}ArrayOfStatisticsRow" minOccurs="0"/>
+ *       &lt;/sequence>
+ *     &lt;/extension>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "GetStatisticsResponseMessage", propOrder = {
+    "rows"
+})
+public class GetStatisticsResponseMessage
+    extends WsResponse
+{
+
+    @XmlElementRef(name = "Rows", namespace = "http://schemas.datacontract.org/2004/07/WcfServiceLib", type = JAXBElement.class, required = false)
+    protected JAXBElement<ArrayOfStatisticsRow> rows;
+
+    /**
+     * Gets the value of the rows property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link JAXBElement }{@code <}{@link ArrayOfStatisticsRow }{@code >}
+     *     
+     */
+    public JAXBElement<ArrayOfStatisticsRow> getRows() {
+        return rows;
+    }
+
+    /**
+     * Sets the value of the rows property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link JAXBElement }{@code <}{@link ArrayOfStatisticsRow }{@code >}
+     *     
+     */
+    public void setRows(JAXBElement<ArrayOfStatisticsRow> value) {
+        this.rows = ((JAXBElement<ArrayOfStatisticsRow> ) value);
+    }
+
+}
