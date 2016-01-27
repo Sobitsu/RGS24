@@ -8,7 +8,10 @@ package com.grs24.mt.unistream.wsclient;
 import com.grs24.mt.unistream.dto.Person;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
+import java.io.StringWriter;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Marshaller;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonResponseMessage;
@@ -46,6 +49,16 @@ public static FindPersonResponseMessage FindPerson(Person pers) throws Exception
                     }
                     IWebService service = new WebService().getWS2007HttpBindingIWebService();
                     FindPersonResponseMessage rm = service.findPerson(fprm);
+                    
+                    //delete
+			   JAXBContext context = JAXBContext.newInstance(FindPersonRequestMessage.class);
+			   StringWriter writer = new StringWriter();
+                           Marshaller marshaller = context.createMarshaller();
+			   marshaller.marshal(fprm,writer);
+                           String stringXML = writer.toString();
+                           System.out.println(stringXML);
+                    //delete
+                    
                     CommonLib.CheckFault(rm);
                     System.out.println(rm.getPersons().getValue().getPerson().get(0).getID().toString());
                     return rm;

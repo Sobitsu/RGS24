@@ -5,5 +5,5 @@
  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="mainclientconfig" 
  >
-    <import location="service.svc.wsdl_wsdl0.xml" namespace="http://test.unistream.com/wcflib/"/>
+    <import location="service.svc.xml" namespace="http://test.unistream.com/wcflib/"/>
 </definitions>
