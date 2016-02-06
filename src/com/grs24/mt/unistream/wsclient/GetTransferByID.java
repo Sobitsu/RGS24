@@ -22,7 +22,6 @@ public class GetTransferByID {
         try
                 {
                     GetTransferByIDRequestMessage gtrm = new GetTransferByIDRequestMessage();
-                    com.microsoft.schemas._2003._10.serialization.ObjectFactory factory = new com.microsoft.schemas._2003._10.serialization.ObjectFactory();
                     JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
                     gtrm.setAuthenticationHeader(ahh);
                     gtrm.setTransferID(transferId);
