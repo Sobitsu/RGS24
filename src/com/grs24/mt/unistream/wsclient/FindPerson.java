@@ -36,23 +36,23 @@ public static FindPersonResponseMessage FindPerson(Person pers) throws Exception
                     org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
                     JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
                     fprm.setAuthenticationHeader(ahh);
-                    fprm.setBirthDate(CommonLib.GetGregorianDate(pers.getBirthDate()));
-                    fprm.setFirstname(CommonLib.MakeString(_FirstName_QNAME, pers.getFirstName()));
-                    fprm.setLastname(CommonLib.MakeString(_LastName_QNAME, pers.getLastName()));
-                    fprm.setMiddlename(CommonLib.MakeString(_MiddleName_QNAME, pers.getMiddleName()));
+                    if (pers.getBirthDate() != null) fprm.setBirthDate(CommonLib.GetGregorianDate(pers.getBirthDate()));
+                    if (pers.getFirstName() != null) fprm.setFirstname(CommonLib.MakeString(_FirstName_QNAME, pers.getFirstName()));
+                    if (pers.getLastName() != null) fprm.setLastname(CommonLib.MakeString(_LastName_QNAME, pers.getLastName()));
+                    if (pers.getMiddleName() != null) fprm.setMiddlename(CommonLib.MakeString(_MiddleName_QNAME, pers.getMiddleName()));
                     if (pers.getDocuments() != null &&  pers.getDocuments().length>0) {
-                        fprm.setDocNumber(CommonLib.MakeString(_DocNumber_QNAME,pers.getDocuments()[1].getNumber()));
-                        fprm.setDocSeries(CommonLib.MakeString(_DocSeries_QNAME,pers.getDocuments()[1].getSeries()));
-                        fprm.setDocIssueDate(CommonLib.GetGregorianDate(pers.getDocuments()[1].getIssueDate()));
-                        fprm.setDocExpiryDate(CommonLib.GetGregorianDate(pers.getDocuments()[1].getExpiryDate()));
+                        if (pers.getDocuments()[1].getNumber() != null) fprm.setDocNumber(CommonLib.MakeString(_DocNumber_QNAME,pers.getDocuments()[1].getNumber()));
+                        if (pers.getDocuments()[1].getSeries() != null) fprm.setDocSeries(CommonLib.MakeString(_DocSeries_QNAME,pers.getDocuments()[1].getSeries()));
+                        if (pers.getDocuments()[1].getIssueDate() != null) fprm.setDocIssueDate(CommonLib.GetGregorianDate(pers.getDocuments()[1].getIssueDate()));
+                        if (pers.getDocuments()[1].getExpiryDate() != null) fprm.setDocExpiryDate(CommonLib.GetGregorianDate(pers.getDocuments()[1].getExpiryDate()));
                     }
                     if (pers.getPhones() != null && pers.getPhones().length>0) {
-                        fprm.setPhoneArea(CommonLib.MakeString(_PhoneArea_QNAME,pers.getPhones()[1].getAreaCode()));
-                        fprm.setPhoneNumber(CommonLib.MakeString(_PhoneNumber_QNAME,pers.getPhones()[1].getNumber()));
-                        fprm.setPhoneCountryID(pers.getPhones()[1].getCountryID());
+                        if (pers.getPhones()[1].getAreaCode() != null) fprm.setPhoneArea(CommonLib.MakeString(_PhoneArea_QNAME,pers.getPhones()[1].getAreaCode()));
+                        if (pers.getPhones()[1].getNumber() != null) fprm.setPhoneNumber(CommonLib.MakeString(_PhoneNumber_QNAME,pers.getPhones()[1].getNumber()));
+                        if (pers.getPhones()[1].getCountryID() != null) fprm.setPhoneCountryID(pers.getPhones()[1].getCountryID());
                     }
                     if (pers.getUnistreamCardNumber()!= null && !pers.getUnistreamCardNumber().isEmpty()){
-                        fprm.setUnistreamCardNumber(CommonLib.MakeString(_UnistreamCardNumber_QNAME,pers.getUnistreamCardNumber()));
+                        if (pers.getUnistreamCardNumber() != null) fprm.setUnistreamCardNumber(CommonLib.MakeString(_UnistreamCardNumber_QNAME,pers.getUnistreamCardNumber()));
                     }
                     IWebService service = new WebService().getWS2007HttpBindingIWebService();
                     FindPersonResponseMessage rm = service.findPerson(fprm);
@@ -64,9 +64,8 @@ public static FindPersonResponseMessage FindPerson(Person pers) throws Exception
 // 
                    
                     CommonLib.CheckFault(rm);
-                    System.out.println(rm.getPersons().getValue().getPerson().get(0).getID().toString());
                     return rm;
                } catch (Exception ex) {
-                    throw new UnsupportedOperationException("Unistream returned error: " + ex.getMessage());}
+                    throw new Exception("FindPerson returned error: " + ex.getMessage());}
     }
 }

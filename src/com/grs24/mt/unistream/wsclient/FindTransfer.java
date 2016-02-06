@@ -8,11 +8,7 @@ package com.grs24.mt.unistream.wsclient;
 import com.grs24.mt.unistream.dto.FindTransferRequestDto;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
-import java.io.StringWriter;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindTransferRequestMessage;
@@ -60,6 +56,6 @@ public class FindTransfer {
                     cur_transfer = ret_value;
                     return ret_value;
                } catch (Exception ex) {
-                    throw new FindTransferException("FindTransfer error: " + ex.getMessage());}
+                    throw new Exception("FindTransfer error: " + ex.getMessage());}
     }
  }
