@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<findTransferRequestDto>
+    <bankID>383589</bankID>
+    <controlNumber>438017213820</controlNumber>
+    <currencyID>2</currencyID>
+    <sum>555.0</sum>
+</findTransferRequestDto>

@@ -9,10 +9,16 @@ import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.WsResponse;
 import com.grs24.mt.unistream.Constants;
+import java.io.StringWriter;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
+import org.datacontract.schemas._2004._07.wcfservicelib.FindTransferRequestMessage;
 
 /**
  *
@@ -42,6 +48,11 @@ public class CommonLib {
                     return ahh;
                 }
         
+        public static JAXBElement<String> MakeString(QName qname, String value)
+                {
+                    return new JAXBElement<String>(qname, String.class, null, value);
+                }
+
         public static XMLGregorianCalendar GetGregorianDate(Date date) {
             try {
                 GregorianCalendar gregory = new GregorianCalendar();
@@ -52,5 +63,16 @@ public class CommonLib {
                     System.out.print(ex.getMessage());
                 return null;
             }
+        }
+         public static void printXml(Object x) throws JAXBException
+            {
+                    JAXBContext context = JAXBContext.newInstance(x.getClass());
+                    StringWriter writer = new StringWriter();
+                    Marshaller marshaller = context.createMarshaller();
+                    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+                    marshaller.marshal(x,writer);
+                    String stringXML = writer.toString();
+                    System.out.println(stringXML);
+            }
          }
-    }
+    

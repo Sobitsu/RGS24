@@ -5,23 +5,23 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import com.grs24.mt.unistream.DateTimeUtils;
-import com.grs24.mt.unistream.dto.Person;
-import static org.junit.Assert.*;
-import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonResponseMessage;
+import com.grs24.mt.unistream.Constants;
+import com.grs24.mt.unistream.dto.FindTransferRequestDto;
+import org.datacontract.schemas._2004._07.wcfservicelib.Transfer;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author Dale
  */
-public class FindPersonTest {
+public class FindTransferTest {
     
-    public FindPersonTest() {
+    public FindTransferTest() {
     }
     
     @BeforeClass
@@ -41,18 +41,18 @@ public class FindPersonTest {
     }
 
     /**
-     * Test of FindPerson method, of class FindPerson.
+     * Test of FindTransfer method, of class FindTransfer.
      */
     @Test
-    public void testFindPerson() throws Exception {
-System.out.println("FindPerson");
-        Person pers = new Person();
-        pers.setFirstName("Владимир");
-        pers.setBirthDate(DateTimeUtils.parseDate("07/10/1977"));
-        pers.setLastName("Резин");
-        pers.setMiddleName("Сергеевич");
-        FindPersonResponseMessage expResult = null;
-        FindPersonResponseMessage result = FindPerson.FindPerson(pers);
+    public void testFindTransfer() throws Exception {
+        System.out.println("FindTransfer");
+        FindTransferRequestDto transfer = new FindTransferRequestDto("438017213820",555D,GetCurrency.GetCurrencyID("USD"),Constants.KEY_BANK_ID);
+        /*transfer.setControlNumber("438017213820");
+        transfer.setCurrencyID(GetCurrency.GetCurrencyID("USD"));
+        transfer.setSum(555D);
+        transfer.setBankID(Constants.KEY_BANK_ID);*/
+        Transfer expResult = null;
+        Transfer result = FindTransfer.FindTransfer(transfer);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
