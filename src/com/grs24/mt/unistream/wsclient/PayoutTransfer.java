@@ -31,7 +31,6 @@ public class PayoutTransfer {
                     IWebService service = new WebService().getWS2007HttpBindingIWebService();
                     PayoutTransferResponseMessage rm = service.payoutTransfer(ptrm);
                     CommonLib.CheckFault(rm);
-                    System.out.println(rm.getTransfer().getValue().getID());
                     return rm;
                } catch (Exception ex) {
                     throw new UnsupportedOperationException("Unistream returned error: " + ex.getMessage());}

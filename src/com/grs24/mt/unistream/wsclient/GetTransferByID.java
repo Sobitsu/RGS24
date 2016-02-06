@@ -29,7 +29,6 @@ public class GetTransferByID {
                     IWebService service = new WebService().getWS2007HttpBindingIWebService();
                     GetTransferByIDResponseMessage rm = service.getTransferByID(gtrm);
                     CommonLib.CheckFault(rm);
-                    System.out.println(rm.getTransfer().getValue().getID().toString());
                     return rm;
                } catch (Exception ex) {
                     throw new UnsupportedOperationException("Unistream returned error: " + ex.getMessage());}
