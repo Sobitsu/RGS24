@@ -46,7 +46,7 @@ public class FindTransferTest {
     @Test
     public void testFindTransfer() throws Exception {
         System.out.println("FindTransfer");
-        FindTransferRequestDto transfer = new FindTransferRequestDto("438017213820",555D,GetCurrency.GetCurrencyID("USD"),Constants.KEY_BANK_ID);
+        FindTransferRequestDto transfer = new FindTransferRequestDto("438017213820",555D,GetCurrency.getCurrencyID("USD"),383589);
         /*transfer.setControlNumber("438017213820");
         transfer.setCurrencyID(GetCurrency.GetCurrencyID("USD"));
         transfer.setSum(555D);

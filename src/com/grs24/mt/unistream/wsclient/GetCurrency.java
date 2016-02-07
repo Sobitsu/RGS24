@@ -18,9 +18,8 @@ import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCurrenci
  * @author Dale
  */
 public class GetCurrency {
-    public static Integer GetCurrencyID(String CurrencyCode) throws Exception {
+    public static Integer getCurrencyID(String CurrencyCode) throws Exception {
         try { 
-                com.microsoft.schemas._2003._10.serialization.ObjectFactory factory = new com.microsoft.schemas._2003._10.serialization.ObjectFactory();
                 JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
                 IWebService service = new WebService().getWS2007HttpBindingIWebService();
                 GetCurrenciesChangesRequestMessage gcrm = new GetCurrenciesChangesRequestMessage();
@@ -29,7 +28,7 @@ public class GetCurrency {
                 GetCurrenciesChangesResponseMessage rm = service.getCurrenciesChanges(gcrm);
                 for (Currency i : rm.getCurrencies().getValue().getCurrency())
                         {
-                            if (i.getLatin3().getValue().equals(CurrencyCode)) {
+                            if (i.getDigital().getValue().equals(CurrencyCode) ) {
                                 return i.getID();
                             }
                         }
@@ -37,4 +36,23 @@ public class GetCurrency {
             } catch (Exception ex) {
                     throw new UnsupportedOperationException("Unistream returned error: " + ex.getMessage());}
      }
+    public static String getCurrencyCode(Integer currencyId) throws Exception {
+        try { 
+                JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+                IWebService service = new WebService().getWS2007HttpBindingIWebService();
+                GetCurrenciesChangesRequestMessage gcrm = new GetCurrenciesChangesRequestMessage();
+                gcrm.setAuthenticationHeader(ahh);
+                gcrm.setUpdateCount(1L);
+                GetCurrenciesChangesResponseMessage rm = service.getCurrenciesChanges(gcrm);
+                for (Currency i : rm.getCurrencies().getValue().getCurrency())
+                        {
+                            if (i.getID().equals(currencyId) ) {
+                                return i.getDigital().getValue();
+                            }
+                        }
+                return null;
+            } catch (Exception ex) {
+                    throw new UnsupportedOperationException("Unistream returned error: " + ex.getMessage());}
+     }
+
 }

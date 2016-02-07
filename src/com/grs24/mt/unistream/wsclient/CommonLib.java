@@ -8,7 +8,7 @@ package com.grs24.mt.unistream.wsclient;
 import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.WsResponse;
-import com.grs24.mt.unistream.Constants;
+import com.grs24.mt.unistream.MtUnistreamAdapter;
 import com.grs24.mt.unistream.dto.Person;
 import java.io.StringWriter;
 import java.util.Date;
@@ -73,9 +73,9 @@ public class CommonLib {
             org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new  org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
             AuthenticationHeader ah = factory.createAuthenticationHeader();
             JAXBElement<AuthenticationHeader> ahh = factory.createWsRequestAuthenticationHeader(ah);
-            ah.setAppKey(factory.createAuthenticationHeaderAppKey(Constants.KEY_USER_AUTHED_APIKEY));
-            ah.setUsername(factory.createAuthenticationHeaderUsername(Constants.KEY_USER_AUTHED_LOGIN));
-            ah.setPassword(factory.createAuthenticationHeaderPassword(Constants.KEY_USER_AUTHED_PASSWORD));
+            ah.setAppKey(factory.createAuthenticationHeaderAppKey(MtUnistreamAdapter.KEY_USER_AUTHED_APIKEY));
+            ah.setUsername(factory.createAuthenticationHeaderUsername(MtUnistreamAdapter.KEY_USER_AUTHED_LOGIN));
+            ah.setPassword(factory.createAuthenticationHeaderPassword(MtUnistreamAdapter.KEY_USER_AUTHED_PASSWORD));
             return ahh;
         }
         

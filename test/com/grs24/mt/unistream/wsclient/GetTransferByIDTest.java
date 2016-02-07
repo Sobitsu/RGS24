@@ -5,9 +5,7 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import com.grs24.mt.unistream.DateTimeUtils;
-import com.grs24.mt.unistream.dto.Person;
-import org.datacontract.schemas._2004._07.wcfservicelib.CreatePersonResponseMessage;
+import org.datacontract.schemas._2004._07.wcfservicelib.GetTransferByIDResponseMessage;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -19,9 +17,9 @@ import static org.junit.Assert.*;
  *
  * @author Dale
  */
-public class CreatePersonTest {
+public class GetTransferByIDTest {
     
-    public CreatePersonTest() {
+    public GetTransferByIDTest() {
     }
     
     @BeforeClass
@@ -41,20 +39,17 @@ public class CreatePersonTest {
     }
 
     /**
-     * Test of CreatePerson method, of class CreatePerson.
+     * Test of GetTransferByID method, of class GetTransferByID.
      */
     @Test
-    public void testCreatePerson() throws Exception {
-        System.out.println("CreatePerson");
-        Person pers = new Person();
-        pers.setFirstName("Владимир");
-        pers.setBirthDate(DateTimeUtils.parseDate("07/10/1977"));
-        pers.setLastName("Резин");
-        pers.setMiddleName("Сергеевич");
-        CreatePersonResponseMessage expResult = null;
-        CreatePersonResponseMessage result = CreatePerson.CreatePerson(pers);
+    public void testGetTransferByID() throws Exception {
+        System.out.println("GetTransferByID");
+        Integer transferId = null;
+        GetTransferByIDResponseMessage expResult = null;
+        GetTransferByIDResponseMessage result = GetTransferByID.getTransferByID(transferId);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
+    
 }

@@ -24,16 +24,16 @@ public class FindTransfer {
     //TODO обсудить со Стасом как сделать потокобезопасным эту часть
     private final static QName _ControlNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "ControlNumber");
     
-    private static Transfer cur_transfer;
+    //private static Transfer cur_transfer;
     
     public static Transfer FindTransfer(FindTransferRequestDto transfer) throws Exception {
         try
                 {
-                    if (cur_transfer != null) {
+      /*              if (cur_transfer != null) {
                         if (transfer.getControlNumber().equals(cur_transfer.getControlNumber().getValue())) {
                             return cur_transfer;
                         }
-                    }
+                    }*/
                     FindTransferRequestMessage ftrm = new FindTransferRequestMessage();
                     org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
                     JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
@@ -53,7 +53,7 @@ public class FindTransfer {
                     CommonLib.CheckFault(rm);
                     Transfer ret_value;
                     ret_value = rm.getTransfer().getValue();
-                    cur_transfer = ret_value;
+//                    cur_transfer = ret_value;
                     return ret_value;
                } catch (Exception ex) {
                     throw new Exception("FindTransfer error: " + ex.getMessage());}

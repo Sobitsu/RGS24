@@ -18,7 +18,7 @@ import org.datacontract.schemas._2004._07.wcfservicelib.GetTransferByIDResponseM
  */
 public class GetTransferByID {
     
-       public static GetTransferByIDResponseMessage GetTransferByID(Integer transferId) throws Exception {
+       public static GetTransferByIDResponseMessage getTransferByID(Integer transferId) throws Exception {
         try
                 {
                     GetTransferByIDRequestMessage gtrm = new GetTransferByIDRequestMessage();

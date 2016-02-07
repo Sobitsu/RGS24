@@ -19,7 +19,7 @@ import org.datacontract.schemas._2004._07.wcfservicelib.Transfer;
  */
 public class PayoutTransfer {
     
-    public static PayoutTransferResponseMessage PayoutTransfer(Transfer transfer) throws Exception {
+    public static PayoutTransferResponseMessage payoutTransfer(Transfer transfer) throws Exception {
         try
                 {
                     PayoutTransferRequestMessage ptrm = new PayoutTransferRequestMessage();
