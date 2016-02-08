@@ -96,4 +96,28 @@ public class CreatePerson {
                } catch (Exception ex) {
                     throw new Exception("CreatePerson returned error: " + ex.getMessage());}
     }
+    public static CreatePersonResponseMessage CreatePersonJAXb(org.datacontract.schemas._2004._07.wcfservicelib.Person persh) throws Exception {
+        try
+                {
+                    CreatePersonRequestMessage cprm = new CreatePersonRequestMessage();
+                    org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
+                    JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+                    JAXBElement<org.datacontract.schemas._2004._07.wcfservicelib.Person> persel = factory.createPerson(persh);
+                    cprm.setAuthenticationHeader(ahh);
+                    cprm.setPerson(persel);
+//
+                    com.unistream.test.wcflib.CreatePerson ftxml = new com.unistream.test.wcflib.CreatePerson();
+                    ftxml.setRequestMessage(factory.createCreatePersonRequestMessage(cprm));
+                    CommonLib.printXml(ftxml);
+// 
+                    IWebService service = new WebService().getWS2007HttpBindingIWebService();
+                    CreatePersonResponseMessage rm = service.createPerson(cprm);
+                    CommonLib.CheckFault(rm);
+                    System.out.println(rm.getPerson().getValue().getID());
+                    return rm;
+               } catch (Exception ex) {
+                    throw new Exception("CreatePerson returned error: " + ex.getMessage());}
+    }
+
 }
+

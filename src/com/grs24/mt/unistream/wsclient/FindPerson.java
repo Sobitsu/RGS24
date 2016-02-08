@@ -68,4 +68,26 @@ public static FindPersonResponseMessage FindPerson(Person pers) throws Exception
                } catch (Exception ex) {
                     throw new Exception("FindPerson returned error: " + ex.getMessage());}
     }
+public static FindPersonResponseMessage FindPersonJAXb(FindPersonRequestMessage fprm) throws Exception {
+        try
+                {
+                    org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
+                    JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+                    fprm.setAuthenticationHeader(ahh);
+                    IWebService service = new WebService().getWS2007HttpBindingIWebService();
+                    FindPersonResponseMessage rm = service.findPerson(fprm);
+                    
+//
+                    com.unistream.test.wcflib.FindPerson ftxml = new com.unistream.test.wcflib.FindPerson();
+                    ftxml.setRequestMessage(factory.createFindPersonRequestMessage(fprm));
+                    CommonLib.printXml(ftxml);
+// 
+                   
+                    CommonLib.CheckFault(rm);
+                    return rm;
+               } catch (Exception ex) {
+                    throw new Exception("FindPerson returned error: " + ex.getMessage());}
+    }
+
 }
+

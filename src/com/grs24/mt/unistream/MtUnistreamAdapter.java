@@ -1,5 +1,6 @@
 package com.grs24.mt.unistream;
 
+import org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory;
 import com.grs24.mt.FullNameTypeHolder;
 import com.grs24.mt.FundsHolder;
 import com.grs24.mt.IndividualHolder;
@@ -7,13 +8,12 @@ import com.grs24.mt.MtAdapter;
 import com.grs24.mt.PersonHolder;
 import com.grs24.mt.RemittanceException;
 import com.grs24.mt.RemittanceHolder;
-import com.grs24.mt.unistream.dto.FindTransferRequestDto;
-import com.grs24.mt.unistream.dto.Person;
 import com.grs24.mt.unistream.wsclient.CreatePerson;
 import com.grs24.mt.unistream.wsclient.FindPerson;
 import com.grs24.mt.unistream.wsclient.FindTransfer;
 import com.grs24.mt.unistream.wsclient.GetCurrency;
 import com.grs24.mt.unistream.wsclient.GetTransferByID;
+import com.grs24.mt.unistream.wsclient.PayOutTransfer;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
@@ -22,8 +22,11 @@ import org.datacontract.schemas._2004._07.wcfservicelib.Amount;
 import org.datacontract.schemas._2004._07.wcfservicelib.AmountType;
 import org.datacontract.schemas._2004._07.wcfservicelib.Consumer;
 import org.datacontract.schemas._2004._07.wcfservicelib.ConsumerRole;
+import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonRequestMessage;
+import org.datacontract.schemas._2004._07.wcfservicelib.PayoutTransferResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.Transfer;
 import org.datacontract.schemas._2004._07.wcfservicelib.TransferStatus;
+import org.datacontract.schemas._2004._07.wcfservicelib.Person;
 
 /**
  *
@@ -49,41 +52,58 @@ public class MtUnistreamAdapter implements MtAdapter
         }
         private FundsHolder getFundsHolder(List<Amount>  amounts, AmountType type)
         {
-            try {
-                   for (Amount i : amounts)
-                        {
-                            if (i.getType() == type) {
-                                FundsHolder retval = new FundsHolder();
-                                retval.setAmount(i.getSum());
-                                retval.setCur(GetCurrency.getCurrencyCode(i.getCurrencyID()));
-                                return retval;
-                            }
-                        }
-                   return null;
-            } catch (Exception ex) {
-		throw new UnsupportedOperationException("Ошибка при получении суммы перевода"); 
-            }
+            for (Amount i : amounts)
+                 {
+                     if (i.getType() == type) {
+                         FundsHolder retval = new FundsHolder();
+                         retval.setAmount(i.getSum());
+                         retval.setCur(GetCurrency.getCurrencyCode(i.getCurrencyID()));
+                         return retval;
+                     }
+                 }
+            return null;
         }
         private FullNameTypeHolder getConsumer(List<Consumer>  consumers, ConsumerRole role)
         {
-            try {
-                   for (Consumer i : consumers)
-                        {
-                            if (i.getRole() == role) {
-                                FullNameTypeHolder retval = new FullNameTypeHolder();
-                                IndividualHolder individual = new IndividualHolder();
-                                individual.setFirst(i.getPerson().getValue().getFirstName().getValue());
-                                individual.setLast(i.getPerson().getValue().getLastName().getValue());
-                                individual.setMiddle(i.getPerson().getValue().getMiddleName().getValue());
-                                retval.setIndividual(individual);
-                                return retval;
-                            }
-                        }
-                   return null;
-            } catch (Exception ex) {
-		throw new UnsupportedOperationException("Ошибка при получении клиента по переводу"); 
+            for (Consumer i : consumers)
+                 {
+                     if (i.getRole() == role) {
+                         FullNameTypeHolder retval = new FullNameTypeHolder();
+                         IndividualHolder individual = new IndividualHolder();
+                         individual.setFirst(i.getPerson().getValue().getFirstName().getValue());
+                         individual.setLast(i.getPerson().getValue().getLastName().getValue());
+                         individual.setMiddle(i.getPerson().getValue().getMiddleName().getValue());
+                         retval.setIndividual(individual);
+                         return retval;
+                     }
+                 }
+            return null;
+        }
+
+        private void checkTransferStatus(Transfer transfer) throws RemittanceException {
+            if (transfer == null) {
+                throw new RemittanceException("Перевод выплачен ругим банком", 30002, "","" );
+            }
+            if (transfer.getStatus() == TransferStatus.CANCELLED) {
+                throw new RemittanceException("Перевод отозван", 30003, "","" );
+            }
+            if (transfer.getStatus() == TransferStatus.REJECTED) {
+                throw new RemittanceException("Перевод отменен", 30004, "","" );
+            }
+            if (transfer.getStatus() == TransferStatus.PAID) {
+                //TODO не понятно как сказать что все ОК?
+                throw new RemittanceException("Перевод оплачен", 10000, "","" );
             }
         }
+    
+        private FindPersonRequestMessage getpersshot(PersonHolder payee) {
+            
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private Person getPerson(PersonHolder payee){
+            throw new UnsupportedOperationException("Сделать обработку клиентской инфо");
+        }    
 
         @Override
 	public RemittanceHolder[] moneySearch(String mtcn, 
@@ -92,29 +112,22 @@ public class MtUnistreamAdapter implements MtAdapter
                                                 String orgCountry, 
                                                 String dstCountry) 
                     throws RemittanceException, IOException {
-            try {
-                FindTransferRequestDto transfer  = new FindTransferRequestDto();
-                Transfer rettransfer;
-                RemittanceHolder retval = new RemittanceHolder();
-                transfer.setBankID(KEY_BANK_ID);
-                transfer.setControlNumber(mtcn);
-                transfer.setSum(approxDstFunds.getAmount().doubleValue());
-                transfer.setCurrencyID(GetCurrency.getCurrencyID(approxDstFunds.getCur()));
-                rettransfer = FindTransfer.FindTransfer(transfer);
-                retval.setDstCountry(dstCountry);
-                retval.setOrgCountry(orgCountry);
-                retval.setMtID(rettransfer.getID().toString());
-                retval.setMtcn(rettransfer.getControlNumber().getValue());
-                retval.setDstFunds(getFundsHolder(rettransfer.getAmounts().getValue().getAmount(),AmountType.ESTIMATED_PAIDOUT));
-                retval.setOrgFunds(getFundsHolder(rettransfer.getAmounts().getValue().getAmount(),AmountType.MAIN));
-                retval.setPayer(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.SENDER));
-                retval.setPayee(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.EXPECTED_RECEIVER));
-                RemittanceHolder[] retarr = null;
-                retarr[1] = retval;
-                return retarr;
-                } catch (Exception ex) {
-                    //TODO сделать нормальную обработку ошибок в том числе проверку на состояние готовности к выдаче
-		throw new UnsupportedOperationException("Not supported yet."); }//To change body of generated methods, choose Tools | Templates.
+            Transfer rettransfer;
+            Double mtsum = approxDstFunds.getAmount().doubleValue();
+            Integer mtval = GetCurrency.getCurrencyID(approxDstFunds.getCur());
+            RemittanceHolder retval = new RemittanceHolder();
+            rettransfer = FindTransfer.FindTransfer(mtcn,mtsum,mtval,KEY_BANK_ID);
+            retval.setDstCountry(dstCountry);
+            retval.setOrgCountry(orgCountry);
+            retval.setMtID(rettransfer.getID().toString());
+            retval.setMtcn(rettransfer.getControlNumber().getValue());
+            retval.setDstFunds(getFundsHolder(rettransfer.getAmounts().getValue().getAmount(),AmountType.ESTIMATED_PAIDOUT));
+            retval.setOrgFunds(getFundsHolder(rettransfer.getAmounts().getValue().getAmount(),AmountType.MAIN));
+            retval.setPayer(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.SENDER));
+            retval.setPayee(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.EXPECTED_RECEIVER));
+            RemittanceHolder[] retarr = null;
+            retarr[1] = retval;
+            return retarr;
 	}
 
         @Override
@@ -129,61 +142,42 @@ public class MtUnistreamAdapter implements MtAdapter
 
         @Override
 	public void moneyPay(String mtID, String mtcn, PersonHolder payee, String docID, String docDate) throws RemittanceException, IOException {
-            try 
+            Transfer transfer = null;
+            if (mtID != null) 
             {
-                Transfer transfer = GetTransferByID.getTransferByID(BaseDataParser.parseInteger(mtID)).getTransfer().getValue();
-                if (transfer == null) {
-                    throw new RemittanceException("Перевод выплачен ругим банком", 30002, "","" );
-                }
-                if (transfer.getStatus() == TransferStatus.CANCELLED) {
-                    throw new RemittanceException("Перевод отозван", 30003, "","" );
-                }
-                if (transfer.getStatus() == TransferStatus.REJECTED) {
-                    throw new RemittanceException("Перевод отменен", 30004, "","" );
-                }
-                if (transfer.getStatus() == TransferStatus.PAID) {
-                    //TODO не понятно как сказать что все ОК?
-                    return;
-                }
-                //TODO Сделать обработку клиентской инфы
-                Person pers = getPerson(payee);
-                org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factoryp = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
-                List<Consumer> consumers = transfer.getConsumers().getValue().getConsumer();
-                List<org.datacontract.schemas._2004._07.wcfservicelib.Person> persons = null;
-                try {
-                     persons = FindPerson.FindPerson(pers).getPersons().getValue().getPerson();
-                } catch (Exception ex)
-                        {
-                            person = ????
-                        }
-                // TODO проверить а вообще кого нить нашли?
-                if (persons.size() == 0) 
-                    {
-                        persons.add(CreatePerson.CreatePerson(pers).getPerson().getValue());
-                    }
-                for (org.datacontract.schemas._2004._07.wcfservicelib.Person person: persons)
-                    {
-                        Consumer consumer = new Consumer();
-                        JAXBElement<org.datacontract.schemas._2004._07.wcfservicelib.Person> xperson = factoryp.createPerson(person);
-                        consumer.setPerson(xperson);
-                        consumer.setRole(ConsumerRole.ACTUAL_RECEIVER);
-                        consumers.add(consumer);
-                    }
-            } catch (Exception ex) {
-                    //TODO сделать нормальную обработку ошибок в том числе проверку на состояние готовности к выдаче
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-    }
+                Integer id = BaseDataParser.parseInteger(mtID);
+                transfer = GetTransferByID.getTransferByID(id).getTransfer().getValue();
+                checkTransferStatus(transfer);
+            }
+            else
+            {
+            //по уму надо искать заного но нема информации о сумме и валюте перевода и найти его не удастся. поэтому генерим exception
+                throw new RemittanceException("Не достаточно информации для поиска перевода",30010,"","");
+            }
+            //TODO Сделать обработку клиентской инфы
 
-    private Person getPerson(PersonHolder payee) throws Exception{
-        //try
-        //{
-           // Person retval = new Person();
-                throw new UnsupportedOperationException("Сделать обработку клиентской инфо");
-          /*  return  retval;
+            Person persh = getPerson(payee);
+            ObjectFactory factory = new ObjectFactory();
+            List<Consumer> consumers = transfer.getConsumers().getValue().getConsumer();
+            FindPersonRequestMessage pershshot = getpersshot(payee);
+            List<Person> persons = FindPerson.FindPersonJAXb(pershshot).getPersons().getValue().getPerson();
+            Person person = null;
+            // TODO проверить а вообще кого нить нашли?
+            if (persons.isEmpty()) 
+                {
+                    person = CreatePerson.CreatePersonJAXb(persh).getPerson().getValue();
+                }
+            else
+                {
+                    person = persons.get(1);
+                }
+            Consumer consumer = new Consumer();
+            JAXBElement<Person> xperson = factory.createPerson(person);
+            consumer.setPerson(xperson);
+            consumer.setRole(ConsumerRole.ACTUAL_RECEIVER);
+            consumers.add(consumer);
+            PayoutTransferResponseMessage retval = PayOutTransfer.payoutTransfer(transfer);
+            transfer= retval.getTransfer().getValue();
+            checkTransferStatus(transfer);
         }
-        catch (Exception ex) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }*/
-    }    
 }

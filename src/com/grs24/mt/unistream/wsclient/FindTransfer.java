@@ -26,7 +26,7 @@ public class FindTransfer {
     
     //private static Transfer cur_transfer;
     
-    public static Transfer FindTransfer(FindTransferRequestDto transfer) throws Exception {
+    public static Transfer FindTransfer(String controlNumber, Double sum, Integer val, Integer bankId) throws Exception {
         try
                 {
       /*              if (cur_transfer != null) {
@@ -38,11 +38,10 @@ public class FindTransfer {
                     org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
                     JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
                     ftrm.setAuthenticationHeader(ahh);
-                    ftrm.setBankID(transfer.getBankID()); 
-                    ftrm.setControlNumber(CommonLib.MakeString(_ControlNumber_QNAME, transfer.getControlNumber()));
-                    ftrm.setCurrencyID(transfer.getCurrencyID());
-                    ftrm.setSum(transfer.getSum());
-                    ftrm.setBankID(transfer.getBankID());
+                    ftrm.setBankID(bankId); 
+                    ftrm.setControlNumber(CommonLib.MakeString(_ControlNumber_QNAME, controlNumber));
+                    ftrm.setCurrencyID(val);
+                    ftrm.setSum(sum);
 //
                     com.unistream.test.wcflib.FindTransfer ftxml = new com.unistream.test.wcflib.FindTransfer();
                     ftxml.setRequestMessage(factory.createFindTransferRequestMessage(ftrm));
