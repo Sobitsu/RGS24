@@ -14,10 +14,12 @@ import com.grs24.mt.unistream.wsclient.FindPerson;
 import com.grs24.mt.unistream.wsclient.FindTransfer;
 import com.grs24.mt.unistream.wsclient.GetCurrency;
 import com.grs24.mt.unistream.wsclient.GetTransferByID;
-import com.grs24.mt.unistream.wsclient.PayOutTransfer;
+import static com.sun.mail.imap.protocol.INTERNALDATE.format;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import org.datacontract.schemas._2004._07.wcfservicelib.Amount;
@@ -61,14 +63,19 @@ public class MtUnistreamAdapter implements MtAdapter
                     throw new UnsupportedOperationException("Not supported configuration. Check cfg info");
                 }
         }
-        private FundsHolder getFundsHolder(List<Amount>  amounts, AmountType type)
+        private FundsHolder getFundsHolder(List<Amount>  amounts, AmountType type) throws RemittanceException
         {
             for (Amount i : amounts)
                  {
                      if (i.getType() == type) {
                          FundsHolder retval = new FundsHolder();
                          retval.setAmount(i.getSum());
-                         retval.setCur(GetCurrency.getCurrencyCode(i.getCurrencyID()));
+                         try {
+                             retval.setCur(GetCurrency.getCurrencyCode(i.getCurrencyID()));
+                         } catch (Exception ex) {
+                            Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                            throw new RemittanceException("Валюты с ID = " + i.getCurrencyID().toString() + "не найдено" , 10010, "","");
+                         }
                          return retval;
                      }
                  }
@@ -93,7 +100,7 @@ public class MtUnistreamAdapter implements MtAdapter
 
         private void checkTransferStatus(Transfer transfer) throws RemittanceException {
             if (transfer == null) {
-                throw new RemittanceException("Перевод выплачен ругим банком", 30002, "","" );
+                throw new RemittanceException("Перевод выплачен другим банком", 30002, "","" );
             }
             if (transfer.getStatus() == TransferStatus.CANCELLED) {
                 throw new RemittanceException("Перевод отозван", 30003, "","" );
@@ -103,13 +110,18 @@ public class MtUnistreamAdapter implements MtAdapter
             }
             if (transfer.getStatus() == TransferStatus.PAID) {
                 //TODO не понятно как сказать что все ОК?
-                throw new RemittanceException("Перевод оплачен", 10000, "","" );
+                throw new RemittanceException("Перевод оплачен", 30000, "","" );
             }
         }
     
-        private FindPersonRequestMessage getpersshot(PersonHolder payee) {
+        private FindPersonRequestMessage getpersshot(PersonHolder payee) throws RemittanceException {
             FindPersonRequestMessage fprm = new FindPersonRequestMessage();
-            if (payee.getBirthday() != null) fprm.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
+            if (payee.getBirthday() != null) try {
+                fprm.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
+            } catch (Exception ex) {
+                Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RemittanceException("Ошибка преобразования даты:" + format(payee.getBirthday()), 20001, "","");                
+            }
             if (payee.getFullName().getIndividual().getFirst() != null) fprm.setFirstname(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
             if (payee.getFullName().getIndividual().getLast() != null) fprm.setLastname(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
             if (payee.getFullName().getIndividual().getMiddle() != null) fprm.setMiddlename(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
@@ -117,19 +129,48 @@ public class MtUnistreamAdapter implements MtAdapter
             if (payee.getIdentification() != null) {
                 if (payee.getIdentification().getCNumber() != null) fprm.setDocNumber(CommonLib.MakeString(_DocNumber_QNAME,payee.getIdentification().getCNumber()));
                 if (payee.getIdentification().getSerialNumber() != null) fprm.setDocSeries(CommonLib.MakeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
-                if (payee.getIdentification().getIssueDate() != null) fprm.setDocIssueDate(CommonLib.GetGregorianDate(payee.getIdentification().getIssueDate()));
-                if (payee.getIdentification().getExpiryDate() != null) fprm.setDocExpiryDate(CommonLib.GetGregorianDate(payee.getIdentification().getExpiryDate()));
+                if (payee.getIdentification().getIssueDate() != null) try {
+                    fprm.setDocIssueDate(CommonLib.GetGregorianDate(payee.getIdentification().getIssueDate()));
+                } catch (Exception ex) {
+                    Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new RemittanceException("Ошибка преобразования даты:" + format(payee.getIdentification().getIssueDate()), 20001, "","");                
+                }
+                if (payee.getIdentification().getExpiryDate() != null) try {
+                    fprm.setDocExpiryDate(CommonLib.GetGregorianDate(payee.getIdentification().getExpiryDate()));
+                } catch (Exception ex) {
+                    Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new RemittanceException("Ошибка преобразования даты:" + format(payee.getIdentification().getExpiryDate()), 20001, "","");                
+                }
             }
             return fprm;
         }
 
-        private Person getPerson(PersonHolder payee){
+        private Person getPerson(PersonHolder payee) throws RemittanceException{
             Person person =  new Person();
-               if (payee.getRegistration() != null ) person.setAddress(CommonLib.getAdressElem(payee.getRegistration()));
-               if (payee.getIdentification() != null) person.setDocuments(CommonLib.getDocuments(payee.getIdentification()));
-               if (payee.getPhone() != null && payee.getPhone().length > 0) person.setPhones(CommonLib.getPhones(payee.getPhone()));
-               
-               if (payee.getBirthday() != null) person.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
+               if (payee.getRegistration() != null ) try {
+                   person.setAddress(CommonLib.getAdressElem(payee.getRegistration()));
+            } catch (Exception ex) {
+                Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RemittanceException("Ошибка обработки адреса:" +payee.getRegistration().toString() , 20002, "","");                
+            }
+               if (payee.getIdentification() != null) try {
+                   person.setDocuments(CommonLib.getDocuments(payee.getIdentification()));
+            } catch (Exception ex) {
+                Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RemittanceException("Ошибка обработки удостоверения личности:" +payee.getIdentification().toString() , 20003, "","");                
+            }
+               if (payee.getPhone() != null && payee.getPhone().length > 0) try {
+                   person.setPhones(CommonLib.getPhones(payee.getPhone()));
+            } catch (Exception ex) {
+                Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RemittanceException("Ошибка обработки телефона:" +payee.getPhone().toString() , 20004, "","");                
+            }
+               if (payee.getBirthday() != null) try {
+                   person.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
+            } catch (Exception ex) {
+                Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RemittanceException("Ошибка преобразования даты:" + format(payee.getBirthday()), 20001, "","");                
+            }
                if (payee.getFullName().getIndividual().getFirst() != null) person.setFirstName(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
                if (payee.getFullName().getIndividual().getLast() != null) person.setLastName(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
                if (payee.getFullName().getIndividual().getMiddle() != null) person.setMiddleName(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
