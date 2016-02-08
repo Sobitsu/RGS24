@@ -18,18 +18,13 @@ import org.datacontract.schemas._2004._07.wcfservicelib.GetTransferByIDResponseM
  */
 public class GetTransferByID {
     
-       public static GetTransferByIDResponseMessage getTransferByID(Integer transferId) throws Exception {
-        try
-                {
-                    GetTransferByIDRequestMessage gtrm = new GetTransferByIDRequestMessage();
-                    JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
-                    gtrm.setAuthenticationHeader(ahh);
-                    gtrm.setTransferID(transferId);
-                    IWebService service = new WebService().getWS2007HttpBindingIWebService();
-                    GetTransferByIDResponseMessage rm = service.getTransferByID(gtrm);
-                    CommonLib.CheckFault(rm);
-                    return rm;
-               } catch (Exception ex) {
-                    throw new UnsupportedOperationException("Unistream returned error: " + ex.getMessage());}
+    public static GetTransferByIDResponseMessage getTransferByID(Integer transferId) throws Exception {
+        GetTransferByIDRequestMessage gtrm = new GetTransferByIDRequestMessage();
+        JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+        gtrm.setAuthenticationHeader(ahh);
+        gtrm.setTransferID(transferId);
+        IWebService service = new WebService().getWS2007HttpBindingIWebService();
+        GetTransferByIDResponseMessage rm = service.getTransferByID(gtrm);
+        return rm;
     }
 }

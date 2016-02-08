@@ -8,6 +8,7 @@ import com.grs24.mt.MtAdapter;
 import com.grs24.mt.PersonHolder;
 import com.grs24.mt.RemittanceException;
 import com.grs24.mt.RemittanceHolder;
+import com.grs24.mt.unistream.wsclient.CommonLib;
 import com.grs24.mt.unistream.wsclient.CreatePerson;
 import com.grs24.mt.unistream.wsclient.FindPerson;
 import com.grs24.mt.unistream.wsclient.FindTransfer;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
 import org.datacontract.schemas._2004._07.wcfservicelib.Amount;
 import org.datacontract.schemas._2004._07.wcfservicelib.AmountType;
 import org.datacontract.schemas._2004._07.wcfservicelib.Consumer;
@@ -34,6 +36,15 @@ import org.datacontract.schemas._2004._07.wcfservicelib.Person;
  */
 public class MtUnistreamAdapter implements MtAdapter
 {       
+        private final static QName _FirstName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "FirstName");
+        private final static QName _LastName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "LastName");
+        private final static QName _MiddleName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "MiddleName");
+        private final static QName _DocNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "DocNumber");
+        private final static QName _DocSeries_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "DocSeries");
+        private final static QName _PhoneArea_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "PhoneArea");
+        private final static QName _PhoneNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "PhoneNumber");
+        private final static QName _Phone_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Phone");
+        private final static QName _UnistreamCardNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "UnistreamCardNumber");
         public static String KEY_USER_AUTHED_APIKEY;// = "1wwteyFGFew624";
 	public static String KEY_USER_AUTHED_LOGIN;// = "g2.grstwentyfour.rus";
 	public static String KEY_USER_AUTHED_PASSWORD;// = "7!LrO7i7";
@@ -97,12 +108,32 @@ public class MtUnistreamAdapter implements MtAdapter
         }
     
         private FindPersonRequestMessage getpersshot(PersonHolder payee) {
-            
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            FindPersonRequestMessage fprm = new FindPersonRequestMessage();
+            if (payee.getBirthday() != null) fprm.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
+            if (payee.getFullName().getIndividual().getFirst() != null) fprm.setFirstname(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
+            if (payee.getFullName().getIndividual().getLast() != null) fprm.setLastname(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
+            if (payee.getFullName().getIndividual().getMiddle() != null) fprm.setMiddlename(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
+            if (payee.getPhone()[1] != null) fprm.setPhone(CommonLib.MakeString(_Phone_QNAME,payee.getPhone()[1]));
+            if (payee.getIdentification() != null) {
+                if (payee.getIdentification().getCNumber() != null) fprm.setDocNumber(CommonLib.MakeString(_DocNumber_QNAME,payee.getIdentification().getCNumber()));
+                if (payee.getIdentification().getSerialNumber() != null) fprm.setDocSeries(CommonLib.MakeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
+                if (payee.getIdentification().getIssueDate() != null) fprm.setDocIssueDate(CommonLib.GetGregorianDate(payee.getIdentification().getIssueDate()));
+                if (payee.getIdentification().getExpiryDate() != null) fprm.setDocExpiryDate(CommonLib.GetGregorianDate(payee.getIdentification().getExpiryDate()));
+            }
+            return fprm;
         }
 
         private Person getPerson(PersonHolder payee){
-            throw new UnsupportedOperationException("Сделать обработку клиентской инфо");
+            Person person =  new Person();
+               if (payee.getRegistration() != null ) person.setAddress(CommonLib.getAdressElem(payee.getRegistration()));
+               if (payee.getIdentification() != null) person.setDocuments(CommonLib.getDocuments(payee.getIdentification()));
+               if (payee.getPhone() != null && payee.getPhone().length > 0) person.setPhones(CommonLib.getPhones(payee.getPhone()));
+               
+               if (payee.getBirthday() != null) person.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
+               if (payee.getFullName().getIndividual().getFirst() != null) person.setFirstName(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
+               if (payee.getFullName().getIndividual().getLast() != null) person.setLastName(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
+               if (payee.getFullName().getIndividual().getMiddle() != null) person.setMiddleName(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
+            return person;
         }    
 
         @Override

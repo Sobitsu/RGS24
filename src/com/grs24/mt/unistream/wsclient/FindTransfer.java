@@ -5,7 +5,6 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import com.grs24.mt.unistream.dto.FindTransferRequestDto;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
 import javax.xml.bind.JAXBElement;
@@ -21,40 +20,26 @@ import org.datacontract.schemas._2004._07.wcfservicelib.Transfer;
  */
 public class FindTransfer {
     
-    //TODO обсудить со Стасом как сделать потокобезопасным эту часть
     private final static QName _ControlNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "ControlNumber");
     
-    //private static Transfer cur_transfer;
-    
     public static Transfer FindTransfer(String controlNumber, Double sum, Integer val, Integer bankId) throws Exception {
-        try
-                {
-      /*              if (cur_transfer != null) {
-                        if (transfer.getControlNumber().equals(cur_transfer.getControlNumber().getValue())) {
-                            return cur_transfer;
-                        }
-                    }*/
-                    FindTransferRequestMessage ftrm = new FindTransferRequestMessage();
-                    org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
-                    JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
-                    ftrm.setAuthenticationHeader(ahh);
-                    ftrm.setBankID(bankId); 
-                    ftrm.setControlNumber(CommonLib.MakeString(_ControlNumber_QNAME, controlNumber));
-                    ftrm.setCurrencyID(val);
-                    ftrm.setSum(sum);
+        FindTransferRequestMessage ftrm = new FindTransferRequestMessage();
+        org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
+        JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+        ftrm.setAuthenticationHeader(ahh);
+        ftrm.setBankID(bankId); 
+        ftrm.setControlNumber(CommonLib.MakeString(_ControlNumber_QNAME, controlNumber));
+        ftrm.setCurrencyID(val);
+        ftrm.setSum(sum);
 //
-                    com.unistream.test.wcflib.FindTransfer ftxml = new com.unistream.test.wcflib.FindTransfer();
-                    ftxml.setRequestMessage(factory.createFindTransferRequestMessage(ftrm));
-                    CommonLib.printXml(ftxml);
+        com.unistream.test.wcflib.FindTransfer ftxml = new com.unistream.test.wcflib.FindTransfer();
+        ftxml.setRequestMessage(factory.createFindTransferRequestMessage(ftrm));
+        CommonLib.printXml(ftxml);
 //                    
-                    IWebService service = new WebService().getWS2007HttpBindingIWebService();
-                    FindTransferResponseMessage rm = service.findTransfer(ftrm);
-                    CommonLib.CheckFault(rm);
-                    Transfer ret_value;
-                    ret_value = rm.getTransfer().getValue();
-//                    cur_transfer = ret_value;
-                    return ret_value;
-               } catch (Exception ex) {
-                    throw new Exception("FindTransfer error: " + ex.getMessage());}
+        IWebService service = new WebService().getWS2007HttpBindingIWebService();
+        FindTransferResponseMessage rm = service.findTransfer(ftrm);
+        Transfer ret_value;
+        ret_value = rm.getTransfer().getValue();
+        return ret_value;
     }
  }
