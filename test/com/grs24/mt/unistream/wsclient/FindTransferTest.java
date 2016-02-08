@@ -5,7 +5,7 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import org.datacontract.schemas._2004._07.wcfservicelib.GetTransferByIDResponseMessage;
+import org.datacontract.schemas._2004._07.wcfservicelib.FindTransferResponseMessage;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,9 +17,9 @@ import static org.junit.Assert.*;
  *
  * @author Dale
  */
-public class GetTransferByIDTest {
+public class FindTransferTest {
     
-    public GetTransferByIDTest() {
+    public FindTransferTest() {
     }
     
     @BeforeClass
@@ -39,14 +39,17 @@ public class GetTransferByIDTest {
     }
 
     /**
-     * Test of getTransferByID method, of class GetTransferByID.
+     * Test of FindTransfer method, of class FindTransfer.
      */
     @Test
-    public void testGetTransferByID() throws Exception {
-        System.out.println("getTransferByID");
-        Integer transferId = null;
-        GetTransferByIDResponseMessage expResult = null;
-        GetTransferByIDResponseMessage result = GetTransferByID.getTransferByID(transferId);
+    public void testFindTransfer() throws Exception {
+        System.out.println("FindTransfer");
+        String controlNumber = "";
+        Double sum = null;
+        Integer val = null;
+        Integer bankId = null;
+        FindTransferResponseMessage expResult = null;
+        FindTransferResponseMessage result = FindTransfer.FindTransfer(controlNumber, sum, val, bankId);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

@@ -12,7 +12,6 @@ import javax.xml.namespace.QName;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindTransferRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindTransferResponseMessage;
-import org.datacontract.schemas._2004._07.wcfservicelib.Transfer;
 
 /**
  *
@@ -22,7 +21,7 @@ public class FindTransfer {
     
     private final static QName _ControlNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "ControlNumber");
     
-    public static Transfer FindTransfer(String controlNumber, Double sum, Integer val, Integer bankId) throws Exception {
+    public static FindTransferResponseMessage FindTransfer(String controlNumber, Double sum, Integer val, Integer bankId) throws Exception {
         FindTransferRequestMessage ftrm = new FindTransferRequestMessage();
         org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
         JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
@@ -38,8 +37,6 @@ public class FindTransfer {
 //                    
         IWebService service = new WebService().getWS2007HttpBindingIWebService();
         FindTransferResponseMessage rm = service.findTransfer(ftrm);
-        Transfer ret_value;
-        ret_value = rm.getTransfer().getValue();
-        return ret_value;
+        return rm;
     }
  }

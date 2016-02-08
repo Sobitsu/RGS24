@@ -5,7 +5,6 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import org.datacontract.schemas._2004._07.wcfservicelib.GetTransferByIDResponseMessage;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,9 +16,9 @@ import static org.junit.Assert.*;
  *
  * @author Dale
  */
-public class GetTransferByIDTest {
+public class GetCurrencyTest {
     
-    public GetTransferByIDTest() {
+    public GetCurrencyTest() {
     }
     
     @BeforeClass
@@ -39,14 +38,28 @@ public class GetTransferByIDTest {
     }
 
     /**
-     * Test of getTransferByID method, of class GetTransferByID.
+     * Test of getCurrencyID method, of class GetCurrency.
      */
     @Test
-    public void testGetTransferByID() throws Exception {
-        System.out.println("getTransferByID");
-        Integer transferId = null;
-        GetTransferByIDResponseMessage expResult = null;
-        GetTransferByIDResponseMessage result = GetTransferByID.getTransferByID(transferId);
+    public void testGetCurrencyID() throws Exception {
+        System.out.println("getCurrencyID");
+        String CurrencyCode = "";
+        Integer expResult = null;
+        Integer result = GetCurrency.getCurrencyID(CurrencyCode);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getCurrencyCode method, of class GetCurrency.
+     */
+    @Test
+    public void testGetCurrencyCode() throws Exception {
+        System.out.println("getCurrencyCode");
+        Integer currencyId = null;
+        String expResult = "";
+        String result = GetCurrency.getCurrencyCode(currencyId);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

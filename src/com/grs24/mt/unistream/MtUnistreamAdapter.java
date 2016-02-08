@@ -14,6 +14,7 @@ import com.grs24.mt.unistream.wsclient.FindPerson;
 import com.grs24.mt.unistream.wsclient.FindTransfer;
 import com.grs24.mt.unistream.wsclient.GetCurrency;
 import com.grs24.mt.unistream.wsclient.GetTransferByID;
+import com.grs24.mt.unistream.wsclient.PayOutTransfer;
 import static com.sun.mail.imap.protocol.INTERNALDATE.format;
 import java.io.IOException;
 import java.util.List;
@@ -21,12 +22,17 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import org.datacontract.schemas._2004._07.wcfservicelib.Amount;
 import org.datacontract.schemas._2004._07.wcfservicelib.AmountType;
 import org.datacontract.schemas._2004._07.wcfservicelib.Consumer;
 import org.datacontract.schemas._2004._07.wcfservicelib.ConsumerRole;
+import org.datacontract.schemas._2004._07.wcfservicelib.CreatePersonResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonRequestMessage;
+import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonResponseMessage;
+import org.datacontract.schemas._2004._07.wcfservicelib.FindTransferResponseMessage;
+import org.datacontract.schemas._2004._07.wcfservicelib.GetTransferByIDResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.PayoutTransferResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.Transfer;
 import org.datacontract.schemas._2004._07.wcfservicelib.TransferStatus;
@@ -186,9 +192,23 @@ public class MtUnistreamAdapter implements MtAdapter
                     throws RemittanceException, IOException {
             Transfer rettransfer;
             Double mtsum = approxDstFunds.getAmount().doubleValue();
-            Integer mtval = GetCurrency.getCurrencyID(approxDstFunds.getCur());
+            Integer mtval;
+            try {
+                mtval = GetCurrency.getCurrencyID(approxDstFunds.getCur());
+            } catch (Exception ex) {
+                Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RemittanceException("Валюты с кодом = " + approxDstFunds.getCur() + "не найдено" , 10011, "","");
+            }
             RemittanceHolder retval = new RemittanceHolder();
-            rettransfer = FindTransfer.FindTransfer(mtcn,mtsum,mtval,KEY_BANK_ID);
+            try {
+                FindTransferResponseMessage rm = FindTransfer.FindTransfer(mtcn,mtsum,mtval,KEY_BANK_ID);
+                CommonLib.CheckFault(rm);
+                rettransfer = rm.getTransfer().getValue();
+                checkTransferStatus(rettransfer);
+            } catch (Exception ex) {
+                Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RemittanceException("Ошибка при поиске перевода", 40001, "",ex.getMessage());
+            }
             retval.setDstCountry(dstCountry);
             retval.setOrgCountry(orgCountry);
             retval.setMtID(rettransfer.getID().toString());
@@ -218,26 +238,47 @@ public class MtUnistreamAdapter implements MtAdapter
             if (mtID != null) 
             {
                 Integer id = BaseDataParser.parseInteger(mtID);
-                transfer = GetTransferByID.getTransferByID(id).getTransfer().getValue();
+                try {
+                    GetTransferByIDResponseMessage gtrm = GetTransferByID.getTransferByID(id);
+                    CommonLib.CheckFault(gtrm);
+                    transfer = gtrm.getTransfer().getValue();
+                } catch (Exception ex) {
+                    Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new RemittanceException("Ошибка при поиске перевода", 40001, "",ex.getMessage());
+            }
                 checkTransferStatus(transfer);
             }
             else
             {
             //по уму надо искать заного но нема информации о сумме и валюте перевода и найти его не удастся. поэтому генерим exception
-                throw new RemittanceException("Не достаточно информации для поиска перевода",30010,"","");
+                throw new RemittanceException("Не достаточно информации для поиска перевода",40002,"","");
             }
-            //TODO Сделать обработку клиентской инфы
-
             Person persh = getPerson(payee);
             ObjectFactory factory = new ObjectFactory();
             List<Consumer> consumers = transfer.getConsumers().getValue().getConsumer();
             FindPersonRequestMessage pershshot = getpersshot(payee);
-            List<Person> persons = FindPerson.FindPersonJAXb(pershshot).getPersons().getValue().getPerson();
+            FindPersonResponseMessage fprm;
+            try {
+                fprm = FindPerson.FindPersonJAXb(pershshot);
+                CommonLib.CheckFault(fprm);
+            } catch (Exception ex) {
+                Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RemittanceException("Ошибка при поиске клиента", 40002, "",ex.getMessage());
+            }
+            List<Person> persons = fprm.getPersons().getValue().getPerson();
             Person person = null;
             // TODO проверить а вообще кого нить нашли?
             if (persons.isEmpty()) 
                 {
-                    person = CreatePerson.CreatePersonJAXb(persh).getPerson().getValue();
+                    CreatePersonResponseMessage cprm;
+                    try {
+                        cprm = CreatePerson.CreatePersonJAXb(persh);
+                        CommonLib.CheckFault(fprm);                    
+                    } catch (Exception ex) {
+                        Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new RemittanceException("Ошибка при создании клиента", 40003, "",ex.getMessage());                    
+                    }
+                    person = cprm.getPerson().getValue();
                 }
             else
                 {
@@ -248,7 +289,14 @@ public class MtUnistreamAdapter implements MtAdapter
             consumer.setPerson(xperson);
             consumer.setRole(ConsumerRole.ACTUAL_RECEIVER);
             consumers.add(consumer);
-            PayoutTransferResponseMessage retval = PayOutTransfer.payoutTransfer(transfer);
+            PayoutTransferResponseMessage retval;
+            try {
+                retval = PayOutTransfer.payoutTransfer(transfer);
+                CommonLib.CheckFault(fprm);
+            } catch (JAXBException ex) {
+                Logger.getLogger(MtUnistreamAdapter.class.getName()).log(Level.SEVERE, null, ex);
+                throw new RemittanceException("Ошибка при оплате перевода", 40004, "",ex.getMessage()); 
+            }
             transfer= retval.getTransfer().getValue();
             checkTransferStatus(transfer);
         }
