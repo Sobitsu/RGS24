@@ -28,7 +28,7 @@ public class GetCurrency {
                 GetCurrenciesChangesResponseMessage rm = service.getCurrenciesChanges(gcrm);
                 for (Currency i : rm.getCurrencies().getValue().getCurrency())
                         {
-                            if (i.getDigital().getValue().equals(CurrencyCode) ) {
+                            if (i.getLatin3().getValue().equals(CurrencyCode) ) {
                                 return i.getID();
                             }
                         }
@@ -47,7 +47,7 @@ public class GetCurrency {
                 for (Currency i : rm.getCurrencies().getValue().getCurrency())
                         {
                             if (i.getID().equals(currencyId) ) {
-                                return i.getDigital().getValue();
+                                return i.getLatin3().getValue();
                             }
                         }
                 return null;

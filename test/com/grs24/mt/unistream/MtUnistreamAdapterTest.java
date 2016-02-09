@@ -5,7 +5,11 @@
  */
 package com.grs24.mt.unistream;
 
+import com.grs24.mt.AddressHolder;
+import com.grs24.mt.CredentialsHolder;
+import com.grs24.mt.FullNameTypeHolder;
 import com.grs24.mt.FundsHolder;
+import com.grs24.mt.IndividualHolder;
 import com.grs24.mt.PersonHolder;
 import com.grs24.mt.RemittanceHolder;
 import java.util.Properties;
@@ -15,6 +19,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import java.math.BigDecimal;
 
 /**
  *
@@ -22,6 +27,11 @@ import static org.junit.Assert.*;
  */
 public class MtUnistreamAdapterTest {
     
+    public static String KEY_USER_AUTHED_APIKEY = "1wwteyFGFew624";
+    public static String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
+    public static String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
+    public static Integer KEY_BANK_ID = 383589;
+
     public MtUnistreamAdapterTest() {
     }
     
@@ -41,66 +51,53 @@ public class MtUnistreamAdapterTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of init method, of class MtUnistreamAdapter.
-     */
-    @Test
-    public void testInit() throws Exception {
-        System.out.println("init");
-        Properties cfg = null;
-        MtUnistreamAdapter instance = new MtUnistreamAdapter();
-        instance.init(cfg);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
 
     /**
      * Test of moneySearch method, of class MtUnistreamAdapter.
      */
+    
     @Test
     public void testMoneySearch() throws Exception {
         System.out.println("moneySearch");
-        String mtcn = "";
-        FundsHolder approxOrgFunds = null;
-        FundsHolder approxDstFunds = null;
-        String orgCountry = "";
-        String dstCountry = "";
+        Properties cfg = new Properties();
+        cfg.setProperty("APIKEY", KEY_USER_AUTHED_APIKEY);
+        cfg.setProperty("LOGIN", KEY_USER_AUTHED_LOGIN);
+        cfg.setProperty("PASSWORD", KEY_USER_AUTHED_PASSWORD);
+        cfg.setProperty("BANKID", KEY_BANK_ID.toString());
         MtUnistreamAdapter instance = new MtUnistreamAdapter();
-        RemittanceHolder[] expResult = null;
+        instance.init(cfg);
+        String mtcn = "828105025765";
+        FundsHolder approxOrgFunds = null;
+        FundsHolder approxDstFunds = new FundsHolder();
+        BigDecimal bd = new BigDecimal("1500");
+        approxDstFunds.setAmount(bd);
+        approxDstFunds.setCur("RUB");
+        String orgCountry = "Russia";
+        String dstCountry = "Russia";
+        RemittanceHolder[] expResult = new RemittanceHolder[1];
+        RemittanceHolder retval = new RemittanceHolder();
+        retval.setDstCountry(dstCountry);
+        retval.setOrgCountry(orgCountry);
+        retval.setMtcn(mtcn);
+        retval.setOrgFunds(approxDstFunds);
+        retval.setMtID("16015170");
+        FullNameTypeHolder payer_ = new FullNameTypeHolder();
+        IndividualHolder individual_ = new IndividualHolder();
+        individual_.setFirst("Роман");
+        individual_.setLast("Градинар");
+        individual_.setMiddle("Игоревич");
+        payer_.setIndividual(individual_);
+        retval.setPayer(payer_);
+        payer_ = new FullNameTypeHolder();
+        individual_ = new IndividualHolder();
+        individual_.setFirst("Павпва");
+        individual_.setLast("Авпва");
+        individual_.setMiddle("Вппва");
+        payer_.setIndividual(individual_);
+        retval.setPayee(payer_);
+        expResult[0] = retval;
         RemittanceHolder[] result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
         assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of moneyHold method, of class MtUnistreamAdapter.
-     */
-    @Test
-    public void testMoneyHold() throws Exception {
-        System.out.println("moneyHold");
-        String mtID = "";
-        String mtcn = "";
-        PersonHolder payee = null;
-        MtUnistreamAdapter instance = new MtUnistreamAdapter();
-        instance.moneyHold(mtID, mtcn, payee);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of moneyUnhold method, of class MtUnistreamAdapter.
-     */
-    @Test
-    public void testMoneyUnhold() throws Exception {
-        System.out.println("moneyUnhold");
-        String mtID = "";
-        String mtcn = "";
-        PersonHolder payee = null;
-        MtUnistreamAdapter instance = new MtUnistreamAdapter();
-        instance.moneyUnhold(mtID, mtcn, payee);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -109,15 +106,52 @@ public class MtUnistreamAdapterTest {
     @Test
     public void testMoneyPay() throws Exception {
         System.out.println("moneyPay");
-        String mtID = "";
-        String mtcn = "";
-        PersonHolder payee = null;
+        Properties cfg = new Properties();
+        cfg.setProperty("APIKEY", KEY_USER_AUTHED_APIKEY);
+        cfg.setProperty("LOGIN", KEY_USER_AUTHED_LOGIN);
+        cfg.setProperty("PASSWORD", KEY_USER_AUTHED_PASSWORD);
+        cfg.setProperty("BANKID", KEY_BANK_ID.toString());
+        MtUnistreamAdapter instance = new MtUnistreamAdapter();
+        instance.init(cfg);
+        String mtcn = "828105025765";
+        FundsHolder approxOrgFunds = null;
+        FundsHolder approxDstFunds = new FundsHolder();
+        BigDecimal bd = new BigDecimal("1500");
+        approxDstFunds.setAmount(bd);
+        approxDstFunds.setCur("RUB");
+        String orgCountry = "Russia";
+        String dstCountry = "Russia";
+        RemittanceHolder[] result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+        String mtID = result[0].getMtID();
+        PersonHolder payee = new PersonHolder();
+        payee.setCitizenCountry("Россия");
+        FullNameTypeHolder fullName_ = new FullNameTypeHolder();
+        IndividualHolder individual_ = new IndividualHolder();
+        individual_.setFirst("Владимир");
+        individual_.setLast("Резин");
+        individual_.setMiddle("Сергеевич");
+        fullName_.setIndividual(individual_);
+        payee.setFullName(fullName_);
+        CredentialsHolder identification_ = new CredentialsHolder();
+        identification_.setCCountry("Россия");
+        identification_.setCNumber("656565");
+        identification_.setIssueCity("Нск");
+        identification_.setIssuer("Нск");
+        identification_.setSerialNumber("5404");
+        payee.setIdentification(identification_);
+        String[] phone_ = new String[1];
+        phone_[0] = "+79139222200";
+        payee.setPhone(phone_);
+        AddressHolder registration_ = new AddressHolder();
+        registration_.setCity("Новосибирск");
+        registration_.setStreet1("Большивисткая");
+        registration_.setStreet2("101");
+        registration_.setZipCode("630090");
+        payee.setRegistration(registration_);
+        payee.setResidentCountry("Россия");
         String docID = "";
         String docDate = "";
-        MtUnistreamAdapter instance = new MtUnistreamAdapter();
         instance.moneyPay(mtID, mtcn, payee, docID, docDate);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

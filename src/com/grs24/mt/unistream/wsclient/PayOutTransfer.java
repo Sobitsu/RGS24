@@ -32,6 +32,4 @@ public class PayOutTransfer {
         PayoutTransferResponseMessage rm = service.payoutTransfer(ptrm);
         return rm;
     }
-
-  
 }

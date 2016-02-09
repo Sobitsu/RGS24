@@ -108,7 +108,7 @@ public class CommonLib {
         ObjectFactory factoryp = new ObjectFactory();
         ArrayOfPhone valuearr = factoryp.createArrayOfPhone();
         if (phones != null &&  phones.length>0) {
-            for(int i=1; i<=phones.length; i++) {
+            for(int i=0; i<phones.length; i++) {
                 Phone valphone = factoryp.createPhone();
                 if (phones[i] != null) valphone.setNumber(CommonLib.MakeString(_PhoneNumber_QNAME,phones[i]));
                 valphone.setType(PhoneType.MOBILE);

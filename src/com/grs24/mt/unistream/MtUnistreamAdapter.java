@@ -131,7 +131,7 @@ public class MtUnistreamAdapter implements MtAdapter
             if (payee.getFullName().getIndividual().getFirst() != null) fprm.setFirstname(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
             if (payee.getFullName().getIndividual().getLast() != null) fprm.setLastname(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
             if (payee.getFullName().getIndividual().getMiddle() != null) fprm.setMiddlename(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
-            if (payee.getPhone()[1] != null) fprm.setPhone(CommonLib.MakeString(_Phone_QNAME,payee.getPhone()[1]));
+            if (payee.getPhone()[0] != null) fprm.setPhone(CommonLib.MakeString(_Phone_QNAME,payee.getPhone()[0]));
             if (payee.getIdentification() != null) {
                 if (payee.getIdentification().getCNumber() != null) fprm.setDocNumber(CommonLib.MakeString(_DocNumber_QNAME,payee.getIdentification().getCNumber()));
                 if (payee.getIdentification().getSerialNumber() != null) fprm.setDocSeries(CommonLib.MakeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
@@ -217,9 +217,9 @@ public class MtUnistreamAdapter implements MtAdapter
             retval.setOrgFunds(getFundsHolder(rettransfer.getAmounts().getValue().getAmount(),AmountType.MAIN));
             retval.setPayer(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.SENDER));
             retval.setPayee(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.EXPECTED_RECEIVER));
-            RemittanceHolder[] retarr = null;
-            retarr[1] = retval;
-            return retarr;
+            RemittanceHolder[] expResult = new RemittanceHolder[1];
+            expResult[0] = retval;
+            return expResult;
 	}
 
         @Override
