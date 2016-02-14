@@ -16,6 +16,7 @@ import com.grs24.mt.unistream.MtUnistreamAdapter;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -55,14 +56,27 @@ public class CommonLib {
     private final static QName _Street_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Street");
     private final static QName _PostalCode_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "PostalCode");
 
+/**
+* Обработка отрицательного ответа от СДП 
+* @param response - ответ сервера
+* @throws RemittanceException в случае провала выполение
+*/ 
     public static void CheckFault(WsResponse response) throws RemittanceException {
         if(!response.getFault().isNil())
         {
+            MtUnistreamAdapter.logger.log(Level.SEVERE,"Unistream returned error: "+response.getFault().getValue().getMessage().getValue());
             throw new RemittanceException("Unistream returned error", BaseDataParser.parseInteger(response.getFault().getValue().getID().getValue()), response.getFault().getValue().getCode().value(),response.getFault().getValue().getMessage().getValue());
         }
     }  
+
+/**
+* Формирование авторизационного заголовка запросов  
+* @return заголовок
+*/ 
+
     public static JAXBElement<AuthenticationHeader> MakeAuthHead()
         {
+            MtUnistreamAdapter.logger.log(Level.INFO,"Create AuthenticationHeader");
             ObjectFactory factory = new ObjectFactory();
             AuthenticationHeader ah = factory.createAuthenticationHeader();
             JAXBElement<AuthenticationHeader> ahh = factory.createWsRequestAuthenticationHeader(ah);
@@ -71,12 +85,27 @@ public class CommonLib {
             ah.setPassword(factory.createAuthenticationHeaderPassword(MtUnistreamAdapter.KEY_USER_AUTHED_PASSWORD));
             return ahh;
         }
-        
+
+/**
+* Формирование простого строкового JAXBElement
+* @param qname 
+* @param value
+* @return строкового JAXBElement
+*/ 
+    
     public static JAXBElement<String> MakeString(QName qname, String value)
         {
             return new JAXBElement<String>(qname, String.class, null, value);
         }
+
+/**
+* Формирование JAXBElement массива удостоверений личности
+* @param credholder 
+* @return массива JAXBElement
+* @throws Exception в случае провала выполение
+*/ 
     public static JAXBElement<ArrayOfDocument> getDocuments(CredentialsHolder credholder) throws Exception {
+        MtUnistreamAdapter.logger.log(Level.INFO,"Create JAXBElement<ArrayOfDocument>");
         ObjectFactory factory = new ObjectFactory();
         ArrayOfDocument valuearr = factory.createArrayOfDocument();
         if (credholder != null) {
@@ -92,8 +121,14 @@ public class CommonLib {
         JAXBElement<ArrayOfDocument> result = factory.createArrayOfDocument(valuearr);
         return result;
     }
-
+/**
+* Формирование JAXBElement массива адресов
+* @param registr 
+* @return массива JAXBElement
+* @throws Exception в случае провала выполение
+*/ 
     public static JAXBElement<PersonAddress> getAdressElem(AddressHolder registr) throws Exception {
+        MtUnistreamAdapter.logger.log(Level.INFO,"Create JAXBElement<PersonAddress>");
         ObjectFactory factoryp = new ObjectFactory();
         PersonAddress value = factoryp.createPersonAddress();
         if (registr.getCity() != null ) value.setCity(CommonLib.MakeString(_PACity_QNAME,registr.getCity()));
@@ -104,7 +139,15 @@ public class CommonLib {
         return result;
     }
 
+/**
+* Формирование JAXBElement массива номеров телефона
+* @param phones
+* @return массива JAXBElement
+* @throws Exception в случае провала выполение
+*/ 
+    
     public static JAXBElement<ArrayOfPhone> getPhones(String[] phones) throws Exception {
+        MtUnistreamAdapter.logger.log(Level.INFO,"Create JAXBElement<ArrayOfPhone>");
         ObjectFactory factoryp = new ObjectFactory();
         ArrayOfPhone valuearr = factoryp.createArrayOfPhone();
         if (phones != null &&  phones.length>0) {
@@ -119,13 +162,29 @@ public class CommonLib {
         return result;
     }
 
+/**
+* Преобразование Даты в XMLGregorianCalendar
+* @param date
+* @return XMLGregorianCalendar
+* @throws Exception в случае провала выполение
+*/ 
+    
+    
     public static XMLGregorianCalendar GetGregorianDate(Date date) throws Exception {
-            GregorianCalendar gregory = new GregorianCalendar();
+        MtUnistreamAdapter.logger.log(Level.INFO,"Create XMLGregorianCalendar");
+        GregorianCalendar gregory = new GregorianCalendar();
             gregory.setTime(date);
             XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
             return calendar;
     }
-     public static void printXml(Object x) throws JAXBException
+
+/**
+* Логгирование XML запросов к серверу
+* @param x
+* @throws JAXBException в случае провала выполение
+*/ 
+    
+    public static void printXml(Object x) throws JAXBException
         {
                 JAXBContext context = JAXBContext.newInstance(x.getClass());
                 StringWriter writer = new StringWriter();
@@ -133,7 +192,7 @@ public class CommonLib {
                 marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
                 marshaller.marshal(x,writer);
                 String stringXML = writer.toString();
-                System.out.println(stringXML);
+                MtUnistreamAdapter.logger.log(Level.INFO,"XMLResult:");
+                MtUnistreamAdapter.logger.log(Level.INFO,stringXML);
         }
      }
-    

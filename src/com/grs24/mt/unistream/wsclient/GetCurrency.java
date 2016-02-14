@@ -18,6 +18,13 @@ import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCurrenci
  * @author Dale
  */
 public class GetCurrency {
+/**
+* Выполнение запроса на получение ID валюты
+* @param CurrencyCode - ISO 4217 символьный код валюты
+* @return ID валюты
+* 
+* @throws Exception в случае провала выполение
+*/ 
     public static Integer getCurrencyID(String CurrencyCode) throws Exception {
         try { 
                 JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
@@ -36,6 +43,14 @@ public class GetCurrency {
             } catch (Exception ex) {
                     throw new UnsupportedOperationException("Unistream returned error: " + ex.getMessage());}
      }
+/**
+* Выполнение запроса на получение кода валюты
+* @param currencyId - ID валюты
+* @return ISO 4217 символьный код валюты
+* 
+* @throws Exception в случае провала выполение
+*/ 
+
     public static String getCurrencyCode(Integer currencyId) throws Exception {
         try { 
                 JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
