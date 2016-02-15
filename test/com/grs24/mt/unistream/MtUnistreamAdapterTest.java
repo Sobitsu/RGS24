@@ -11,7 +11,9 @@ import com.grs24.mt.FullNameTypeHolder;
 import com.grs24.mt.FundsHolder;
 import com.grs24.mt.IndividualHolder;
 import com.grs24.mt.PersonHolder;
+import com.grs24.mt.RemittanceException;
 import com.grs24.mt.RemittanceHolder;
+import java.io.IOException;
 import java.util.Properties;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -31,12 +33,19 @@ public class MtUnistreamAdapterTest {
     public static String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
     public static String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
     public static Integer KEY_BANK_ID = 383589;
-
+    private static MtUnistreamAdapter instance;
     public MtUnistreamAdapterTest() {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws IOException {
+        Properties cfg = new Properties();
+        cfg.setProperty("APIKEY", KEY_USER_AUTHED_APIKEY);
+        cfg.setProperty("LOGIN", KEY_USER_AUTHED_LOGIN);
+        cfg.setProperty("PASSWORD", KEY_USER_AUTHED_PASSWORD);
+        cfg.setProperty("BANKID", KEY_BANK_ID.toString());
+        instance = new MtUnistreamAdapter();
+        instance.init(cfg);    
     }
     
     @AfterClass
@@ -59,13 +68,6 @@ public class MtUnistreamAdapterTest {
     @Test
     public void testMoneySearch() throws Exception {
         System.out.println("moneySearch");
-        Properties cfg = new Properties();
-        cfg.setProperty("APIKEY", KEY_USER_AUTHED_APIKEY);
-        cfg.setProperty("LOGIN", KEY_USER_AUTHED_LOGIN);
-        cfg.setProperty("PASSWORD", KEY_USER_AUTHED_PASSWORD);
-        cfg.setProperty("BANKID", KEY_BANK_ID.toString());
-        MtUnistreamAdapter instance = new MtUnistreamAdapter();
-        instance.init(cfg);
         String mtcn = "828105025765";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
@@ -106,13 +108,6 @@ public class MtUnistreamAdapterTest {
     @Test
     public void testMoneyPay() throws Exception {
         System.out.println("moneyPay");
-        Properties cfg = new Properties();
-        cfg.setProperty("APIKEY", KEY_USER_AUTHED_APIKEY);
-        cfg.setProperty("LOGIN", KEY_USER_AUTHED_LOGIN);
-        cfg.setProperty("PASSWORD", KEY_USER_AUTHED_PASSWORD);
-        cfg.setProperty("BANKID", KEY_BANK_ID.toString());
-        MtUnistreamAdapter instance = new MtUnistreamAdapter();
-        instance.init(cfg);
         String mtcn = "828105025765";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
@@ -125,6 +120,7 @@ public class MtUnistreamAdapterTest {
         String mtID = result[0].getMtID();
         PersonHolder payee = new PersonHolder();
         payee.setCitizenCountry("Россия");
+        payee.setBirthday(DateTimeUtils.parseDate("07.10.1977",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
         FullNameTypeHolder fullName_ = new FullNameTypeHolder();
         IndividualHolder individual_ = new IndividualHolder();
         individual_.setFirst("Владимир");
@@ -153,5 +149,40 @@ public class MtUnistreamAdapterTest {
         String docDate = "";
         instance.moneyPay(mtID, mtcn, payee, docID, docDate);
     }
+
+
+    /**
+     * Test of moneyHold method, of class MtUnistreamAdapter.
+     */
+    @Test
+    public void testMoneyHold() throws Exception {
+        System.out.println("moneyHold");
+        String mtID = "";
+        String mtcn = "";
+        PersonHolder payee = null;
+        try {
+            instance.moneyHold(mtID, mtcn, payee);}
+        catch (RemittanceException ex) {
+            if (ex.getCode() == 30001)  {System.out.println("moneyHold OK");}
+        }
+    }
+
+    /**
+     * Test of moneyUnhold method, of class MtUnistreamAdapter.
+     */
+    @Test
+    public void testMoneyUnhold() throws Exception {
+        System.out.println("moneyUnhold");
+        String mtID = "";
+        String mtcn = "";
+        PersonHolder payee = null;
+        try {
+            instance.moneyUnhold(mtID, mtcn, payee);
+            }
+        catch (RemittanceException ex) {
+            if (ex.getCode() == 30001)  {System.out.println("moneyUnhold OK");}
+    }
+
+        }
     
 }
