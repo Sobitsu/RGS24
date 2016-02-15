@@ -22,7 +22,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import org.datacontract.schemas._2004._07.wcfservicelib.Amount;
 import org.datacontract.schemas._2004._07.wcfservicelib.AmountType;
@@ -33,6 +32,8 @@ import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonRequestMessage
 import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindTransferResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.GetTransferByIDResponseMessage;
+import org.datacontract.schemas._2004._07.wcfservicelib.Participator;
+import org.datacontract.schemas._2004._07.wcfservicelib.ParticipatorRole;
 import org.datacontract.schemas._2004._07.wcfservicelib.PayoutTransferResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.Transfer;
 import org.datacontract.schemas._2004._07.wcfservicelib.TransferStatus;
@@ -57,6 +58,7 @@ public class MtUnistreamAdapter implements MtAdapter
 	public static String KEY_USER_AUTHED_LOGIN;// = "g2.grstwentyfour.rus";
 	public static String KEY_USER_AUTHED_PASSWORD;// = "7!LrO7i7";
         public static Integer KEY_BANK_ID;// = 383589;
+        public static Integer KEY_PARTICIPATOR_ID;
         public static Logger logger;
 /**
 * На вход подается набор параметров для установки соединения, таких как URL точки доступа,
@@ -69,6 +71,7 @@ public class MtUnistreamAdapter implements MtAdapter
 * LOGIN - Идентификатор пользователя. Выдается UNIStream при регистрации участника
 * PASSWORD  - Пароль пользователя. Выдается UNIStream при регистрации участника
 * BANKID  - Код банка в системе. Выдается UNIStream при регистрации участника
+* PARTID - Код точки выдачи. Выдается UNIStream при регистрации участника
 * @throws IOException в случае проблем инициализации (например, ошибка соединения 
 * с СУБД.
 * 
@@ -83,6 +86,7 @@ public class MtUnistreamAdapter implements MtAdapter
                     KEY_USER_AUTHED_LOGIN = cfg.getProperty("LOGIN");
                     KEY_USER_AUTHED_PASSWORD = cfg.getProperty("PASSWORD");
                     KEY_BANK_ID = BaseDataParser.parseInteger(cfg.getProperty("BANKID"));
+                    KEY_PARTICIPATOR_ID = BaseDataParser.parseInteger(cfg.getProperty("PARTID"));
                     logger.log(Level.INFO, "init compleate"); 
             } catch (Exception ex) {
                     logger.log(Level.SEVERE, "Error while try to take properties", ex);
@@ -456,11 +460,15 @@ public class MtUnistreamAdapter implements MtAdapter
                 {
                     person = persons.get(1);
                 }
-            Consumer consumer = new Consumer();
+            Consumer consumer = factory.createConsumer();
             JAXBElement<Person> xperson = factory.createPerson(person);
             consumer.setPerson(xperson);
             consumer.setRole(ConsumerRole.ACTUAL_RECEIVER);
             consumers.add(consumer);
+            Participator part = factory.createParticipator();
+            part.setID(KEY_PARTICIPATOR_ID);
+            part.setRole(ParticipatorRole.ACTUAL_RECEIVER_POS);
+            transfer.getParticipators().getValue().getParticipator().add(part);
             PayoutTransferResponseMessage retval;
             try {
                 logger.log(Level.INFO,"Оплата перевода");
