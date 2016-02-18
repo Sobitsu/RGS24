@@ -1,13 +1,16 @@
 package com.grs24.mt.unistream;
 
-import org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory;
-import com.grs24.msg.FullNameTypeHolder;
-import com.grs24.msg.FundsHolder;
-import com.grs24.msg.IndividualHolder;
-import com.grs24.mt.MtAdapter;
-import com.grs24.msg.PersonHolder;
 import com.grs24.RemittanceException;
 import com.grs24.RemittanceHolder;
+import com.grs24.msg.FundsHolder;
+import com.grs24.msg.PersonHolder;
+import com.grs24.mt.MtAdapter;
+import java.io.IOException;
+import java.util.Properties;
+
+import com.grs24.msg.FullNameTypeHolder;
+import com.grs24.msg.IndividualHolder;
+import java.util.List;
 import com.grs24.mt.unistream.wsclient.CommonLib;
 import com.grs24.mt.unistream.wsclient.CreatePerson;
 import com.grs24.mt.unistream.wsclient.FindPerson;
@@ -15,13 +18,11 @@ import com.grs24.mt.unistream.wsclient.FindTransfer;
 import com.grs24.mt.unistream.wsclient.GetCurrency;
 import com.grs24.mt.unistream.wsclient.GetTransferByID;
 import com.grs24.mt.unistream.wsclient.PayOutTransfer;
-import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
+import org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory;
 import org.datacontract.schemas._2004._07.wcfservicelib.Amount;
 import org.datacontract.schemas._2004._07.wcfservicelib.AmountType;
 import org.datacontract.schemas._2004._07.wcfservicelib.Consumer;
@@ -43,6 +44,7 @@ import org.datacontract.schemas._2004._07.wcfservicelib.Person;
  * @author Ctac
  */
 public class MtUnistreamAdapter implements MtAdapter
+        
 {       
         private final static QName _FirstName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "FirstName");
         private final static QName _LastName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "LastName");
@@ -59,41 +61,111 @@ public class MtUnistreamAdapter implements MtAdapter
         public static Integer KEY_BANK_ID;// = 383589;
         public static Integer KEY_PARTICIPATOR_ID;
         public static Logger logger;
-/**
-* На вход подается набор параметров для установки соединения, таких как URL точки доступа,
-* логин и пароль, идентификатор приложения или системы, идентификатор сертификата и ключ доступа 
-* к хранилищу и т.д. Список необходимых параметров, которые должны быть установлены, 
-* предоставляется разработчиком при передаче исходного кода реализации.
-* @param cfg набор параметров для инициализации, такие как dbUser, dbPassword, etc.
-* Ожидаемые параметры:
-* APIKEY - идентификатор приложения. Выдается UNIStream при регистрации участника
-* LOGIN - Идентификатор пользователя. Выдается UNIStream при регистрации участника
-* PASSWORD  - Пароль пользователя. Выдается UNIStream при регистрации участника
-* BANKID  - Код банка в системе. Выдается UNIStream при регистрации участника
-* PARTID - Код точки выдачи. Выдается UNIStream при регистрации участника
-* @throws IOException в случае проблем инициализации (например, ошибка соединения 
-* с СУБД.
-* 
-*/
-        @Override
-	public void init(Properties cfg) throws IOException {
-            try{
-                    logger = Logger.getLogger(MtUnistreamAdapter.class.getName());
-                    logger.setLevel(Level.ALL);
-                    logger.log(Level.INFO, "init start"); 
-                    KEY_USER_AUTHED_APIKEY = cfg.getProperty("APIKEY");
-                    KEY_USER_AUTHED_LOGIN = cfg.getProperty("LOGIN");
-                    KEY_USER_AUTHED_PASSWORD = cfg.getProperty("PASSWORD");
-                    KEY_BANK_ID = BaseDataParser.parseInteger(cfg.getProperty("BANKID"));
-                    KEY_PARTICIPATOR_ID = BaseDataParser.parseInteger(cfg.getProperty("PARTID"));
-                    logger.log(Level.INFO, "init compleate"); 
-            } catch (Exception ex) {
-                    logger.log(Level.SEVERE, "Error while try to take properties", ex);
-                    throw new UnsupportedOperationException("Not supported configuration. Check cfg info");
+
+
+ /**
+* Проверка входных параметров для поиска перевода 
+* @param mtcn Money Transfer Control Number, Контрольный Номер Перевода (КНП)
+* @param approxOrgFunds
+* @param approxDstFunds
+* @param orgCountry
+* @param dstCountry
+* @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
+* code 50001: Не указан номер перевода
+* code 50002: Не указаны валюта и сумма перевода
+* code 40003: Проблемы при создании клиента
+* code 40004: Проблемы при оплате перевода
+*/ 
+
+        private void mscheckInparam(String mtcn, FundsHolder approxOrgFunds, FundsHolder approxDstFunds, String orgCountry, String dstCountry) throws RemittanceException
+        {
+            if (mtcn == null) {
+                    logger.log(Level.SEVERE, "Не указан номер перевода");
+                    throw new RemittanceException("Не указан номер перевода", 50001, "","");
+                }
+            if (approxDstFunds == null) {
+                    logger.log(Level.SEVERE, "Не указаны валюта и сумма перевода");
+                    throw new RemittanceException("Не указаны валюта и сумма перевода", 50002, "","");
+                }
+            if (approxDstFunds.getAmount() == null) {
+                    logger.log(Level.SEVERE, "Не указана сумма перевода"); 
+                    throw new RemittanceException("Не указана сумма перевода", 50002, "","");
+                }
+            if (approxDstFunds.getCur() == null)    {
+                    logger.log(Level.SEVERE, "Не указана валюта перевода"); 
+                    throw new RemittanceException("Не валюта перевода", 50002, "","");
                 }
         }
 
 /**
+* Проверка входных параметров для оплаты перевода 
+* @param mtID ID перевода
+* @param payee получатель
+* @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
+* code 50004: Не указан ID перевода
+* code 50005: Не указан получатель перевода
+* code 50006: Не указаны ФИО получателя перевода
+* code 50007: Не указанна дата рождения получателя перевода
+* code 50008: Не указанны  реквизиты удостоверения личности получателя перевода
+* code 50009: Не указан телефон получателя перевода
+* code 50010: Не указан адресс регистрации получателя перевода
+*/ 
+        private void mpCheckInParam(String mtID,PersonHolder payee)  throws RemittanceException {
+            if (mtID == null) {
+                logger.log(Level.SEVERE, "Не указан ID перевода"); 
+                throw new RemittanceException("Не указан ID перевода", 50004, "","");
+            }
+            if (payee == null) {
+                logger.log(Level.SEVERE, "Не указан получатель перевода"); 
+                throw new RemittanceException("Не указан получатель перевода", 50005, "","");
+            }
+            if (payee.getFullName() == null) {
+                logger.log(Level.SEVERE, "Не указанны ФИО получателя перевода"); 
+                throw new RemittanceException("Не указанны ФИО получателя перевода", 50006, "","");
+            }
+            if (payee.getFullName().getIndividual() == null) {
+                logger.log(Level.SEVERE, "Не указанны ФИО получателя перевода"); 
+                throw new RemittanceException("Не указанны ФИО получателя перевода", 50006, "","");
+            }
+            if (payee.getFullName().getIndividual().getFirst() == null) {
+                logger.log(Level.SEVERE, "Не указанно имя получателя перевода"); 
+                throw new RemittanceException("Не указанно имя получателя перевода", 50006, "","");
+            }
+            if (payee.getFullName().getIndividual().getLast() == null) {
+                logger.log(Level.SEVERE, "Не указанна фамилия получателя перевода"); 
+                throw new RemittanceException("Не указанна фамилия получателя перевода", 50006, "","");
+            }
+            if (payee.getBirthday() == null) {
+                logger.log(Level.SEVERE, "Не указанна дата рождения получателя перевода"); 
+                throw new RemittanceException("Не указанна дата рождения получателя перевода", 50007, "","");
+            }
+            if (payee.getIdentification() == null) {
+                logger.log(Level.SEVERE, "Не указанны удостоверения личности получателя перевода"); 
+                throw new RemittanceException("Не указанны удостоверения личности получателя перевода", 50008, "","");
+            }
+            if (payee.getIdentification().getCredNumber() == null) {
+                logger.log(Level.SEVERE, "Не указан номер удостоверения личности получателя перевода"); 
+                throw new RemittanceException("Не указан номер удостоверения личности получателя перевода", 50008, "","");
+            }
+            if (payee.getPhone() == null) {
+                logger.log(Level.SEVERE, "Не указан номер удостоверения личности получателя перевода"); 
+                throw new RemittanceException("Не указан телефон получателя перевода", 50009, "","");
+            }
+            if (payee.getRegistration() == null) {
+                logger.log(Level.SEVERE, "Не указан адресс регистрации получателя перевода"); 
+                throw new RemittanceException("Не указан адресс регистрации получателя перевода", 50010, "","");
+            }
+            if (payee.getRegistration().getCountry() == null) {
+                logger.log(Level.SEVERE, "Не указана страна регистрации получателя перевода"); 
+                throw new RemittanceException("Не указана страна регистрации получателя перевода", 50010, "","");
+            }
+            if (payee.getRegistration().getCity() == null) {
+                logger.log(Level.SEVERE, "Не указан город регистрации получателя перевода"); 
+                throw new RemittanceException("Не указан город регистрации получателя перевода", 50010, "","");
+            }
+        }
+        
+ /**
 * Функция для поиска суммы с типом type в списке сумм текущего перевода
 * @param amounts список сумм:
 * @XmlType(name = "Amount", propOrder = {
@@ -292,28 +364,56 @@ public class MtUnistreamAdapter implements MtAdapter
         }    
 
 /**
+* На вход подается набор параметров для установки соединения, таких как URL точки доступа,
+* логин и пароль, идентификатор приложения или системы, идентификатор сертификата и ключ доступа 
+* к хранилищу и т.д. Список необходимых параметров, которые должны быть установлены, 
+* предоставляется разработчиком при передаче исходного кода реализации.
+* @param init набор параметров для инициализации, такие как dbUser, dbPassword, etc.
+* Ожидаемые параметры:
+* APIKEY - идентификатор приложения. Выдается UNIStream при регистрации участника
+* LOGIN - Идентификатор пользователя. Выдается UNIStream при регистрации участника
+* PASSWORD  - Пароль пользователя. Выдается UNIStream при регистрации участника
+* BANKID  - Код банка в системе. Выдается UNIStream при регистрации участника
+* PARTID - Код точки выдачи. Выдается UNIStream при регистрации участника
+* @throws IOException в случае проблем инициализации (например, ошибка соединения 
+* с СУБД.
+* 
+*/
+        @Override
+        public void init(Properties init) throws IOException {
+            try{
+                    logger = Logger.getLogger(MtUnistreamAdapter.class.getName());
+                    logger.setLevel(Level.ALL);
+                    logger.log(Level.INFO, "init start"); 
+                    KEY_USER_AUTHED_APIKEY = init.getProperty("APIKEY");
+                    KEY_USER_AUTHED_LOGIN = init.getProperty("LOGIN");
+                    KEY_USER_AUTHED_PASSWORD = init.getProperty("PASSWORD");
+                    KEY_BANK_ID = BaseDataParser.parseInteger(init.getProperty("BANKID"));
+                    KEY_PARTICIPATOR_ID = BaseDataParser.parseInteger(init.getProperty("PARTID"));
+                    logger.log(Level.INFO, "init compleate"); 
+            } catch (Exception ex) {
+                    logger.log(Level.SEVERE, "Error while try to take properties", ex);
+                    throw new UnsupportedOperationException("Not supported configuration. Check cfg info");
+                }
+        }
+
+/**
 * Поиск денежного перевода, доступного для выдачи. 
 * Если перевод по КНП найден, но не может быть выдан (например, не тот статус), должно 
 * выдаваться исключение прикладного типа для передачи информации клиенту.
 *
 * @param mtcn Money Transfer Control Number, Контрольный Номер Перевода (КНП)
-	 * @param approxOrgFunds
-	 * @param approxDstFunds
-	 * @param orgCountry
-	 * @param dstCountry
+* @param approxOrgFunds
+* @param approxDstFunds
+* @param orgCountry
+* @param dstCountry
 * @return RemittanceHolder[] найденные денежные переводы. Иногда СДП могут возвращать де-факто
 * один и тот же перевод в разных вариантах валют к выплате. 
-	 * @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
+	 * @throws com.grs24.RemittanceException в случае провала поиска (например, неверный формат запроса) 
 	 * @throws java.io.IOException
 */
-        
         @Override
-	public RemittanceHolder[] moneySearch(String mtcn, 
-                                                FundsHolder approxOrgFunds, 
-                                                FundsHolder approxDstFunds, 
-                                                String orgCountry, 
-                                                String dstCountry) 
-                    throws RemittanceException, IOException {
+        public RemittanceHolder[] moneySearch(String mtcn, FundsHolder approxOrgFunds, FundsHolder approxDstFunds, String orgCountry, String dstCountry) throws RemittanceException, IOException {
             logger.log(Level.INFO,"moneySearch start");  
             mscheckInparam(mtcn,approxOrgFunds,approxDstFunds,orgCountry,dstCountry);
             Transfer rettransfer;
@@ -347,7 +447,7 @@ public class MtUnistreamAdapter implements MtAdapter
             expResult[0] = retval;
             logger.log(Level.INFO,"moneySearch finish");  
             return expResult;
-	}
+        }
 
 /**
 * Блокирование денежного перевода, доступного для выдачи. 
@@ -356,14 +456,13 @@ public class MtUnistreamAdapter implements MtAdapter
 * @param mtcn Money Transfer Control Number, Контрольный Номер Перевода (КНП)
 * @param payee
 
-* @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
+* @throws com.grs24.RemittanceException в случае провала поиска (например, неверный формат запроса) 
 * @throws java.io.IOException
 */
         @Override
-	public void moneyHold(String mtID, String mtcn, PersonHolder payee) throws RemittanceException, IOException {
+        public void moneyHold(String mtID, String mtcn, PersonHolder payee) throws RemittanceException, IOException {
 		throw new RemittanceException("Операция HOLD не поддерживается Unistream", 30001, "","");
-	}
-
+        }
 /**
 * Разблокирование денежного перевода, доступного для выдачи. 
 * В СДП UNIStream функция не поддерживается
@@ -371,15 +470,13 @@ public class MtUnistreamAdapter implements MtAdapter
 * @param mtcn Money Transfer Control Number, Контрольный Номер Перевода (КНП)
 * @param payee
 
-* @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
+* @throws com.grs24.RemittanceException в случае провала поиска (например, неверный формат запроса) 
 * @throws java.io.IOException
 */
-
         @Override
-	public void moneyUnhold(String mtID, String mtcn, PersonHolder payee) throws RemittanceException, IOException {
-		throw new RemittanceException("Операция UNHOLD не поддерживается Unistream", 30001, "","");
-	}
-
+        public void moneyUnhold(String mtID, String mtcn, PersonHolder payee) throws RemittanceException, IOException {
+            throw new RemittanceException("Операция UNHOLD не поддерживается Unistream", 30001, "","");
+        }
 /**
 * Выплата денежного перевода в СДП, включая внесение всей необходимой информации по получателю. 
 * Если не удается выплатить перевод должно выдаваться исключение прикладного типа. 
@@ -403,7 +500,7 @@ public class MtUnistreamAdapter implements MtAdapter
 * code 40004: Проблемы при оплате перевода
 */ 
         @Override
-	public void moneyPay(String mtID, String mtcn, PersonHolder payee, String docID, String docDate) throws RemittanceException, IOException {
+        public void moneyPay(String mtID, String mtcn, PersonHolder payee, String docID, String docDate) throws RemittanceException, IOException {
             logger.log(Level.INFO,"moneyPay start");  
             mpCheckInParam(mtID, payee);
             Transfer transfer = null;
@@ -480,107 +577,5 @@ public class MtUnistreamAdapter implements MtAdapter
             transfer= retval.getTransfer().getValue();
             logger.log(Level.INFO,"moneyPay finish");
             checkTransferStatus(transfer);
-        }
-
- /**
-* Проверка входных параметров для поиска перевода 
-* @param mtcn Money Transfer Control Number, Контрольный Номер Перевода (КНП)
-* @param approxOrgFunds
-* @param approxDstFunds
-* @param orgCountry
-* @param dstCountry
-* @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
-* code 50001: Не указан номер перевода
-* code 50002: Не указаны валюта и сумма перевода
-* code 40003: Проблемы при создании клиента
-* code 40004: Проблемы при оплате перевода
-*/ 
-
-        private void mscheckInparam(String mtcn, FundsHolder approxOrgFunds, FundsHolder approxDstFunds, String orgCountry, String dstCountry) throws RemittanceException
-        {
-            if (mtcn == null) {
-                    logger.log(Level.SEVERE, "Не указан номер перевода");
-                    throw new RemittanceException("Не указан номер перевода", 50001, "","");
-                }
-            if (approxDstFunds == null) {
-                    logger.log(Level.SEVERE, "Не указаны валюта и сумма перевода");
-                    throw new RemittanceException("Не указаны валюта и сумма перевода", 50002, "","");
-                }
-            if (approxDstFunds.getAmount() == null) {
-                    logger.log(Level.SEVERE, "Не указана сумма перевода"); 
-                    throw new RemittanceException("Не указана сумма перевода", 50002, "","");
-                }
-            if (approxDstFunds.getCur() == null)    {
-                    logger.log(Level.SEVERE, "Не указана валюта перевода"); 
-                    throw new RemittanceException("Не валюта перевода", 50002, "","");
-                }
-        }
-
-/**
-* Проверка входных параметров для оплаты перевода 
-* @param mtID ID перевода
-* @param payee получатель
-* @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
-* code 50004: Не указан ID перевода
-* code 50005: Не указан получатель перевода
-* code 50006: Не указаны ФИО получателя перевода
-* code 50007: Не указанна дата рождения получателя перевода
-* code 50008: Не указанны  реквизиты удостоверения личности получателя перевода
-* code 50009: Не указан телефон получателя перевода
-* code 50010: Не указан адресс регистрации получателя перевода
-*/ 
-        private void mpCheckInParam(String mtID,PersonHolder payee)  throws RemittanceException {
-            if (mtID == null) {
-                logger.log(Level.SEVERE, "Не указан ID перевода"); 
-                throw new RemittanceException("Не указан ID перевода", 50004, "","");
-            }
-            if (payee == null) {
-                logger.log(Level.SEVERE, "Не указан получатель перевода"); 
-                throw new RemittanceException("Не указан получатель перевода", 50005, "","");
-            }
-            if (payee.getFullName() == null) {
-                logger.log(Level.SEVERE, "Не указанны ФИО получателя перевода"); 
-                throw new RemittanceException("Не указанны ФИО получателя перевода", 50006, "","");
-            }
-            if (payee.getFullName().getIndividual() == null) {
-                logger.log(Level.SEVERE, "Не указанны ФИО получателя перевода"); 
-                throw new RemittanceException("Не указанны ФИО получателя перевода", 50006, "","");
-            }
-            if (payee.getFullName().getIndividual().getFirst() == null) {
-                logger.log(Level.SEVERE, "Не указанно имя получателя перевода"); 
-                throw new RemittanceException("Не указанно имя получателя перевода", 50006, "","");
-            }
-            if (payee.getFullName().getIndividual().getLast() == null) {
-                logger.log(Level.SEVERE, "Не указанна фамилия получателя перевода"); 
-                throw new RemittanceException("Не указанна фамилия получателя перевода", 50006, "","");
-            }
-            if (payee.getBirthday() == null) {
-                logger.log(Level.SEVERE, "Не указанна дата рождения получателя перевода"); 
-                throw new RemittanceException("Не указанна дата рождения получателя перевода", 50007, "","");
-            }
-            if (payee.getIdentification() == null) {
-                logger.log(Level.SEVERE, "Не указанны удостоверения личности получателя перевода"); 
-                throw new RemittanceException("Не указанны удостоверения личности получателя перевода", 50008, "","");
-            }
-            if (payee.getIdentification().getCredNumber() == null) {
-                logger.log(Level.SEVERE, "Не указан номер удостоверения личности получателя перевода"); 
-                throw new RemittanceException("Не указан номер удостоверения личности получателя перевода", 50008, "","");
-            }
-            if (payee.getPhone() == null) {
-                logger.log(Level.SEVERE, "Не указан номер удостоверения личности получателя перевода"); 
-                throw new RemittanceException("Не указан телефон получателя перевода", 50009, "","");
-            }
-            if (payee.getRegistration() == null) {
-                logger.log(Level.SEVERE, "Не указан адресс регистрации получателя перевода"); 
-                throw new RemittanceException("Не указан адресс регистрации получателя перевода", 50010, "","");
-            }
-            if (payee.getRegistration().getCountry() == null) {
-                logger.log(Level.SEVERE, "Не указана страна регистрации получателя перевода"); 
-                throw new RemittanceException("Не указана страна регистрации получателя перевода", 50010, "","");
-            }
-            if (payee.getRegistration().getCity() == null) {
-                logger.log(Level.SEVERE, "Не указан город регистрации получателя перевода"); 
-                throw new RemittanceException("Не указан город регистрации получателя перевода", 50010, "","");
-            }
         }
 }

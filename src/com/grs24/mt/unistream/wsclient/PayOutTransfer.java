@@ -5,7 +5,6 @@ import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
 import java.util.logging.Level;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.PayoutTransferRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.PayoutTransferResponseMessage;
