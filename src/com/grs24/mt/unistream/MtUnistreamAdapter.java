@@ -1,13 +1,13 @@
 package com.grs24.mt.unistream;
 
 import org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory;
-import com.grs24.mt.FullNameTypeHolder;
-import com.grs24.mt.FundsHolder;
-import com.grs24.mt.IndividualHolder;
+import com.grs24.msg.FullNameTypeHolder;
+import com.grs24.msg.FundsHolder;
+import com.grs24.msg.IndividualHolder;
 import com.grs24.mt.MtAdapter;
-import com.grs24.mt.PersonHolder;
-import com.grs24.mt.RemittanceException;
-import com.grs24.mt.RemittanceHolder;
+import com.grs24.msg.PersonHolder;
+import com.grs24.RemittanceException;
+import com.grs24.RemittanceHolder;
 import com.grs24.mt.unistream.wsclient.CommonLib;
 import com.grs24.mt.unistream.wsclient.CreatePerson;
 import com.grs24.mt.unistream.wsclient.FindPerson;
@@ -15,7 +15,6 @@ import com.grs24.mt.unistream.wsclient.FindTransfer;
 import com.grs24.mt.unistream.wsclient.GetCurrency;
 import com.grs24.mt.unistream.wsclient.GetTransferByID;
 import com.grs24.mt.unistream.wsclient.PayOutTransfer;
-import static com.sun.mail.imap.protocol.INTERNALDATE.format;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
@@ -218,8 +217,8 @@ public class MtUnistreamAdapter implements MtAdapter
             if (payee.getBirthday() != null) try {
                 fprm.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Ошибка преобразования даты:" + format(payee.getBirthday()), ex);
-                throw new RemittanceException("Ошибка преобразования даты:" + format(payee.getBirthday()), 20001, "","");                
+                logger.log(Level.SEVERE, "Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getBirthday()), ex);
+                throw new RemittanceException("Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getBirthday()), 20001, "","");                
             }
             logger.log(Level.INFO,"getpersshot parse FIO");            
             if (payee.getFullName().getIndividual().getFirst() != null) fprm.setFirstname(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
@@ -228,19 +227,19 @@ public class MtUnistreamAdapter implements MtAdapter
             if (payee.getPhone()[0] != null) fprm.setPhone(CommonLib.MakeString(_Phone_QNAME,payee.getPhone()[0]));
             if (payee.getIdentification() != null) {
                 logger.log(Level.INFO,"getpersshot parse Identification");            
-                if (payee.getIdentification().getCNumber() != null) fprm.setDocNumber(CommonLib.MakeString(_DocNumber_QNAME,payee.getIdentification().getCNumber()));
+                if (payee.getIdentification().getCredNumber() != null) fprm.setDocNumber(CommonLib.MakeString(_DocNumber_QNAME,payee.getIdentification().getCredNumber()));
                 if (payee.getIdentification().getSerialNumber() != null) fprm.setDocSeries(CommonLib.MakeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
                 if (payee.getIdentification().getIssueDate() != null) try {
                     fprm.setDocIssueDate(CommonLib.GetGregorianDate(payee.getIdentification().getIssueDate()));
                 } catch (Exception ex) {
-                    logger.log(Level.SEVERE, "Ошибка преобразования даты:" + format(payee.getIdentification().getIssueDate()), ex);
-                    throw new RemittanceException("Ошибка преобразования даты:" + format(payee.getIdentification().getIssueDate()), 20001, "","");                
+                    logger.log(Level.SEVERE, "Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getIdentification().getIssueDate()), ex);
+                    throw new RemittanceException("Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getIdentification().getIssueDate()), 20001, "","");                
                 }
                 if (payee.getIdentification().getExpiryDate() != null) try {
                     fprm.setDocExpiryDate(CommonLib.GetGregorianDate(payee.getIdentification().getExpiryDate()));
                 } catch (Exception ex) {
-                    logger.log(Level.SEVERE, "Ошибка преобразования даты:" + format(payee.getIdentification().getExpiryDate()), ex);
-                    throw new RemittanceException("Ошибка преобразования даты:" + format(payee.getIdentification().getExpiryDate()), 20001, "","");                
+                    logger.log(Level.SEVERE, "Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getIdentification().getExpiryDate()), ex);
+                    throw new RemittanceException("Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getIdentification().getExpiryDate()), 20001, "","");                
                 }
             }
             logger.log(Level.INFO,"getpersshot finish");
@@ -282,8 +281,8 @@ public class MtUnistreamAdapter implements MtAdapter
                if (payee.getBirthday() != null) try {
                    person.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Ошибка преобразования даты:" + format(payee.getBirthday()), ex);
-                throw new RemittanceException("Ошибка преобразования даты:" + format(payee.getBirthday()), 20001, "","");                
+                logger.log(Level.SEVERE, "Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getBirthday()), ex);
+                throw new RemittanceException("Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getBirthday()), 20001, "","");                
             }
                if (payee.getFullName().getIndividual().getFirst() != null) person.setFirstName(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
                if (payee.getFullName().getIndividual().getLast() != null) person.setLastName(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
@@ -563,7 +562,7 @@ public class MtUnistreamAdapter implements MtAdapter
                 logger.log(Level.SEVERE, "Не указанны удостоверения личности получателя перевода"); 
                 throw new RemittanceException("Не указанны удостоверения личности получателя перевода", 50008, "","");
             }
-            if (payee.getIdentification().getCNumber() == null) {
+            if (payee.getIdentification().getCredNumber() == null) {
                 logger.log(Level.SEVERE, "Не указан номер удостоверения личности получателя перевода"); 
                 throw new RemittanceException("Не указан номер удостоверения личности получателя перевода", 50008, "","");
             }

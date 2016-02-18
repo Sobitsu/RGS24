@@ -5,15 +5,16 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import com.grs24.mt.AddressHolder;
-import com.grs24.mt.CredentialsHolder;
-import com.grs24.mt.RemittanceException;
+import com.grs24.msg.AddressHolder;
+import com.grs24.msg.CredentialsHolder;
+import com.grs24.RemittanceException;
 import com.grs24.mt.unistream.BaseDataParser;
 import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.WsResponse;
 import com.grs24.mt.unistream.MtUnistreamAdapter;
 import java.io.StringWriter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -64,7 +65,7 @@ public class CommonLib {
     public static void CheckFault(WsResponse response) throws RemittanceException {
         if(!response.getFault().isNil())
         {
-            MtUnistreamAdapter.logger.log(Level.SEVERE,"Unistream returned error: "+response.getFault().getValue().getMessage().getValue());
+            MtUnistreamAdapter.logger.log(Level.SEVERE, "Unistream returned error: {0}", response.getFault().getValue().getMessage().getValue());
             throw new RemittanceException("Unistream returned error", BaseDataParser.parseInteger(response.getFault().getValue().getID().getValue()), response.getFault().getValue().getCode().value(),response.getFault().getValue().getMessage().getValue());
         }
     }  
@@ -110,7 +111,7 @@ public class CommonLib {
         ArrayOfDocument valuearr = factory.createArrayOfDocument();
         if (credholder != null) {
             Document valdoc = factory.createDocument();
-            if (credholder.getCNumber() != null) valdoc.setNumber(CommonLib.MakeString(_DocNumber_QNAME,credholder.getCNumber()));
+            if (credholder.getCredNumber() != null) valdoc.setNumber(CommonLib.MakeString(_DocNumber_QNAME,credholder.getCredNumber()));
             if (credholder.getSerialNumber() != null) valdoc.setSeries(CommonLib.MakeString(_DocSeries_QNAME,credholder.getSerialNumber()));
             if (credholder.getIssueDate() != null) valdoc.setIssueDate(CommonLib.GetGregorianDate(credholder.getIssueDate()));
             if (credholder.getExpiryDate() != null) valdoc.setExpiryDate(CommonLib.GetGregorianDate(credholder.getExpiryDate()));
@@ -172,10 +173,15 @@ public class CommonLib {
     
     public static XMLGregorianCalendar GetGregorianDate(Date date) throws Exception {
         MtUnistreamAdapter.logger.log(Level.INFO,"Create XMLGregorianCalendar");
+    //    TimeZone zone = TimeZone.getTimeZone("Etc/GMT");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+      //  calendar.setTimeZone(zone);
+        calendar.clear(Calendar.ZONE_OFFSET);
         GregorianCalendar gregory = new GregorianCalendar();
-            gregory.setTime(date);
-            XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
-            return calendar;
+        gregory.setTime(calendar.getTime());
+        XMLGregorianCalendar gcalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+        return gcalendar;
     }
 
 /**
