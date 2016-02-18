@@ -5,8 +5,8 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import com.grs24.mt.AddressHolder;
-import com.grs24.mt.CredentialsHolder;
+import com.grs24.msg.AddressHolder;
+import com.grs24.msg.CredentialsHolder;
 import java.util.Date;
 import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.XMLGregorianCalendar;

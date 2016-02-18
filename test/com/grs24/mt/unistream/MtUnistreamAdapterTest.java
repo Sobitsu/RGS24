@@ -5,14 +5,14 @@
  */
 package com.grs24.mt.unistream;
 
-import com.grs24.mt.AddressHolder;
-import com.grs24.mt.CredentialsHolder;
-import com.grs24.mt.FullNameTypeHolder;
-import com.grs24.mt.FundsHolder;
-import com.grs24.mt.IndividualHolder;
-import com.grs24.mt.PersonHolder;
-import com.grs24.mt.RemittanceException;
-import com.grs24.mt.RemittanceHolder;
+import com.grs24.msg.AddressHolder;
+import com.grs24.msg.CredentialsHolder;
+import com.grs24.msg.FullNameTypeHolder;
+import com.grs24.msg.FundsHolder;
+import com.grs24.msg.IndividualHolder;
+import com.grs24.msg.PersonHolder;
+import com.grs24.RemittanceException;
+import com.grs24.RemittanceHolder;
 import java.io.IOException;
 import java.util.Properties;
 import org.junit.After;
@@ -129,8 +129,8 @@ public class MtUnistreamAdapterTest {
         fullName_.setIndividual(individual_);
         payee.setFullName(fullName_);
         CredentialsHolder identification_ = new CredentialsHolder();
-        identification_.setCCountry("Россия");
-        identification_.setCNumber("656565");
+        identification_.setCredCountry("Россия");
+        identification_.setCredNumber("656565");
         identification_.setIssueCity("Нск");
         identification_.setIssuer("Нск");
         identification_.setSerialNumber("5404");
@@ -143,11 +143,18 @@ public class MtUnistreamAdapterTest {
         registration_.setStreet1("Большивисткая");
         registration_.setStreet2("101");
         registration_.setZipCode("630090");
+        registration_.setCountry("Россия");
         payee.setRegistration(registration_);
         payee.setResidentCountry("Россия");
         String docID = "";
         String docDate = "";
-        instance.moneyPay(mtID, mtcn, payee, docID, docDate);
+        try{
+            instance.moneyPay(mtID, mtcn, payee, docID, docDate);
+        }
+        catch (RemittanceException ex) {
+            if (ex.getCode() == 30002)  {System.out.println("moneyHold OK");}
+        }
+        fail("");
     }
 
 
