@@ -1,7 +1,12 @@
 package com.grs24.mt;
 
+import com.grs24.RemittanceException;
+import com.grs24.RemittanceHolder;
 import java.io.IOException;
 import java.util.Properties;
+
+import com.grs24.msg.FundsHolder;
+import com.grs24.msg.PersonHolder;
 
 /**
 * Интерфейс работы с СДП.
@@ -38,10 +43,11 @@ public interface MtAdapter {
 * к хранилищу и т.д. Список необходимых параметров, которые должны быть установлены, 
 * предоставляется разработчиком при передаче исходного кода реализации.
 * @param cfg набор параметров для инициализации, такие как dbUser, dbPassword, etc.
+ * @return 
 * @throws IOException в случае проблем инициализации (например, ошибка соединения 
 * с СУБД.
 */
-public void init(Properties cfg) throws IOException;
+public void init(Properties init) throws IOException;
 
 /**
 * Поиск денежного перевода, доступного для выдачи. 
@@ -49,14 +55,9 @@ public void init(Properties cfg) throws IOException;
 * выдаваться исключение прикладного типа для передачи информации клиенту.
 *
 * @param mtcn Money Transfer Control Number, Контрольный Номер Перевода (КНП)
-	 * @param approxOrgFunds
-	 * @param approxDstFunds
-	 * @param orgCountry
-	 * @param dstCountry
 * @return RemittanceHolder[] найденные денежные переводы. Иногда СДП могут возвращать де-факто
 * один и тот же перевод в разных вариантах валют к выплате. 
-	 * @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
-	 * @throws java.io.IOException
+* @throws com.grs24.RemittanceException в случае провала поиска (например, неверный формат запроса)
 */
 public RemittanceHolder[] moneySearch(String mtcn, FundsHolder approxOrgFunds, 
 		FundsHolder approxDstFunds, String orgCountry, String dstCountry ) throws RemittanceException, IOException;
@@ -68,8 +69,8 @@ public RemittanceHolder[] moneySearch(String mtcn, FundsHolder approxOrgFunds,
 * @param mtID идентификатор денежного перевода в СДП
 * @param mtcn Money Transfer Control Number, Контрольный Номер Перевода (КНП)
 * @param payee полная информация о получателе денежного перевода
+* @return
 * @throws RemittanceException если возникли проблемы резервирования перевода в СДП.
-	 * @throws java.io.IOException
 */ 
 public void moneyHold(String mtID, String mtcn, PersonHolder payee) throws RemittanceException, IOException;
 
@@ -81,8 +82,8 @@ public void moneyHold(String mtID, String mtcn, PersonHolder payee) throws Remit
 * @param mtID идентификатор денежного перевода в СДП
 * @param mtcn Money Transfer Control Number, Контрольный Номер Перевода (КНП)
 * @param payee полная информация о получателе денежного перевода
+* @return
 * @throws RemittanceException если возникли проблемы разрезервирования перевода в СДП.
-	 * @throws java.io.IOException
 */ 
 public void moneyUnhold(String mtID, String mtcn, PersonHolder payee) throws RemittanceException, IOException;
 
@@ -96,8 +97,8 @@ public void moneyUnhold(String mtID, String mtcn, PersonHolder payee) throws Rem
 * @param payee полная информация о получателе денежного перевода
 * @param docID идентификатор документа-проводки выдачи перевода в банке-получателе
 * @param docDate дата документа-проводки
+* @return
 * @throws RemittanceException если возникли проблемы выдачи перевода в СДП.
-	 * @throws java.io.IOException
 */ 
 public void moneyPay(String mtID, String mtcn, PersonHolder payee, String docID, 
 			String docDate) throws RemittanceException, IOException;
