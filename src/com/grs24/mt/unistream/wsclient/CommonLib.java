@@ -7,7 +7,7 @@ package com.grs24.mt.unistream.wsclient;
 
 import com.grs24.msg.AddressHolder;
 import com.grs24.msg.CredentialsHolder;
-import com.grs24.RemittanceException;
+import com.grs24.mt.RemittanceException;
 import com.grs24.mt.unistream.BaseDataParser;
 import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
@@ -173,14 +174,12 @@ public class CommonLib {
     
     public static XMLGregorianCalendar GetGregorianDate(Date date) throws Exception {
         MtUnistreamAdapter.logger.log(Level.INFO,"Create XMLGregorianCalendar");
-    //    TimeZone zone = TimeZone.getTimeZone("Etc/GMT");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-      //  calendar.setTimeZone(zone);
-        calendar.clear(Calendar.ZONE_OFFSET);
         GregorianCalendar gregory = new GregorianCalendar();
         gregory.setTime(calendar.getTime());
         XMLGregorianCalendar gcalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+        gcalendar.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
         return gcalendar;
     }
 

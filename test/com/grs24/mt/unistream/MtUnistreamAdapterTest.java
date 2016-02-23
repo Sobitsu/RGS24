@@ -11,8 +11,8 @@ import com.grs24.msg.FullNameTypeHolder;
 import com.grs24.msg.FundsHolder;
 import com.grs24.msg.IndividualHolder;
 import com.grs24.msg.PersonHolder;
-import com.grs24.RemittanceException;
-import com.grs24.RemittanceHolder;
+import com.grs24.mt.RemittanceException;
+import com.grs24.mt.RemittanceHolder;
 import java.io.IOException;
 import java.util.Properties;
 import org.junit.After;
@@ -153,8 +153,9 @@ public class MtUnistreamAdapterTest {
         }
         catch (RemittanceException ex) {
             if (ex.getCode() == 30002)  {System.out.println("moneyHold OK");}
+            else
+            {fail(" Ошибка оплаты перевода");}
         }
-        fail("");
     }
 
 

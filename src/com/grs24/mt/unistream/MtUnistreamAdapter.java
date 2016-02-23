@@ -1,7 +1,7 @@
 package com.grs24.mt.unistream;
 
-import com.grs24.RemittanceException;
-import com.grs24.RemittanceHolder;
+import com.grs24.mt.RemittanceException;
+import com.grs24.mt.RemittanceHolder;
 import com.grs24.msg.FundsHolder;
 import com.grs24.msg.PersonHolder;
 import com.grs24.mt.MtAdapter;
