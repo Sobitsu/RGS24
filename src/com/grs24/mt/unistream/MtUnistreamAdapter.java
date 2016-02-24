@@ -604,7 +604,7 @@ public class MtUnistreamAdapter implements MtAdapter
             consumers.add(consumer);
   //TODO Проверить данные о пункте выдачи
             Participator part = factory.createParticipator();
-            part.setID(KEY_PARTICIPATOR_ID);
+            part.setID(KEY_PARTICIPATOR_ID.intValue());
             part.setRole(ParticipatorRole.ACTUAL_RECEIVER_POS);
             if (transfer.getParticipators().isNil()){
                 logger.log(Level.SEVERE, "Не заполнено поле Participators в инфомации о переводе");

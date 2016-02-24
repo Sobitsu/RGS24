@@ -33,7 +33,7 @@ public class MtUnistreamAdapterTest {
     public static String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
     public static String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
     public static Integer KEY_BANK_ID = 383589;
-     public static Integer KEY_PARTICIPATOR_ID = 383589;
+    public static Integer KEY_PARTICIPATOR_ID = 1;
     private static MtUnistreamAdapter instance;
     public MtUnistreamAdapterTest() {
     }
