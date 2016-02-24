@@ -182,7 +182,7 @@ public class MtUnistreamAdapter implements MtAdapter
 *    PRIMARY_PAID_COMISSION
 
 * @throws RemittanceException в случае ошибок при получении списка доступных валют.
-* 
+* * code 10010: Не найдена валюта с указанным ID. Нарушение целостности данных в Юнистрим
 */
 
         private FundsHolder getFundsHolder(List<Amount>  amounts, AmountType type) throws RemittanceException
@@ -198,7 +198,7 @@ public class MtUnistreamAdapter implements MtAdapter
                              logger.log(Level.INFO,"getCurrencyCode = " + i.getCurrencyID().toString());
                          } catch (Exception ex) {
                             logger.log(Level.SEVERE, "Error while try to take currency from UNIStream", ex);
-                            throw new RemittanceException("Валюты с ID = " + i.getCurrencyID().toString() + "не найдено" , 10010, "","");
+                            throw new RemittanceException("Валюты с ID = " + i.getCurrencyID().toString() + " не найдено" , 10010, "","");
                          }
                          logger.log(Level.INFO,"getFundsHolder finish");
                          return retval;
@@ -222,11 +222,11 @@ public class MtUnistreamAdapter implements MtAdapter
     ACTUAL_RECEIVER("ActualReceiver"),
     RECEIVERS_REPRESENTATIVE("ReceiversRepresentative"),
     RECEIVER_COMPANY("ReceiverCompany");
-* 
+*   code 10022 Ошибка при получении данных о клиентах по переводу. Проверить полученные данные от Юнистрим
 */
 
 
-        private FullNameTypeHolder getConsumer(List<Consumer>  consumers, ConsumerRole role)
+        private FullNameTypeHolder getConsumer(List<Consumer>  consumers, ConsumerRole role) throws RemittanceException
         {
             logger.log(Level.INFO,"getConsumer start");
             for (Consumer i : consumers)
@@ -234,9 +234,15 @@ public class MtUnistreamAdapter implements MtAdapter
                      if (i.getRole() == role) {
                          FullNameTypeHolder retval = new FullNameTypeHolder();
                          IndividualHolder individual = new IndividualHolder();
-                         individual.setFirst(i.getPerson().getValue().getFirstName().getValue());
-                         individual.setLast(i.getPerson().getValue().getLastName().getValue());
-                         individual.setMiddle(i.getPerson().getValue().getMiddleName().getValue());
+                         if (i.getPerson().isNil()) {
+                            throw new RemittanceException("Ошибка при получении данных о клиентах по переводу", 10022, "","" );
+                         }
+                         if (!i.getPerson().getValue().getFirstName().isNil()){
+                         individual.setFirst(i.getPerson().getValue().getFirstName().getValue());}
+                         if (!i.getPerson().getValue().getLastName().isNil()) {
+                         individual.setLast(i.getPerson().getValue().getLastName().getValue());}
+                         if (!i.getPerson().getValue().getMiddleName().isNil()) {
+                         individual.setMiddle(i.getPerson().getValue().getMiddleName().getValue());}
                          retval.setIndividual(individual);
                          logger.log(Level.INFO,"getConsumer finish");
                          return retval;
@@ -409,8 +415,10 @@ public class MtUnistreamAdapter implements MtAdapter
 * @param dstCountry
 * @return RemittanceHolder[] найденные денежные переводы. Иногда СДП могут возвращать де-факто
 * один и тот же перевод в разных вариантах валют к выплате. 
-	 * @throws com.grs24.RemittanceException в случае провала поиска (например, неверный формат запроса) 
+	 * @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
 	 * @throws java.io.IOException
+         * code 10011 Не найдена валюта с указанным кодом
+         * code 40001 Ошибка при поиске перевода
 */
         @Override
         public RemittanceHolder[] moneySearch(String mtcn, FundsHolder approxOrgFunds, FundsHolder approxDstFunds, String orgCountry, String dstCountry) throws RemittanceException, IOException {
@@ -426,14 +434,22 @@ public class MtUnistreamAdapter implements MtAdapter
                 throw new RemittanceException("Валюты с кодом = " + approxDstFunds.getCur() + "не найдено" , 10011, "","");
             }
             RemittanceHolder retval = new RemittanceHolder();
+            RemittanceHolder[] expResult = new RemittanceHolder[1];
+            FindTransferResponseMessage rm;
             try {
-                FindTransferResponseMessage rm = FindTransfer.FindTransfer(mtcn,mtsum,mtval,KEY_BANK_ID);
-                CommonLib.CheckFault(rm);
-                rettransfer = rm.getTransfer().getValue();
-                checkTransferStatus(rettransfer);
+                rm = FindTransfer.FindTransfer(mtcn,mtsum,mtval,KEY_BANK_ID);
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, "Ошибка при поиске перевода", ex);
                 throw new RemittanceException("Ошибка при поиске перевода", 40001, "",ex.getMessage());
+            }
+            CommonLib.CheckFault(rm);
+            if (!rm.getTransfer().isNil())
+            {rettransfer = rm.getTransfer().getValue();
+                    checkTransferStatus(rettransfer);}
+            else
+            {
+                logger.log(Level.INFO,"moneySearch finish");  
+                return expResult;
             }
             retval.setDstCountry(dstCountry);
             retval.setOrgCountry(orgCountry);
@@ -443,7 +459,6 @@ public class MtUnistreamAdapter implements MtAdapter
             retval.setOrgFunds(getFundsHolder(rettransfer.getAmounts().getValue().getAmount(),AmountType.MAIN));
             retval.setPayer(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.SENDER));
             retval.setPayee(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.EXPECTED_RECEIVER));
-            RemittanceHolder[] expResult = new RemittanceHolder[1];
             expResult[0] = retval;
             logger.log(Level.INFO,"moneySearch finish");  
             return expResult;
@@ -456,8 +471,9 @@ public class MtUnistreamAdapter implements MtAdapter
 * @param mtcn Money Transfer Control Number, Контрольный Номер Перевода (КНП)
 * @param payee
 
-* @throws com.grs24.RemittanceException в случае провала поиска (например, неверный формат запроса) 
+* @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
 * @throws java.io.IOException
+* code 30001 Операция HOLD не поддерживается Unistream
 */
         @Override
         public void moneyHold(String mtID, String mtcn, PersonHolder payee) throws RemittanceException, IOException {
@@ -470,8 +486,9 @@ public class MtUnistreamAdapter implements MtAdapter
 * @param mtcn Money Transfer Control Number, Контрольный Номер Перевода (КНП)
 * @param payee
 
-* @throws com.grs24.RemittanceException в случае провала поиска (например, неверный формат запроса) 
+* @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
 * @throws java.io.IOException
+* code 30001 Операция UNHOLD не поддерживается Unistream
 */
         @Override
         public void moneyUnhold(String mtID, String mtcn, PersonHolder payee) throws RemittanceException, IOException {
@@ -498,6 +515,10 @@ public class MtUnistreamAdapter implements MtAdapter
 * code 40002: Проблемы при поиске клиента
 * code 40003: Проблемы при создании клиента
 * code 40004: Проблемы при оплате перевода
+* code 10026: Нарушение целостности Unistream при поиске перевода по ID
+* code 10023: Нарушение целостности Unistream Не заполнено поле consumer в полученном переводе
+* code 10024: Нарушение целостности Unistream Не заполнено поле persons в инфомации о клиенте
+* code 10025: Нарушение целостности Unistream Не заполнено поле Participators в инфомации о переводе
 */ 
         @Override
         public void moneyPay(String mtID, String mtcn, PersonHolder payee, String docID, String docDate) throws RemittanceException, IOException {
@@ -507,35 +528,51 @@ public class MtUnistreamAdapter implements MtAdapter
             if (mtID != null) 
             {
                 Integer id = BaseDataParser.parseInteger(mtID);
+                GetTransferByIDResponseMessage gtrm;
                 try {
                     logger.log(Level.INFO,"Получение перевода по ID");
-                    GetTransferByIDResponseMessage gtrm = GetTransferByID.getTransferByID(id);
-                    CommonLib.CheckFault(gtrm);
-                    transfer = gtrm.getTransfer().getValue();
+                    gtrm = GetTransferByID.getTransferByID(id);
                 } catch (Exception ex) {
                     logger.log(Level.SEVERE, "Ошибка при поиске перевода", ex);
                     throw new RemittanceException("Ошибка при поиске перевода", 40001, "",ex.getMessage());
             }
-                checkTransferStatus(transfer);
+            CommonLib.CheckFault(gtrm);
+            if (!gtrm.getTransfer().isNil()) {
+                transfer = gtrm.getTransfer().getValue();
+                }
+            else
+                {
+                    logger.log(Level.SEVERE, "Ошибка при поиске перевода");
+                    throw new RemittanceException("Ошибка при поиске перевода", 10026, "","");
+                }
+            checkTransferStatus(transfer);
             }
             else
             {
             //по уму надо искать заного но нема информации о сумме и валюте перевода и найти его не удастся. поэтому генерим exception
                 logger.log(Level.SEVERE, "Не указан ID перевода");
-                throw new RemittanceException("Не достаточно информации для поиска перевода",40002,"","");
+                throw new RemittanceException("Не достаточно информации для поиска перевода",40001,"","");
             }
             Person persh = getPerson(payee);
             ObjectFactory factory = new ObjectFactory();
+            if (transfer.getConsumers().isNil()){
+                logger.log(Level.SEVERE, "Не заполнено поле consumer в полученном переводе");
+                throw new RemittanceException("Ошибка при получении информации о переводе от Юнистрим",10023,"","");            
+            }
             List<Consumer> consumers = transfer.getConsumers().getValue().getConsumer();
             FindPersonRequestMessage pershshot = getpersshot(payee);
             FindPersonResponseMessage fprm;
             try {
                 logger.log(Level.INFO,"Поиск получателя перевода");
                 fprm = FindPerson.FindPersonJAXb(pershshot);
-                CommonLib.CheckFault(fprm);
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, "Ошибка при поиске клиента", ex);
                 throw new RemittanceException("Ошибка при поиске клиента", 40002, "",ex.getMessage());
+            }
+            CommonLib.CheckFault(fprm);
+            if (fprm.getPersons().isNil()) {
+                logger.log(Level.SEVERE, "Не заполнено поле persons в инфомации о клиенте");
+                throw new RemittanceException("Ошибка при получении информации о переводе от Юнистрим", 10024, "","");
             }
             List<Person> persons = fprm.getPersons().getValue().getPerson();
             Person person = null;
@@ -550,6 +587,10 @@ public class MtUnistreamAdapter implements MtAdapter
                         logger.log(Level.SEVERE, "Ошибка при создании клиента", ex);
                         throw new RemittanceException("Ошибка при создании клиента", 40003, "",ex.getMessage());                    
                     }
+                    if (cprm.getPerson().isNil()) {
+                        logger.log(Level.SEVERE, "Ошибка при создании клиента");
+                        throw new RemittanceException("Ошибка при создании клиента", 40003, "","");                    
+                    }
                     person = cprm.getPerson().getValue();
                 }
             else
@@ -561,18 +602,28 @@ public class MtUnistreamAdapter implements MtAdapter
             consumer.setPerson(xperson);
             consumer.setRole(ConsumerRole.ACTUAL_RECEIVER);
             consumers.add(consumer);
+  //TODO Проверить данные о пункте выдачи
             Participator part = factory.createParticipator();
             part.setID(KEY_PARTICIPATOR_ID);
             part.setRole(ParticipatorRole.ACTUAL_RECEIVER_POS);
+            if (transfer.getParticipators().isNil()){
+                logger.log(Level.SEVERE, "Не заполнено поле Participators в инфомации о переводе");
+                throw new RemittanceException("Ошибка при получении информации о переводе от Юнистрим", 10025, "","");
+            }
             transfer.getParticipators().getValue().getParticipator().add(part);
             PayoutTransferResponseMessage retval;
             try {
                 logger.log(Level.INFO,"Оплата перевода");
                 retval = PayOutTransfer.payoutTransfer(transfer);
-                CommonLib.CheckFault(fprm);
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, "Ошибка при оплате перевода", ex);
                 throw new RemittanceException("Ошибка при оплате перевода", 40004, "",ex.getMessage()); 
+            }
+            CommonLib.CheckFault(fprm);
+            if (retval.getTransfer().isNil())
+            {
+                logger.log(Level.SEVERE, "Ошибка при оплате перевода");
+                throw new RemittanceException("Ошибка при оплате перевода", 40004, "",""); 
             }
             transfer= retval.getTransfer().getValue();
             logger.log(Level.INFO,"moneyPay finish");

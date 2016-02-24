@@ -33,6 +33,7 @@ public class MtUnistreamAdapterTest {
     public static String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
     public static String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
     public static Integer KEY_BANK_ID = 383589;
+     public static Integer KEY_PARTICIPATOR_ID = 383589;
     private static MtUnistreamAdapter instance;
     public MtUnistreamAdapterTest() {
     }
@@ -44,6 +45,7 @@ public class MtUnistreamAdapterTest {
         cfg.setProperty("LOGIN", KEY_USER_AUTHED_LOGIN);
         cfg.setProperty("PASSWORD", KEY_USER_AUTHED_PASSWORD);
         cfg.setProperty("BANKID", KEY_BANK_ID.toString());
+        cfg.setProperty("PARTID",KEY_PARTICIPATOR_ID.toString());
         instance = new MtUnistreamAdapter();
         instance.init(cfg);    
     }
