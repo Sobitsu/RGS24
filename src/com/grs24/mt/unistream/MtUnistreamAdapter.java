@@ -436,12 +436,7 @@ public class MtUnistreamAdapter implements MtAdapter
             RemittanceHolder retval = new RemittanceHolder();
             RemittanceHolder[] expResult = new RemittanceHolder[1];
             FindTransferResponseMessage rm;
-            try {
-                rm = FindTransfer.FindTransfer(mtcn,mtsum,mtval,KEY_BANK_ID);
-            } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Ошибка при поиске перевода", ex);
-                throw new RemittanceException("Ошибка при поиске перевода", 40001, "",ex.getMessage());
-            }
+            rm = FindTransfer.FindTransfer(mtcn,mtsum,mtval,KEY_BANK_ID);
             CommonLib.CheckFault(rm);
             if (!rm.getTransfer().isNil())
             {rettransfer = rm.getTransfer().getValue();
@@ -526,27 +521,22 @@ public class MtUnistreamAdapter implements MtAdapter
             mpCheckInParam(mtID, payee);
             Transfer transfer = null;
             if (mtID != null) 
-            {
-                Integer id = BaseDataParser.parseInteger(mtID);
-                GetTransferByIDResponseMessage gtrm;
-                try {
+                {
+                    Integer id = BaseDataParser.parseInteger(mtID);
+                    GetTransferByIDResponseMessage gtrm;
                     logger.log(Level.INFO,"Получение перевода по ID");
                     gtrm = GetTransferByID.getTransferByID(id);
-                } catch (Exception ex) {
-                    logger.log(Level.SEVERE, "Ошибка при поиске перевода", ex);
-                    throw new RemittanceException("Ошибка при поиске перевода", 40001, "",ex.getMessage());
-            }
-            CommonLib.CheckFault(gtrm);
-            if (!gtrm.getTransfer().isNil()) {
-                transfer = gtrm.getTransfer().getValue();
+                    CommonLib.CheckFault(gtrm);
+                    if (!gtrm.getTransfer().isNil()) {
+                        transfer = gtrm.getTransfer().getValue();
+                        checkTransferStatus(transfer);
+                        }
+                    else
+                        {
+                            logger.log(Level.SEVERE, "Ошибка при поиске перевода");
+                            throw new RemittanceException("Ошибка при поиске перевода", 10026, "","");
+                        }
                 }
-            else
-                {
-                    logger.log(Level.SEVERE, "Ошибка при поиске перевода");
-                    throw new RemittanceException("Ошибка при поиске перевода", 10026, "","");
-                }
-            checkTransferStatus(transfer);
-            }
             else
             {
             //по уму надо искать заного но нема информации о сумме и валюте перевода и найти его не удастся. поэтому генерим exception
@@ -562,13 +552,8 @@ public class MtUnistreamAdapter implements MtAdapter
             List<Consumer> consumers = transfer.getConsumers().getValue().getConsumer();
             FindPersonRequestMessage pershshot = getpersshot(payee);
             FindPersonResponseMessage fprm;
-            try {
-                logger.log(Level.INFO,"Поиск получателя перевода");
-                fprm = FindPerson.FindPersonJAXb(pershshot);
-            } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Ошибка при поиске клиента", ex);
-                throw new RemittanceException("Ошибка при поиске клиента", 40002, "",ex.getMessage());
-            }
+            logger.log(Level.INFO,"Поиск получателя перевода");
+            fprm = FindPerson.FindPersonJAXb(pershshot);
             CommonLib.CheckFault(fprm);
             if (fprm.getPersons().isNil()) {
                 logger.log(Level.SEVERE, "Не заполнено поле persons в инфомации о клиенте");
@@ -579,14 +564,9 @@ public class MtUnistreamAdapter implements MtAdapter
             if (persons.isEmpty()) 
                 {
                     CreatePersonResponseMessage cprm;
-                    try {
-                        logger.log(Level.INFO,"Создание клиента");
-                        cprm = CreatePerson.CreatePersonJAXb(persh);
-                        CommonLib.CheckFault(fprm);                    
-                    } catch (Exception ex) {
-                        logger.log(Level.SEVERE, "Ошибка при создании клиента", ex);
-                        throw new RemittanceException("Ошибка при создании клиента", 40003, "",ex.getMessage());                    
-                    }
+                    logger.log(Level.INFO,"Создание клиента");
+                    cprm = CreatePerson.CreatePersonJAXb(persh);
+                    CommonLib.CheckFault(fprm);                    
                     if (cprm.getPerson().isNil()) {
                         logger.log(Level.SEVERE, "Ошибка при создании клиента");
                         throw new RemittanceException("Ошибка при создании клиента", 40003, "","");                    
@@ -604,7 +584,7 @@ public class MtUnistreamAdapter implements MtAdapter
             consumers.add(consumer);
   //TODO Проверить данные о пункте выдачи
             Participator part = factory.createParticipator();
-            part.setID(KEY_PARTICIPATOR_ID.intValue());
+            part.setID(KEY_PARTICIPATOR_ID);
             part.setRole(ParticipatorRole.ACTUAL_RECEIVER_POS);
             if (transfer.getParticipators().isNil()){
                 logger.log(Level.SEVERE, "Не заполнено поле Participators в инфомации о переводе");
@@ -612,13 +592,9 @@ public class MtUnistreamAdapter implements MtAdapter
             }
             transfer.getParticipators().getValue().getParticipator().add(part);
             PayoutTransferResponseMessage retval;
-            try {
-                logger.log(Level.INFO,"Оплата перевода");
-                retval = PayOutTransfer.payoutTransfer(transfer);
-            } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Ошибка при оплате перевода", ex);
-                throw new RemittanceException("Ошибка при оплате перевода", 40004, "",ex.getMessage()); 
-            }
+            logger.log(Level.INFO,"Оплата перевода");
+            retval = PayOutTransfer.payoutTransfer(transfer);
+            CommonLib.printXml(retval);
             CommonLib.CheckFault(fprm);
             if (retval.getTransfer().isNil())
             {

@@ -8,6 +8,7 @@ package com.grs24.mt.unistream.wsclient;
 import com.grs24.mt.unistream.MtUnistreamAdapter;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
+import java.io.IOException;
 import java.util.logging.Level;
 import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
@@ -43,10 +44,11 @@ public class CreatePerson {
 }
 * @return Созданный клиент
 * 
-* @throws Exception в случае провала выполение
+* @throws IOException в случае провала выполение
 */ 
     
-    public static CreatePersonResponseMessage CreatePersonJAXb(org.datacontract.schemas._2004._07.wcfservicelib.Person persh) throws Exception {
+    public static CreatePersonResponseMessage CreatePersonJAXb(org.datacontract.schemas._2004._07.wcfservicelib.Person persh) throws IOException {
+    try {    
         MtUnistreamAdapter.logger.log(Level.INFO,"Start CreatePersonResponseMessage");
         CreatePersonRequestMessage cprm = new CreatePersonRequestMessage();
         org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
@@ -54,14 +56,23 @@ public class CreatePerson {
         JAXBElement<org.datacontract.schemas._2004._07.wcfservicelib.Person> persel = factory.createPerson(persh);
         cprm.setAuthenticationHeader(ahh);
         cprm.setPerson(persel);
-        com.unistream.test.wcflib.CreatePerson ftxml = new com.unistream.test.wcflib.CreatePerson();
-        ftxml.setRequestMessage(factory.createCreatePersonRequestMessage(cprm));
-        CommonLib.printXml(ftxml);
+
+        debug(cprm);
+        
         IWebService service = new WebService().getWS2007HttpBindingIWebService();
         CreatePersonResponseMessage rm = service.createPerson(cprm);
         MtUnistreamAdapter.logger.log(Level.INFO,"Finish CreatePersonResponseMessage");
         return rm;
     }
-
+    catch (Exception ex)
+        {throw new IOException("Ошибка доступа к Unistream",ex);}
+    }
+   private static void debug(CreatePersonRequestMessage cprm)
+        {
+            org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
+            com.unistream.test.wcflib.CreatePerson ftxml = new com.unistream.test.wcflib.CreatePerson();
+            ftxml.setRequestMessage(factory.createCreatePersonRequestMessage(cprm));
+            CommonLib.printXml(ftxml);
+        }
 }
 

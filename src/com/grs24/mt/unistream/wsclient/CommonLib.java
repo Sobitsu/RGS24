@@ -18,9 +18,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -112,12 +114,12 @@ public class CommonLib {
         ArrayOfDocument valuearr = factory.createArrayOfDocument();
         if (credholder != null) {
             Document valdoc = factory.createDocument();
-            if (credholder.getCredNumber() != null) valdoc.setNumber(CommonLib.MakeString(_DocNumber_QNAME,credholder.getCredNumber()));
-            if (credholder.getSerialNumber() != null) valdoc.setSeries(CommonLib.MakeString(_DocSeries_QNAME,credholder.getSerialNumber()));
+            if (!credholder.getCredNumber().isEmpty()) valdoc.setNumber(CommonLib.MakeString(_DocNumber_QNAME,credholder.getCredNumber()));
+            if (!credholder.getSerialNumber().isEmpty()) valdoc.setSeries(CommonLib.MakeString(_DocSeries_QNAME,credholder.getSerialNumber()));
             if (credholder.getIssueDate() != null) valdoc.setIssueDate(CommonLib.GetGregorianDate(credholder.getIssueDate()));
             if (credholder.getExpiryDate() != null) valdoc.setExpiryDate(CommonLib.GetGregorianDate(credholder.getExpiryDate()));
-            if (credholder.getIssuer() != null) valdoc.setIssuer(CommonLib.MakeString(_Issuer_QNAME,credholder.getIssuer()));
-            if (credholder.getIssuerCode() != null) valdoc.setIssuerCode(CommonLib.MakeString(_IssuerCode_QNAME,credholder.getIssuerCode()));
+            if (!credholder.getIssuer().isEmpty()) valdoc.setIssuer(CommonLib.MakeString(_Issuer_QNAME,credholder.getIssuer()));
+            if (!credholder.getIssuerCode().isEmpty()) valdoc.setIssuerCode(CommonLib.MakeString(_IssuerCode_QNAME,credholder.getIssuerCode()));
             valuearr.getDocument().add(valdoc);
         }
         JAXBElement<ArrayOfDocument> result = factory.createArrayOfDocument(valuearr);
@@ -133,10 +135,11 @@ public class CommonLib {
         MtUnistreamAdapter.logger.log(Level.INFO,"Create JAXBElement<PersonAddress>");
         ObjectFactory factoryp = new ObjectFactory();
         PersonAddress value = factoryp.createPersonAddress();
-        if (registr.getCity() != null ) value.setCity(CommonLib.MakeString(_PACity_QNAME,registr.getCity()));
-        if (registr.getStreet2() != null ) value.setHouse(CommonLib.MakeString(_House_QNAME,registr.getStreet2()));
-        if (registr.getStreet1() != null ) value.setStreet(CommonLib.MakeString(_Street_QNAME,registr.getStreet1()));
-        if (registr.getZipCode() != null ) value.setPostalCode(CommonLib.MakeString(_PostalCode_QNAME,registr.getZipCode()));
+        if (!registr.getCity().isEmpty()) value.setCity(CommonLib.MakeString(_PACity_QNAME,registr.getCity()));
+        if (!registr.getStreet2().isEmpty()) value.setHouse(CommonLib.MakeString(_House_QNAME,registr.getStreet2()));
+        if (!registr.getStreet1().isEmpty()) value.setStreet(CommonLib.MakeString(_Street_QNAME,registr.getStreet1()));
+        if (!registr.getZipCode().isEmpty()) value.setPostalCode(CommonLib.MakeString(_PostalCode_QNAME,registr.getZipCode()));
+        if (!registr.getCountry().isEmpty()) value.setCountryID(GetCountry.getCountriesID(registr.getCountry()));
         JAXBElement<PersonAddress> result = factoryp.createPersonAddress(value);
         return result;
     }
@@ -189,13 +192,31 @@ public class CommonLib {
 * @throws JAXBException в случае провала выполение
 */ 
     
-    public static void printXml(Object x) throws JAXBException
+    public static void printXml(Object x)
         {
-                JAXBContext context = JAXBContext.newInstance(x.getClass());
+                JAXBContext context = null;
+        try {
+            context = JAXBContext.newInstance(x.getClass());
+        } catch (JAXBException ex) {
+            MtUnistreamAdapter.logger.log(Level.INFO, null, ex);
+        }
                 StringWriter writer = new StringWriter();
-                Marshaller marshaller = context.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-                marshaller.marshal(x,writer);
+                Marshaller marshaller = null;
+        try {
+            marshaller = context.createMarshaller();
+        } catch (JAXBException ex) {
+            MtUnistreamAdapter.logger.log(Level.INFO, null, ex);
+        }
+        try {
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        } catch (PropertyException ex) {
+            MtUnistreamAdapter.logger.log(Level.INFO, null, ex);
+        }
+        try {
+            marshaller.marshal(x,writer);
+        } catch (JAXBException ex) {
+            MtUnistreamAdapter.logger.log(Level.INFO, null, ex);
+        }
                 String stringXML = writer.toString();
                 MtUnistreamAdapter.logger.log(Level.INFO,"XMLResult:");
                 MtUnistreamAdapter.logger.log(Level.INFO,stringXML);
