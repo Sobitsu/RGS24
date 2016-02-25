@@ -18,7 +18,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -114,12 +113,12 @@ public class CommonLib {
         ArrayOfDocument valuearr = factory.createArrayOfDocument();
         if (credholder != null) {
             Document valdoc = factory.createDocument();
-            if (!credholder.getCredNumber().isEmpty()) valdoc.setNumber(CommonLib.MakeString(_DocNumber_QNAME,credholder.getCredNumber()));
-            if (!credholder.getSerialNumber().isEmpty()) valdoc.setSeries(CommonLib.MakeString(_DocSeries_QNAME,credholder.getSerialNumber()));
+            if (credholder.getCredNumber() != null) valdoc.setNumber(CommonLib.MakeString(_DocNumber_QNAME,credholder.getCredNumber()));
+            if (credholder.getSerialNumber() != null) valdoc.setSeries(CommonLib.MakeString(_DocSeries_QNAME,credholder.getSerialNumber()));
             if (credholder.getIssueDate() != null) valdoc.setIssueDate(CommonLib.GetGregorianDate(credholder.getIssueDate()));
             if (credholder.getExpiryDate() != null) valdoc.setExpiryDate(CommonLib.GetGregorianDate(credholder.getExpiryDate()));
-            if (!credholder.getIssuer().isEmpty()) valdoc.setIssuer(CommonLib.MakeString(_Issuer_QNAME,credholder.getIssuer()));
-            if (!credholder.getIssuerCode().isEmpty()) valdoc.setIssuerCode(CommonLib.MakeString(_IssuerCode_QNAME,credholder.getIssuerCode()));
+            if (credholder.getIssuer() != null) valdoc.setIssuer(CommonLib.MakeString(_Issuer_QNAME,credholder.getIssuer()));
+            if (credholder.getIssuerCode() != null) valdoc.setIssuerCode(CommonLib.MakeString(_IssuerCode_QNAME,credholder.getIssuerCode()));
             valuearr.getDocument().add(valdoc);
         }
         JAXBElement<ArrayOfDocument> result = factory.createArrayOfDocument(valuearr);
@@ -135,11 +134,11 @@ public class CommonLib {
         MtUnistreamAdapter.logger.log(Level.INFO,"Create JAXBElement<PersonAddress>");
         ObjectFactory factoryp = new ObjectFactory();
         PersonAddress value = factoryp.createPersonAddress();
-        if (!registr.getCity().isEmpty()) value.setCity(CommonLib.MakeString(_PACity_QNAME,registr.getCity()));
-        if (!registr.getStreet2().isEmpty()) value.setHouse(CommonLib.MakeString(_House_QNAME,registr.getStreet2()));
-        if (!registr.getStreet1().isEmpty()) value.setStreet(CommonLib.MakeString(_Street_QNAME,registr.getStreet1()));
-        if (!registr.getZipCode().isEmpty()) value.setPostalCode(CommonLib.MakeString(_PostalCode_QNAME,registr.getZipCode()));
-        if (!registr.getCountry().isEmpty()) value.setCountryID(GetCountry.getCountriesID(registr.getCountry()));
+        if (registr.getCity() != null) value.setCity(CommonLib.MakeString(_PACity_QNAME,registr.getCity()));
+        if (registr.getStreet2() != null) value.setHouse(CommonLib.MakeString(_House_QNAME,registr.getStreet2()));
+        if (registr.getStreet1() != null) value.setStreet(CommonLib.MakeString(_Street_QNAME,registr.getStreet1()));
+        if (registr.getZipCode() != null) value.setPostalCode(CommonLib.MakeString(_PostalCode_QNAME,registr.getZipCode()));
+        if (registr.getCountry() != null) value.setCountryID(GetCountry.getCountriesID(registr.getCountry()));
         JAXBElement<PersonAddress> result = factoryp.createPersonAddress(value);
         return result;
     }
