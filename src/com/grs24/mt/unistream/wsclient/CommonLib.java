@@ -188,7 +188,7 @@ public class CommonLib {
 /**
 * Логгирование XML запросов к серверу
 * @param x
-* @throws JAXBException в случае провала выполение
+
 */ 
     
     public static void printXml(Object x)

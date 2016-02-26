@@ -121,7 +121,7 @@ public class MtUnistreamAdapterTest {
         RemittanceHolder[] result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
         String mtID = result[0].getMtID();
         PersonHolder payee = new PersonHolder();
-        payee.setCitizenCountry("Россия");
+        payee.setCitizenCountry("RUS");
         payee.setBirthday(DateTimeUtils.parseDate("07.10.1977",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
         FullNameTypeHolder fullName_ = new FullNameTypeHolder();
         IndividualHolder individual_ = new IndividualHolder();
@@ -131,7 +131,7 @@ public class MtUnistreamAdapterTest {
         fullName_.setIndividual(individual_);
         payee.setFullName(fullName_);
         CredentialsHolder identification_ = new CredentialsHolder();
-        identification_.setCredCountry("Россия");
+        identification_.setCredCountry("RUS");
         identification_.setCredNumber("656565");
         identification_.setIssueCity("Нск");
         identification_.setIssuer("Нск");
@@ -141,13 +141,13 @@ public class MtUnistreamAdapterTest {
         phone_[0] = "+79139222200";
         payee.setPhone(phone_);
         AddressHolder registration_ = new AddressHolder();
+        registration_.setCountry("RUS");
         registration_.setCity("Новосибирск");
         registration_.setStreet1("Большивисткая");
         registration_.setStreet2("101");
         registration_.setZipCode("630090");
-        registration_.setCountry("Россия");
         payee.setRegistration(registration_);
-        payee.setResidentCountry("Россия");
+        payee.setResidentCountry("RUS");
         String docID = "";
         String docDate = "";
         try{
