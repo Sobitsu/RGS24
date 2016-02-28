@@ -148,7 +148,7 @@ public class CommonLibTest {
      * Test of printXml method, of class CommonLib.
      */
     @Test
-    public void testPrintXml() throws Exception {
+    public void testPrintXml() {
         System.out.println("printXml");
         Object x = null;
         CommonLib.printXml(x);

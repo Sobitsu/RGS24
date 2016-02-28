@@ -43,9 +43,9 @@ public class GetCurrencyTest {
     @Test
     public void testGetCurrencyID() throws Exception {
         System.out.println("getCurrencyID");
-        String CurrencyCode = "";
+        String сode = "";
         Integer expResult = null;
-        Integer result = GetCurrency.getCurrencyID(CurrencyCode);
+        Integer result = GetCurrency.getCurrencyID(сode);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

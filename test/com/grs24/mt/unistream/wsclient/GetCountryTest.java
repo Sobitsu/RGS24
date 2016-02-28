@@ -5,8 +5,6 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonRequestMessage;
-import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonResponseMessage;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,9 +16,9 @@ import static org.junit.Assert.*;
  *
  * @author Dale
  */
-public class FindPersonTest {
+public class GetCountryTest {
     
-    public FindPersonTest() {
+    public GetCountryTest() {
     }
     
     @BeforeClass
@@ -40,14 +38,28 @@ public class FindPersonTest {
     }
 
     /**
-     * Test of FindPersonJAXb method, of class FindPerson.
+     * Test of getCountriesID method, of class GetCountry.
      */
     @Test
-    public void testFindPersonJAXb() throws Exception {
-        System.out.println("FindPersonJAXb");
-        FindPersonRequestMessage fprm = null;
-        FindPersonResponseMessage expResult = null;
-        FindPersonResponseMessage result = FindPerson.FindPersonJAXb(fprm);
+    public void testGetCountriesID() throws Exception {
+        System.out.println("getCountriesID");
+        String code = "";
+        Integer expResult = null;
+        Integer result = GetCountry.getCountriesID(code);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of getCuntryCode method, of class GetCountry.
+     */
+    @Test
+    public void testGetCuntryCode() throws Exception {
+        System.out.println("getCuntryCode");
+        Integer cuntryId = null;
+        String expResult = "";
+        String result = GetCountry.getCuntryCode(cuntryId);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
