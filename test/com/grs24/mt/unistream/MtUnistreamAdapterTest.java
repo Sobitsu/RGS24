@@ -115,6 +115,7 @@ public class MtUnistreamAdapterTest {
         identification_.setIssueCity("Нск");
         identification_.setIssuer("Нск");
         identification_.setSerialNumber("5404");
+        identification_.setCredType("Паспорт");
         payee.setIdentification(identification_);
         String[] phone_ = new String[1];
         phone_[0] = "+79139222200";

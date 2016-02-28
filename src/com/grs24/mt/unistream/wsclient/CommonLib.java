@@ -120,6 +120,7 @@ public class CommonLib {
             if (credholder.getExpiryDate() != null) valdoc.setExpiryDate(CommonLib.GetGregorianDate(credholder.getExpiryDate()));
             if (credholder.getIssuer() != null) valdoc.setIssuer(CommonLib.MakeString(_Issuer_QNAME,credholder.getIssuer()));
             if (credholder.getIssuerCode() != null) valdoc.setIssuerCode(CommonLib.MakeString(_IssuerCode_QNAME,credholder.getIssuerCode()));
+            if (credholder.getCredType() != null) valdoc.setTypeID(GetDocumentType.getDocumentsID(credholder.getCredType()));
             valuearr.getDocument().add(valdoc);
         }
         JAXBElement<ArrayOfDocument> result = factory.createArrayOfDocument(valuearr);
