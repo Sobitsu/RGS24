@@ -5,6 +5,9 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
+import com.grs24.mt.unistream.MtUnistreamAdapter;
+import java.io.IOException;
+import java.util.Properties;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,11 +21,23 @@ import static org.junit.Assert.*;
  */
 public class GetCountryTest {
     
-    public GetCountryTest() {
-    }
-    
+ public static String KEY_USER_AUTHED_APIKEY = "1wwteyFGFew624";
+    public static String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
+    public static String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
+    public static Integer KEY_BANK_ID = 383589;
+    public static Integer KEY_PARTICIPATOR_ID = 383589;
+    private static MtUnistreamAdapter instance;
+  
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws IOException {
+        Properties cfg = new Properties();
+        cfg.setProperty("APIKEY", KEY_USER_AUTHED_APIKEY);
+        cfg.setProperty("LOGIN", KEY_USER_AUTHED_LOGIN);
+        cfg.setProperty("PASSWORD", KEY_USER_AUTHED_PASSWORD);
+        cfg.setProperty("BANKID", KEY_BANK_ID.toString());
+        cfg.setProperty("PARTID",KEY_PARTICIPATOR_ID.toString());
+        instance = new MtUnistreamAdapter();
+        instance.init(cfg);    
     }
     
     @AfterClass
@@ -43,12 +58,11 @@ public class GetCountryTest {
     @Test
     public void testGetCountriesID() throws Exception {
         System.out.println("getCountriesID");
-        String code = "";
-        Integer expResult = null;
+        String code = "RUS";
+        Integer expResult = 18;
         Integer result = GetCountry.getCountriesID(code);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        System.out.println("getCountriesID OK");
     }
 
     /**
@@ -57,12 +71,10 @@ public class GetCountryTest {
     @Test
     public void testGetCuntryCode() throws Exception {
         System.out.println("getCuntryCode");
-        Integer cuntryId = null;
-        String expResult = "";
+        Integer cuntryId = 18;
+        String expResult = "RUS";
         String result = GetCountry.getCuntryCode(cuntryId);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        System.out.println("getCuntryCode OK");
     }
-    
 }

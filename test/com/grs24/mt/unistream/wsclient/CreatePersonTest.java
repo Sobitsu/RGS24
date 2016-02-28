@@ -40,9 +40,7 @@ public class CreatePersonTest {
     private final static QName _LastName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "LastName");
     private final static QName _MiddleName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "MiddleName");
 
-    public CreatePersonTest() {
-    }
-    
+
     
     @BeforeClass
     public static void setUpClass() throws IOException {
@@ -55,6 +53,9 @@ public class CreatePersonTest {
         instance = new MtUnistreamAdapter();
         instance.init(cfg);    
     }
+    public CreatePersonTest() {
+    }
+    
     @AfterClass
     public static void tearDownClass() {
     }
