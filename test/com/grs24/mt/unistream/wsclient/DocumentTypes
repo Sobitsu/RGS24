@@ -1,0 +1,60 @@
+2,Military ID,Военный билет
+6,Residence permit,Вид на жительство
+7,Overseas Passport,Паспорт моряка
+11,Driving Licence,Водительские права
+12,Home Office Ind,Удостоверение МВД
+13,UK Driving Licence,.
+16,Alien Card,Карточка иностранца
+20,Tax Id,ИНН
+21,Credit Card,Кредитная карта
+23,Immigration Permit,Миграционная карта
+29,Visa,Виза
+30,Invitation,Приглашение
+40,Other ID,Иной документ
+43,.,Свидетельство о предоставлении временного убежища
+47,Certificate of laissez-passer  citizenship,Свидетельство на возвращение в страну гражданства
+48,Current council tax demand letter, or statement,Текущий запрос о выписке налогооблажения
+8,foreign passport,Общегражданский заграничный паспорт
+9,Pink Slip,Временное удостоверение личности
+10,ID,Удостоверение личности военнослужащего
+14,CIS Card,Идентификационная карта СНГ
+15,ID Card,Идентификационная карта
+17,State Identification Card,Государственное удостоверение личности
+18,Naturalization Certificate,Сертификат о натурализации
+19,Social Security,Номер социального обеспечения
+22,Foreign passport,Паспорт иностранного гражданина
+24,Utility Bill,Счет за коммунальные услуги
+25,Current bank statement,Текущая выписка из банковского счета
+26,Credit /debit card statement,Выписка с кредитной/дебетной карты
+27,Current council tax demand letter, or statement,Текущий запрос о выписке налогооблажения
+28,Instrument of a court appointment,Судебная повестка
+31,Registry office certificate,Свидетельство  органов  ЗАГС
+32,Sojourn permit,Разрешение на временное проживание
+33,Certificate of consideration of refugee status rec,Свид-во о рассмотрении признания лица беженцем
+34,Refugee Certificate,Удостоверение беженца
+35,Russian Federation Passport,Паспорт гражданина РФ
+36,Russian Federation temporary identity card,Временное удостоверение личности гражданина РФ
+37,Residence permit in Russian Federation,Вид на жительство в РФ
+38,Diplomatic passport,Дипломатический паспорт
+39,Temporary residence permit in Russia,Разрешение на временное проживание в РФ
+41,Certificate of laissez-passer  citizenship,Свидетельство на возвращение в страну гражданства
+42,Foreign country ID,Удостоверение личности гражданина иностр. гос-ва
+44,.,Свидетельство о предоставлении временного убежища
+45,Certificate for temporary asylum in Russian Federa,Св-во о предоставлении вр. убежища на терр. РФ
+49,Another document,Другой документ
+1,Passport,Паспорт
+46,Interim Certificate,Временное удостоверение личности
+50,Residence permit in Ukraine,Вид на жительство (Украина)
+67,Temporary residence permit in Russia (stless),Разрешение на временное проживание в РФ (без гр.)
+68,Residence permit (Belarus),Вид на жительство (Белоруссия)
+51,Temp. residence permit in Russ (stateless pers.),Разр. на временное проживание в РФ (лиц без гр.)
+55,Residence permit (Belarus),Вид на жительство (Белоруссия)
+56,Passport (Belarus),Паспорт (Белоруссия)
+57,Refugee certificate (Belarus),Удостоверение беженца (Белоруссия)
+58,Visa (Belarus),Виза (Белоруссия)
+59,Passport (Kazakhstan),Паспорт (Казахстан)
+60,Id (Kazakhstan),Удостоверение личности (Казахстан)
+61,ResidencePermit (Kazakhstan),Вид на жительство иностранного граждан. Казахстан
+62,StatelessPassport (Kazakhstan),Паспорт лица без гражданства (Казахстан)
+63,Stateless person residence permit in Russian,Вид на жительство лица без гражданства в РФ
+64,Inprisonment release certificate in Russian,Справка об освобождении из мест лишения свободы

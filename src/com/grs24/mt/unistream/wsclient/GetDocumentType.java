@@ -5,6 +5,7 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
+import com.grs24.mt.RemittanceException;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
 import java.io.IOException;
@@ -182,6 +183,25 @@ Inprisonment release certificate in Russian
                 }
         return null;
      }
+    
+    public static String getDocumentTypeList() throws Exception {
+        GetDocumentTypeChangesResponseMessage rm = getDocumentTypeChanges();
+        CommonLib.CheckFault(rm);
+        if (rm.getDocumentTypes().isNil()) return null;
+        StringBuilder str = new StringBuilder();
+        str.append("ID").append(",").append("English Names").append(",").append("Russian Names").append(System.getProperty("line.separator"));
+        for (DocumentType i : rm.getDocumentTypes().getValue().getDocumentType())
+                {
+                    if (i.getStatus().equals(ObjectStatus.ACTUAL)) {
+                        if (!i.getName().getValue().getLangText().isEmpty()) {
+                            str.append(i.getID().toString()).append(",")
+                               .append(i.getName().getValue().getLangText().get(0).getText().getValue()).append(",")
+                               .append(i.getName().getValue().getLangText().get(1).getText().getValue()).append(System.getProperty("line.separator"));
+                        }
+                    }
+                }    
+        return str.toString();
+    }
      private static void debug(GetDocumentTypeChangesResponseMessage fprm)
         {
             CommonLib.printXml(fprm);
