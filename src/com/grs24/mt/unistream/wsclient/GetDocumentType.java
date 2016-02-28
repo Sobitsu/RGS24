@@ -6,6 +6,7 @@
 package com.grs24.mt.unistream.wsclient;
 
 import com.grs24.mt.RemittanceException;
+import com.grs24.mt.unistream.BaseDataParser;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
 import java.io.IOException;
@@ -165,7 +166,7 @@ Inprisonment release certificate in Russian
 * @throws Exception в случае провала выполение
 */ 
     public static Integer getDocumentsID(String code)throws Exception {
-        GetDocumentTypeChangesResponseMessage rm = getDocumentTypeChanges();
+       /* GetDocumentTypeChangesResponseMessage rm = getDocumentTypeChanges();
         CommonLib.CheckFault(rm);
         debug(rm);
         if (rm.getDocumentTypes().isNil()) return null;
@@ -180,8 +181,9 @@ Inprisonment release certificate in Russian
                             }
                         }
                     }
-                }
-        return null;
+                }*/
+        Integer res = BaseDataParser.parseInteger(code);
+        return res;
      }
     
     public static String getDocumentTypeList() throws Exception {
