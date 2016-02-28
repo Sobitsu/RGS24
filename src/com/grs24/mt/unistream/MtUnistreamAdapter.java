@@ -18,8 +18,8 @@ import com.grs24.mt.unistream.wsclient.FindTransfer;
 import com.grs24.mt.unistream.wsclient.GetCurrency;
 import com.grs24.mt.unistream.wsclient.GetTransferByID;
 import com.grs24.mt.unistream.wsclient.PayOutTransfer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory;
@@ -60,7 +60,7 @@ public class MtUnistreamAdapter implements MtAdapter
 	public static String KEY_USER_AUTHED_PASSWORD;// = "7!LrO7i7";
         public static Integer KEY_BANK_ID;// = 383589;
         public static Integer KEY_PARTICIPATOR_ID;
-        public static Logger logger;
+        private static Logger logger = LoggerFactory.getLogger(MtUnistreamAdapter.class);
 
 
  /**
@@ -80,19 +80,19 @@ public class MtUnistreamAdapter implements MtAdapter
         private void mscheckInparam(String mtcn, FundsHolder approxOrgFunds, FundsHolder approxDstFunds, String orgCountry, String dstCountry) throws RemittanceException
         {
             if (mtcn == null) {
-                    logger.log(Level.SEVERE, "Не указан номер перевода");
+                    logger.error("Не указан номер перевода");
                     throw new RemittanceException("Не указан номер перевода", 50001, "","");
                 }
             if (approxDstFunds == null) {
-                    logger.log(Level.SEVERE, "Не указаны валюта и сумма перевода");
+                    logger.error("Не указаны валюта и сумма перевода");
                     throw new RemittanceException("Не указаны валюта и сумма перевода", 50002, "","");
                 }
             if (approxDstFunds.getAmount() == null) {
-                    logger.log(Level.SEVERE, "Не указана сумма перевода"); 
+                    logger.error("Не указана сумма перевода"); 
                     throw new RemittanceException("Не указана сумма перевода", 50002, "","");
                 }
             if (approxDstFunds.getCur() == null)    {
-                    logger.log(Level.SEVERE, "Не указана валюта перевода"); 
+                    logger.error("Не указана валюта перевода"); 
                     throw new RemittanceException("Не валюта перевода", 50002, "","");
                 }
         }
@@ -112,55 +112,55 @@ public class MtUnistreamAdapter implements MtAdapter
 */ 
         private void mpCheckInParam(String mtID,PersonHolder payee)  throws RemittanceException {
             if (mtID == null) {
-                logger.log(Level.SEVERE, "Не указан ID перевода"); 
+                logger.error( "Не указан ID перевода"); 
                 throw new RemittanceException("Не указан ID перевода", 50004, "","");
             }
             if (payee == null) {
-                logger.log(Level.SEVERE, "Не указан получатель перевода"); 
+                logger.error("Не указан получатель перевода"); 
                 throw new RemittanceException("Не указан получатель перевода", 50005, "","");
             }
             if (payee.getFullName() == null) {
-                logger.log(Level.SEVERE, "Не указанны ФИО получателя перевода"); 
+                logger.error("Не указанны ФИО получателя перевода"); 
                 throw new RemittanceException("Не указанны ФИО получателя перевода", 50006, "","");
             }
             if (payee.getFullName().getIndividual() == null) {
-                logger.log(Level.SEVERE, "Не указанны ФИО получателя перевода"); 
+                logger.error("Не указанны ФИО получателя перевода"); 
                 throw new RemittanceException("Не указанны ФИО получателя перевода", 50006, "","");
             }
             if (payee.getFullName().getIndividual().getFirst() == null) {
-                logger.log(Level.SEVERE, "Не указанно имя получателя перевода"); 
+                logger.error("Не указанно имя получателя перевода"); 
                 throw new RemittanceException("Не указанно имя получателя перевода", 50006, "","");
             }
             if (payee.getFullName().getIndividual().getLast() == null) {
-                logger.log(Level.SEVERE, "Не указанна фамилия получателя перевода"); 
+                logger.error("Не указанна фамилия получателя перевода"); 
                 throw new RemittanceException("Не указанна фамилия получателя перевода", 50006, "","");
             }
             if (payee.getBirthday() == null) {
-                logger.log(Level.SEVERE, "Не указанна дата рождения получателя перевода"); 
+                logger.error("Не указанна дата рождения получателя перевода"); 
                 throw new RemittanceException("Не указанна дата рождения получателя перевода", 50007, "","");
             }
             if (payee.getIdentification() == null) {
-                logger.log(Level.SEVERE, "Не указанны удостоверения личности получателя перевода"); 
+                logger.error("Не указанны удостоверения личности получателя перевода"); 
                 throw new RemittanceException("Не указанны удостоверения личности получателя перевода", 50008, "","");
             }
             if (payee.getIdentification().getCredNumber() == null) {
-                logger.log(Level.SEVERE, "Не указан номер удостоверения личности получателя перевода"); 
+                logger.error("Не указан номер удостоверения личности получателя перевода"); 
                 throw new RemittanceException("Не указан номер удостоверения личности получателя перевода", 50008, "","");
             }
             if (payee.getPhone() == null) {
-                logger.log(Level.SEVERE, "Не указан номер удостоверения личности получателя перевода"); 
+                logger.error("Не указан номер удостоверения личности получателя перевода"); 
                 throw new RemittanceException("Не указан телефон получателя перевода", 50009, "","");
             }
             if (payee.getRegistration() == null) {
-                logger.log(Level.SEVERE, "Не указан адресс регистрации получателя перевода"); 
+                logger.error("Не указан адресс регистрации получателя перевода"); 
                 throw new RemittanceException("Не указан адресс регистрации получателя перевода", 50010, "","");
             }
             if (payee.getRegistration().getCountry() == null) {
-                logger.log(Level.SEVERE, "Не указана страна регистрации получателя перевода"); 
+                logger.error("Не указана страна регистрации получателя перевода"); 
                 throw new RemittanceException("Не указана страна регистрации получателя перевода", 50010, "","");
             }
             if (payee.getRegistration().getCity() == null) {
-                logger.log(Level.SEVERE, "Не указан город регистрации получателя перевода"); 
+                logger.error("Не указан город регистрации получателя перевода"); 
                 throw new RemittanceException("Не указан город регистрации получателя перевода", 50010, "","");
             }
         }
@@ -187,7 +187,7 @@ public class MtUnistreamAdapter implements MtAdapter
 
         private FundsHolder getFundsHolder(List<Amount>  amounts, AmountType type) throws RemittanceException
         {
-            logger.log(Level.INFO,"getFundsHolder start");
+            logger.debug("getFundsHolder start");
             for (Amount i : amounts)
                  {
                      if (i.getType() == type) {
@@ -195,16 +195,16 @@ public class MtUnistreamAdapter implements MtAdapter
                          retval.setAmount(i.getSum());
                          try {
                              retval.setCur(GetCurrency.getCurrencyCode(i.getCurrencyID()));
-                             logger.log(Level.INFO,"getCurrencyCode = " + i.getCurrencyID().toString());
+                             logger.debug("getCurrencyCode = " + i.getCurrencyID().toString());
                          } catch (Exception ex) {
-                            logger.log(Level.SEVERE, "Error while try to take currency from UNIStream", ex);
+                            logger.error("Error while try to take currency from UNIStream", ex);
                             throw new RemittanceException("Валюты с ID = " + i.getCurrencyID().toString() + " не найдено" , 10010, "","");
                          }
-                         logger.log(Level.INFO,"getFundsHolder finish");
+                         logger.debug("getFundsHolder finish");
                          return retval;
                      }
                  }
-            logger.log(Level.INFO,"getFundsHolder finish");
+            logger.debug("getFundsHolder finish");
             return null;
         }
 
@@ -228,7 +228,7 @@ public class MtUnistreamAdapter implements MtAdapter
 
         private FullNameTypeHolder getConsumer(List<Consumer>  consumers, ConsumerRole role) throws RemittanceException
         {
-            logger.log(Level.INFO,"getConsumer start");
+            logger.debug("getConsumer start");
             for (Consumer i : consumers)
                  {
                      if (i.getRole() == role) {
@@ -244,11 +244,11 @@ public class MtUnistreamAdapter implements MtAdapter
                          if (!i.getPerson().getValue().getMiddleName().isNil()) {
                          individual.setMiddle(i.getPerson().getValue().getMiddleName().getValue());}
                          retval.setIndividual(individual);
-                         logger.log(Level.INFO,"getConsumer finish");
+                         logger.debug("getConsumer finish");
                          return retval;
                      }
                  }
-            logger.log(Level.INFO,"getConsumer finish");            
+            logger.debug("getConsumer finish");            
             return null;
         }
 
@@ -264,9 +264,9 @@ public class MtUnistreamAdapter implements MtAdapter
 */
       
         private void checkTransferStatus(Transfer transfer) throws RemittanceException {
-            logger.log(Level.INFO,"checkTransferStatus start");            
+            logger.debug("checkTransferStatus start");            
             if (transfer == null) {
-                logger.log(Level.WARNING,"Попытка выплаты уже выданного перевода");            
+                logger.warn("Попытка выплаты уже выданного перевода");
                 throw new RemittanceException("Перевод выплачен другим банком", 30002, "","" );
             }
             if (transfer.getStatus() == TransferStatus.CANCELLED) {
@@ -279,7 +279,7 @@ public class MtUnistreamAdapter implements MtAdapter
                 //TODO не понятно как сказать что все ОК?
                 throw new RemittanceException("Перевод оплачен", 30000, "","" );
             }
-            logger.log(Level.INFO,"checkTransferStatus finish");            
+            logger.debug("checkTransferStatus finish");            
         }
 
 /**
@@ -290,37 +290,37 @@ public class MtUnistreamAdapter implements MtAdapter
 * 
 */
         private FindPersonRequestMessage getpersshot(PersonHolder payee) throws RemittanceException {
-            logger.log(Level.INFO,"getpersshot start");            
+            logger.debug("getpersshot start");            
             FindPersonRequestMessage fprm = new FindPersonRequestMessage();
             if (payee.getBirthday() != null) try {
                 fprm.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getBirthday()), ex);
+                logger.error("Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getBirthday()), ex);
                 throw new RemittanceException("Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getBirthday()), 20001, "","");                
             }
-            logger.log(Level.INFO,"getpersshot parse FIO");            
+            logger.debug("getpersshot parse FIO");            
             if (payee.getFullName().getIndividual().getFirst() != null) fprm.setFirstname(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
             if (payee.getFullName().getIndividual().getLast() != null) fprm.setLastname(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
             if (payee.getFullName().getIndividual().getMiddle() != null) fprm.setMiddlename(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
             if (payee.getPhone()[0] != null) fprm.setPhone(CommonLib.MakeString(_Phone_QNAME,payee.getPhone()[0]));
             if (payee.getIdentification() != null) {
-                logger.log(Level.INFO,"getpersshot parse Identification");            
+                logger.debug("getpersshot parse Identification");            
                 if (payee.getIdentification().getCredNumber() != null) fprm.setDocNumber(CommonLib.MakeString(_DocNumber_QNAME,payee.getIdentification().getCredNumber()));
                 if (payee.getIdentification().getSerialNumber() != null) fprm.setDocSeries(CommonLib.MakeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
                 if (payee.getIdentification().getIssueDate() != null) try {
                     fprm.setDocIssueDate(CommonLib.GetGregorianDate(payee.getIdentification().getIssueDate()));
                 } catch (Exception ex) {
-                    logger.log(Level.SEVERE, "Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getIdentification().getIssueDate()), ex);
+                    logger.error("Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getIdentification().getIssueDate()), ex);
                     throw new RemittanceException("Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getIdentification().getIssueDate()), 20001, "","");                
                 }
                 if (payee.getIdentification().getExpiryDate() != null) try {
                     fprm.setDocExpiryDate(CommonLib.GetGregorianDate(payee.getIdentification().getExpiryDate()));
                 } catch (Exception ex) {
-                    logger.log(Level.SEVERE, "Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getIdentification().getExpiryDate()), ex);
+                    logger.error("Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getIdentification().getExpiryDate()), ex);
                     throw new RemittanceException("Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getIdentification().getExpiryDate()), 20001, "","");                
                 }
             }
-            logger.log(Level.INFO,"getpersshot finish");
+            logger.debug("getpersshot finish");
             return fprm;
         }
 
@@ -336,36 +336,36 @@ public class MtUnistreamAdapter implements MtAdapter
 */
         
         private Person getPerson(PersonHolder payee) throws RemittanceException{
-            logger.log(Level.INFO,"getPerson start");            
+            logger.debug("getPerson start");            
             Person person =  new Person();
                if (payee.getRegistration() != null ) try {
                    person.setAddress(CommonLib.getAdressElem(payee.getRegistration()));
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Ошибка обработки адреса:" +payee.getRegistration().toString(), ex);
+                logger.error("Ошибка обработки адреса:" +payee.getRegistration().toString(), ex);
                 throw new RemittanceException("Ошибка обработки адреса:" +payee.getRegistration().toString() , 20002, "","");                
             }
                if (payee.getIdentification() != null) try {
                    person.setDocuments(CommonLib.getDocuments(payee.getIdentification()));
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Ошибка обработки удостоверения личности:" +payee.getIdentification().toString(), ex);
+                logger.error("Ошибка обработки удостоверения личности:" +payee.getIdentification().toString(), ex);
                 throw new RemittanceException("Ошибка обработки удостоверения личности:" +payee.getIdentification().toString() , 20003, "","");                
             }
                if (payee.getPhone() != null && payee.getPhone().length > 0) try {
                    person.setPhones(CommonLib.getPhones(payee.getPhone()));
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Ошибка обработки телефона:" +payee.getPhone().toString() , ex);
+                logger.error("Ошибка обработки телефона:" +payee.getPhone().toString() , ex);
                 throw new RemittanceException("Ошибка обработки телефона:" +payee.getPhone().toString() , 20004, "","");                
             }
                if (payee.getBirthday() != null) try {
                    person.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getBirthday()), ex);
+                logger.error("Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getBirthday()), ex);
                 throw new RemittanceException("Ошибка преобразования даты:" + DateTimeUtils.formatDate(payee.getBirthday()), 20001, "","");                
             }
                if (payee.getFullName().getIndividual().getFirst() != null) person.setFirstName(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
                if (payee.getFullName().getIndividual().getLast() != null) person.setLastName(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
                if (payee.getFullName().getIndividual().getMiddle() != null) person.setMiddleName(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
-            logger.log(Level.INFO,"getPerson finish");    
+            logger.debug("getPerson finish");    
             return person;
         }    
 
@@ -388,17 +388,15 @@ public class MtUnistreamAdapter implements MtAdapter
         @Override
         public void init(Properties init) throws IOException {
             try{
-                    logger = Logger.getLogger(MtUnistreamAdapter.class.getName());
-                    logger.setLevel(Level.ALL);
-                    logger.log(Level.INFO, "init start"); 
+                    logger.debug( "init start"); 
                     KEY_USER_AUTHED_APIKEY = init.getProperty("APIKEY");
                     KEY_USER_AUTHED_LOGIN = init.getProperty("LOGIN");
                     KEY_USER_AUTHED_PASSWORD = init.getProperty("PASSWORD");
                     KEY_BANK_ID = BaseDataParser.parseInteger(init.getProperty("BANKID"));
                     KEY_PARTICIPATOR_ID = BaseDataParser.parseInteger(init.getProperty("PARTID"));
-                    logger.log(Level.INFO, "init compleate"); 
+                    logger.debug( "init compleate"); 
             } catch (Exception ex) {
-                    logger.log(Level.SEVERE, "Error while try to take properties", ex);
+                    logger.error("Error while try to take properties", ex);
                     throw new UnsupportedOperationException("Not supported configuration. Check cfg info");
                 }
         }
@@ -422,7 +420,7 @@ public class MtUnistreamAdapter implements MtAdapter
 */
         @Override
         public RemittanceHolder[] moneySearch(String mtcn, FundsHolder approxOrgFunds, FundsHolder approxDstFunds, String orgCountry, String dstCountry) throws RemittanceException, IOException {
-            logger.log(Level.INFO,"moneySearch start");  
+            logger.debug("moneySearch start");  
             mscheckInparam(mtcn,approxOrgFunds,approxDstFunds,orgCountry,dstCountry);
             Transfer rettransfer;
             Double mtsum = approxDstFunds.getAmount().doubleValue();
@@ -430,7 +428,7 @@ public class MtUnistreamAdapter implements MtAdapter
             try {
                 mtval = GetCurrency.getCurrencyID(approxDstFunds.getCur());
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, "Валюты с кодом = " + approxDstFunds.getCur() + "не найдено", ex);
+                logger.error("Валюты с кодом = " + approxDstFunds.getCur() + "не найдено", ex);
                 throw new RemittanceException("Валюты с кодом = " + approxDstFunds.getCur() + "не найдено" , 10011, "","");
             }
             RemittanceHolder retval = new RemittanceHolder();
@@ -443,7 +441,7 @@ public class MtUnistreamAdapter implements MtAdapter
                     checkTransferStatus(rettransfer);}
             else
             {
-                logger.log(Level.INFO,"moneySearch finish");  
+                logger.debug("moneySearch finish");  
                 return expResult;
             }
             retval.setDstCountry(dstCountry);
@@ -455,7 +453,7 @@ public class MtUnistreamAdapter implements MtAdapter
             retval.setPayer(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.SENDER));
             retval.setPayee(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.EXPECTED_RECEIVER));
             expResult[0] = retval;
-            logger.log(Level.INFO,"moneySearch finish");  
+            logger.debug("moneySearch finish");  
             return expResult;
         }
 
@@ -517,14 +515,14 @@ public class MtUnistreamAdapter implements MtAdapter
 */ 
         @Override
         public void moneyPay(String mtID, String mtcn, PersonHolder payee, String docID, String docDate) throws RemittanceException, IOException {
-            logger.log(Level.INFO,"moneyPay start");  
+            logger.debug("moneyPay start");  
             mpCheckInParam(mtID, payee);
             Transfer transfer = null;
             if (mtID != null) 
                 {
                     Integer id = BaseDataParser.parseInteger(mtID);
                     GetTransferByIDResponseMessage gtrm;
-                    logger.log(Level.INFO,"Получение перевода по ID");
+                    logger.debug("Получение перевода по ID");
                     gtrm = GetTransferByID.getTransferByID(id);
                     CommonLib.CheckFault(gtrm);
                     if (!gtrm.getTransfer().isNil()) {
@@ -533,30 +531,30 @@ public class MtUnistreamAdapter implements MtAdapter
                         }
                     else
                         {
-                            logger.log(Level.SEVERE, "Ошибка при поиске перевода");
+                            logger.error("Ошибка при поиске перевода");
                             throw new RemittanceException("Ошибка при поиске перевода", 10026, "","");
                         }
                 }
             else
             {
             //по уму надо искать заного но нема информации о сумме и валюте перевода и найти его не удастся. поэтому генерим exception
-                logger.log(Level.SEVERE, "Не указан ID перевода");
+                logger.error("Не указан ID перевода");
                 throw new RemittanceException("Не достаточно информации для поиска перевода",40001,"","");
             }
             Person persh = getPerson(payee);
             ObjectFactory factory = new ObjectFactory();
             if (transfer.getConsumers().isNil()){
-                logger.log(Level.SEVERE, "Не заполнено поле consumer в полученном переводе");
+                logger.error("Не заполнено поле consumer в полученном переводе");
                 throw new RemittanceException("Ошибка при получении информации о переводе от Юнистрим",10023,"","");            
             }
             List<Consumer> consumers = transfer.getConsumers().getValue().getConsumer();
             FindPersonRequestMessage pershshot = getpersshot(payee);
             FindPersonResponseMessage fprm;
-            logger.log(Level.INFO,"Поиск получателя перевода");
+            logger.debug("Поиск получателя перевода");
             fprm = FindPerson.FindPersonJAXb(pershshot);
             CommonLib.CheckFault(fprm);
             if (fprm.getPersons().isNil()) {
-                logger.log(Level.SEVERE, "Не заполнено поле persons в инфомации о клиенте");
+                logger.error("Не заполнено поле persons в инфомации о клиенте");
                 throw new RemittanceException("Ошибка при получении информации о переводе от Юнистрим", 10024, "","");
             }
             List<Person> persons = fprm.getPersons().getValue().getPerson();
@@ -564,11 +562,11 @@ public class MtUnistreamAdapter implements MtAdapter
             if (persons.isEmpty()) 
                 {
                     CreatePersonResponseMessage cprm;
-                    logger.log(Level.INFO,"Создание клиента");
+                    logger.debug("Создание клиента");
                     cprm = CreatePerson.CreatePersonJAXb(persh);
                     CommonLib.CheckFault(fprm);                    
                     if (cprm.getPerson().isNil()) {
-                        logger.log(Level.SEVERE, "Ошибка при создании клиента");
+                        logger.error("Ошибка при создании клиента");
                         throw new RemittanceException("Ошибка при создании клиента", 40003, "","");                    
                     }
                     person = cprm.getPerson().getValue();
@@ -587,22 +585,22 @@ public class MtUnistreamAdapter implements MtAdapter
             part.setID(KEY_PARTICIPATOR_ID);
             part.setRole(ParticipatorRole.ACTUAL_RECEIVER_POS);
             if (transfer.getParticipators().isNil()){
-                logger.log(Level.SEVERE, "Не заполнено поле Participators в инфомации о переводе");
+                logger.error("Не заполнено поле Participators в инфомации о переводе");
                 throw new RemittanceException("Ошибка при получении информации о переводе от Юнистрим", 10025, "","");
             }
             transfer.getParticipators().getValue().getParticipator().add(part);
             PayoutTransferResponseMessage retval;
-            logger.log(Level.INFO,"Оплата перевода");
+            logger.debug("Оплата перевода");
             retval = PayOutTransfer.payoutTransfer(transfer);
             CommonLib.printXml(retval);
             CommonLib.CheckFault(fprm);
             if (retval.getTransfer().isNil())
             {
-                logger.log(Level.SEVERE, "Ошибка при оплате перевода");
+                logger.error("Ошибка при оплате перевода");
                 throw new RemittanceException("Ошибка при оплате перевода", 40004, "",""); 
             }
             transfer= retval.getTransfer().getValue();
-            logger.log(Level.INFO,"moneyPay finish");
+            logger.debug("moneyPay finish");
             checkTransferStatus(transfer);
         }
 }

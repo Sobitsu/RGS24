@@ -5,11 +5,11 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import com.grs24.mt.unistream.MtUnistreamAdapter;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
 import java.io.IOException;
-import java.util.logging.Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
@@ -23,6 +23,7 @@ import org.datacontract.schemas._2004._07.wcfservicelib.FindTransferResponseMess
 public class FindTransfer {
     
     private final static QName _ControlNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "ControlNumber");
+    private static final Logger logger = LoggerFactory.getLogger(FindTransfer.class);
 /**
 * Выполнение запроса на поиск перевода
 * @param controlNumber - номер перевода
@@ -35,7 +36,7 @@ public class FindTransfer {
 */   
     public static FindTransferResponseMessage FindTransfer(String controlNumber, Double sum, Integer val, Integer bankId) throws IOException {
     try {
-        MtUnistreamAdapter.logger.log(Level.INFO,"Start FindTransferResponseMessage");
+        logger.debug("Start FindTransferResponseMessage");
         FindTransferRequestMessage ftrm = new FindTransferRequestMessage();
         org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
         JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
@@ -47,7 +48,7 @@ public class FindTransfer {
         debug(ftrm);
         IWebService service = new WebService().getWS2007HttpBindingIWebService();
         FindTransferResponseMessage rm = service.findTransfer(ftrm);
-        MtUnistreamAdapter.logger.log(Level.INFO,"Finish FindTransferResponseMessage");        
+        logger.debug("Finish FindTransferResponseMessage");        
         return rm;
     }
     catch (Exception ex)

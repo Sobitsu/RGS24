@@ -33,6 +33,8 @@ import org.datacontract.schemas._2004._07.wcfservicelib.PersonAddress;
 import org.datacontract.schemas._2004._07.wcfservicelib.Phone;
 import org.datacontract.schemas._2004._07.wcfservicelib.PhoneType;
 import org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -40,7 +42,7 @@ import org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory;
  * @author Dale
  */
 public class CommonLib {
-
+    private static final Logger logger = LoggerFactory.getLogger(CommonLib.class);
     private final static QName _DocNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "DocNumber");
     private final static QName _DocSeries_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "DocSeries");
     private final static QName _PhoneArea_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "PhoneArea");
@@ -67,7 +69,7 @@ public class CommonLib {
     public static void CheckFault(WsResponse response) throws RemittanceException {
         if(!response.getFault().isNil())
         {
-            MtUnistreamAdapter.logger.log(Level.SEVERE, "Unistream returned error: {0}", response.getFault().getValue().getMessage().getValue());
+            logger.error("Unistream returned error: {0}", response.getFault().getValue().getMessage().getValue());
             throw new RemittanceException("Unistream returned error", BaseDataParser.parseInteger(response.getFault().getValue().getID().getValue()), response.getFault().getValue().getCode().value(),response.getFault().getValue().getMessage().getValue());
         }
     }  
@@ -79,7 +81,7 @@ public class CommonLib {
 
     public static JAXBElement<AuthenticationHeader> MakeAuthHead()
         {
-            MtUnistreamAdapter.logger.log(Level.INFO,"Create AuthenticationHeader");
+            logger.debug("Create AuthenticationHeader");
             ObjectFactory factory = new ObjectFactory();
             AuthenticationHeader ah = factory.createAuthenticationHeader();
             JAXBElement<AuthenticationHeader> ahh = factory.createWsRequestAuthenticationHeader(ah);
@@ -108,7 +110,7 @@ public class CommonLib {
 * @throws Exception в случае провала выполение
 */ 
     public static JAXBElement<ArrayOfDocument> getDocuments(CredentialsHolder credholder) throws Exception {
-        MtUnistreamAdapter.logger.log(Level.INFO,"Create JAXBElement<ArrayOfDocument>");
+        logger.debug("Create JAXBElement<ArrayOfDocument>");
         ObjectFactory factory = new ObjectFactory();
         ArrayOfDocument valuearr = factory.createArrayOfDocument();
         if (credholder != null) {
@@ -131,7 +133,7 @@ public class CommonLib {
 * @throws Exception в случае провала выполение
 */ 
     public static JAXBElement<PersonAddress> getAdressElem(AddressHolder registr) throws Exception {
-        MtUnistreamAdapter.logger.log(Level.INFO,"Create JAXBElement<PersonAddress>");
+        logger.debug("Create JAXBElement<PersonAddress>");
         ObjectFactory factoryp = new ObjectFactory();
         PersonAddress value = factoryp.createPersonAddress();
         if (registr.getCity() != null) value.setCity(CommonLib.MakeString(_PACity_QNAME,registr.getCity()));
@@ -151,7 +153,7 @@ public class CommonLib {
 */ 
     
     public static JAXBElement<ArrayOfPhone> getPhones(String[] phones) throws Exception {
-        MtUnistreamAdapter.logger.log(Level.INFO,"Create JAXBElement<ArrayOfPhone>");
+        logger.debug("Create JAXBElement<ArrayOfPhone>");
         ObjectFactory factoryp = new ObjectFactory();
         ArrayOfPhone valuearr = factoryp.createArrayOfPhone();
         if (phones != null &&  phones.length>0) {
@@ -175,7 +177,7 @@ public class CommonLib {
     
     
     public static XMLGregorianCalendar GetGregorianDate(Date date) throws Exception {
-        MtUnistreamAdapter.logger.log(Level.INFO,"Create XMLGregorianCalendar");
+        logger.debug("Create XMLGregorianCalendar");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         GregorianCalendar gregory = new GregorianCalendar();
@@ -197,27 +199,27 @@ public class CommonLib {
         try {
             context = JAXBContext.newInstance(x.getClass());
         } catch (JAXBException ex) {
-            MtUnistreamAdapter.logger.log(Level.INFO, null, ex);
+            logger.debug( null, ex);
         }
                 StringWriter writer = new StringWriter();
                 Marshaller marshaller = null;
         try {
             marshaller = context.createMarshaller();
         } catch (JAXBException ex) {
-            MtUnistreamAdapter.logger.log(Level.INFO, null, ex);
+            logger.debug( null, ex);
         }
         try {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         } catch (PropertyException ex) {
-            MtUnistreamAdapter.logger.log(Level.INFO, null, ex);
+            logger.debug( null, ex);
         }
         try {
             marshaller.marshal(x,writer);
         } catch (JAXBException ex) {
-            MtUnistreamAdapter.logger.log(Level.INFO, null, ex);
+            logger.debug( null, ex);
         }
                 String stringXML = writer.toString();
-                MtUnistreamAdapter.logger.log(Level.INFO,"XMLResult:");
-                MtUnistreamAdapter.logger.log(Level.INFO,stringXML);
+                logger.debug("XMLResult:");
+                logger.debug(stringXML);
         }
      }

@@ -5,22 +5,22 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import com.grs24.mt.unistream.MtUnistreamAdapter;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
 import java.io.IOException;
-import java.util.logging.Level;
 import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.CreatePersonRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.CreatePersonResponseMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Dale
  */
 public class CreatePerson {
-
+private static final Logger logger = LoggerFactory.getLogger(CreatePerson.class);
     /**
 * Выполнение запроса на создание клиента
 * @param persh 
@@ -49,19 +49,17 @@ public class CreatePerson {
     
     public static CreatePersonResponseMessage CreatePersonJAXb(org.datacontract.schemas._2004._07.wcfservicelib.Person persh) throws IOException {
     try {    
-        MtUnistreamAdapter.logger.log(Level.INFO,"Start CreatePersonResponseMessage");
+        logger.debug("Start CreatePersonResponseMessage");
         CreatePersonRequestMessage cprm = new CreatePersonRequestMessage();
         org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
         JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
         JAXBElement<org.datacontract.schemas._2004._07.wcfservicelib.Person> persel = factory.createPerson(persh);
         cprm.setAuthenticationHeader(ahh);
         cprm.setPerson(persel);
-
         debug(cprm);
-        
         IWebService service = new WebService().getWS2007HttpBindingIWebService();
         CreatePersonResponseMessage rm = service.createPerson(cprm);
-        MtUnistreamAdapter.logger.log(Level.INFO,"Finish CreatePersonResponseMessage");
+        logger.debug("Finish CreatePersonResponseMessage");
         return rm;
     }
     catch (Exception ex)

@@ -5,21 +5,22 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import com.grs24.mt.unistream.MtUnistreamAdapter;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
 import java.io.IOException;
-import java.util.logging.Level;
 import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonResponseMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Dale
  */
 public class FindPerson {
+ private static final Logger logger = LoggerFactory.getLogger(FindPerson.class);
     /**
 * Выполнение запроса на создание клиента
 * @param fprm 
@@ -46,14 +47,14 @@ public class FindPerson {
 */ 
     public static FindPersonResponseMessage FindPersonJAXb(FindPersonRequestMessage fprm) throws IOException {
         try {
-            MtUnistreamAdapter.logger.log(Level.INFO,"Start FindPersonResponseMessage");
+            logger.debug("Start FindPersonResponseMessage");
             org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
             JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
             fprm.setAuthenticationHeader(ahh);
             IWebService service = new WebService().getWS2007HttpBindingIWebService();
             FindPersonResponseMessage rm = service.findPerson(fprm);
             debug(fprm);
-            MtUnistreamAdapter.logger.log(Level.INFO,"Finish FindPersonResponseMessage");
+            logger.debug("Finish FindPersonResponseMessage");
             return rm;
         }
         catch (Exception ex) 
