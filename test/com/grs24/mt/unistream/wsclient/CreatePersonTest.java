@@ -5,6 +5,16 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
+import com.grs24.msg.AddressHolder;
+import com.grs24.msg.CredentialsHolder;
+import com.grs24.msg.FullNameTypeHolder;
+import com.grs24.msg.IndividualHolder;
+import com.grs24.msg.PersonHolder;
+import com.grs24.mt.unistream.DateTimeUtils;
+import com.grs24.mt.unistream.MtUnistreamAdapter;
+import java.io.IOException;
+import java.util.Properties;
+import javax.xml.namespace.QName;
 import org.datacontract.schemas._2004._07.wcfservicelib.CreatePersonResponseMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.Person;
 import org.junit.After;
@@ -20,13 +30,31 @@ import static org.junit.Assert.*;
  */
 public class CreatePersonTest {
     
+    public static String KEY_USER_AUTHED_APIKEY = "1wwteyFGFew624";
+    public static String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
+    public static String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
+    public static Integer KEY_BANK_ID = 383589;
+    public static Integer KEY_PARTICIPATOR_ID = 383589;
+    private static MtUnistreamAdapter instance;
+    private final static QName _FirstName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "FirstName");
+    private final static QName _LastName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "LastName");
+    private final static QName _MiddleName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "MiddleName");
+
     public CreatePersonTest() {
     }
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
     
+    @BeforeClass
+    public static void setUpClass() throws IOException {
+        Properties cfg = new Properties();
+        cfg.setProperty("APIKEY", KEY_USER_AUTHED_APIKEY);
+        cfg.setProperty("LOGIN", KEY_USER_AUTHED_LOGIN);
+        cfg.setProperty("PASSWORD", KEY_USER_AUTHED_PASSWORD);
+        cfg.setProperty("BANKID", KEY_BANK_ID.toString());
+        cfg.setProperty("PARTID",KEY_PARTICIPATOR_ID.toString());
+        instance = new MtUnistreamAdapter();
+        instance.init(cfg);    
+    }
     @AfterClass
     public static void tearDownClass() {
     }
@@ -45,12 +73,58 @@ public class CreatePersonTest {
     @Test
     public void testCreatePersonJAXb() throws Exception {
         System.out.println("CreatePersonJAXb");
-        Person persh = null;
-        CreatePersonResponseMessage expResult = null;
-        CreatePersonResponseMessage result = CreatePerson.CreatePersonJAXb(persh);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Person person = new Person();
+        PersonHolder payee = new PersonHolder();
+        payee.setCitizenCountry("RUS");
+        payee.setBirthday(DateTimeUtils.parseDate("07.10.1977",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
+        FullNameTypeHolder fullName_ = new FullNameTypeHolder();
+        IndividualHolder individual_ = new IndividualHolder();
+        individual_.setFirst("Владимир");
+        individual_.setLast("Резин");
+        individual_.setMiddle("Сергеевич");
+        fullName_.setIndividual(individual_);
+        payee.setFullName(fullName_);
+        CredentialsHolder identification_ = new CredentialsHolder();
+        identification_.setCredCountry("RUS");
+        identification_.setCredNumber("656565");
+        identification_.setIssueCity("Нск");
+        identification_.setIssuer("Нск");
+        identification_.setSerialNumber("5404");
+        payee.setIdentification(identification_);
+        String[] phone_ = new String[1];
+        phone_[0] = "+79139222200";
+        payee.setPhone(phone_);
+        AddressHolder registration_ = new AddressHolder();
+        registration_.setCountry("RUS");
+        registration_.setCity("Новосибирск");
+        registration_.setStreet1("Большивисткая");
+        registration_.setStreet2("101");
+        registration_.setZipCode("630090");
+        payee.setRegistration(registration_);
+        payee.setResidentCountry("RUS");
+
+        person.setAddress(CommonLib.getAdressElem(payee.getRegistration()));
+        person.setDocuments(CommonLib.getDocuments(payee.getIdentification()));
+        person.setPhones(CommonLib.getPhones(payee.getPhone()));
+        person.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
+        person.setFirstName(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
+        person.setLastName(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
+        person.setMiddleName(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
+        
+        CreatePersonResponseMessage result = CreatePerson.CreatePersonJAXb(person);
+
+        assertTrue(result.getFault().isNil());
+        assertFalse(result.getPerson().isNil());
+        assertNotNull(result.getPerson().getValue());
+        assertFalse(result.getPerson().getValue().getAddress().isNil());
+        assertTrue(result.getPerson().getValue().getBirthDate().isValid());
+        assertFalse(result.getPerson().getValue().getDocuments().isNil());
+        assertFalse(result.getPerson().getValue().getPhones().isNil());
+        assertFalse(result.getPerson().getValue().getFirstName().isNil());
+        assertFalse(result.getPerson().getValue().getLastName().isNil());
+        assertFalse(result.getPerson().getValue().getMiddleName().isNil());
+        assertFalse(result.getPerson().getValue().getLastNameLat().isNil());
+        assertEquals(result.getPerson().getValue().getFirstNameLat().getValue(),"Vladimir");
+        System.out.println("CreatePersonJAXb OK");    
     }
-    
 }

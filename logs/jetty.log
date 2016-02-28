@@ -1,1 +1,2 @@
 28.02.2016 12:57:06 [ERROR] .mt.unistream.MtUnistreamAdapter - Ошибка при оплате перевода
+28.02.2016 13:30:18 [ERROR] .mt.unistream.wsclient.CommonLib - Unistream returned error: {0}
