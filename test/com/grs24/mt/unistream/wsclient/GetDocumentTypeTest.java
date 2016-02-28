@@ -57,7 +57,7 @@ public class GetDocumentTypeTest {
     @Test
     public void testGetDocumentsID() throws Exception {
         System.out.println("getDocumentsID");
-        String code = "Паспорт гражданина РФ";
+        String code = "35";
         Integer expResult = 35;
         Integer result = GetDocumentType.getDocumentsID(code);
         assertEquals(expResult, result);
