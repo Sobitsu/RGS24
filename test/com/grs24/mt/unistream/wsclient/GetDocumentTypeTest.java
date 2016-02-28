@@ -57,12 +57,10 @@ public class GetDocumentTypeTest {
     @Test
     public void testGetDocumentsID() throws Exception {
         System.out.println("getDocumentsID");
-        String code = "Паспорт";
-        Integer expResult = null;
+        String code = "Паспорт гражданина РФ";
+        Integer expResult = 35;
         Integer result = GetDocumentType.getDocumentsID(code);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        System.out.println("getDocumentsID OK");
     }
-    
 }

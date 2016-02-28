@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.LangText;
+import org.datacontract.schemas._2004._07.wcfservicelib.ObjectStatus;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.DocumentType;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetDocumentTypeChangesResponseMessage;
 
@@ -49,7 +50,7 @@ public class GetDocumentType {
         if (rm.getDocumentTypes().isNil()) return null;
         for (DocumentType i : rm.getDocumentTypes().getValue().getDocumentType())
                 {
-                    if (i.getStatus().equals("ACTUAL")) {
+                    if (i.getStatus().equals(ObjectStatus.ACTUAL)) {
                         
                         if (!i.getName().getValue().getLangText().isEmpty()) {
                             for (LangText j : i.getName().getValue().getLangText())
