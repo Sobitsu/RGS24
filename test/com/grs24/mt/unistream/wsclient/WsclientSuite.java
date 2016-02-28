@@ -17,7 +17,13 @@ import org.junit.runners.Suite;
  * @author Dale
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({com.grs24.mt.unistream.wsclient.GetCountryTest.class, com.grs24.mt.unistream.wsclient.GetTransferByIDTest.class, com.grs24.mt.unistream.wsclient.GetCurrencyTest.class, com.grs24.mt.unistream.wsclient.CommonLibTest.class, com.grs24.mt.unistream.wsclient.PayOutTransferTest.class, com.grs24.mt.unistream.wsclient.CreatePersonTest.class, com.grs24.mt.unistream.wsclient.FindTransferTest.class, com.grs24.mt.unistream.wsclient.FindPersonTest.class})
+@Suite.SuiteClasses({com.grs24.mt.unistream.wsclient.GetCountryTest.class, 
+    com.grs24.mt.unistream.wsclient.GetTransferByIDTest.class, 
+    com.grs24.mt.unistream.wsclient.GetCurrencyTest.class, 
+    com.grs24.mt.unistream.wsclient.CommonLibTest.class, 
+    com.grs24.mt.unistream.wsclient.CreatePersonTest.class, 
+    com.grs24.mt.unistream.wsclient.FindTransferTest.class, 
+    com.grs24.mt.unistream.wsclient.FindPersonTest.class})
 public class WsclientSuite {
 
     @BeforeClass
