@@ -70,16 +70,17 @@ public class MtUnistreamAdapterTest {
     @Test
     public void testMoneySearch() throws Exception {
         System.out.println("moneySearch");
-        String mtcn = "828105025765";
+        String mtcn = "706238946521";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
-        BigDecimal bd = new BigDecimal("1500");
+        BigDecimal bd = new BigDecimal("1000");
         approxDstFunds.setAmount(bd);
         approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
         String dstCountry = "Russia";
         RemittanceHolder[] result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
-        assertEquals(result[0].getMtID(),"16015170");
+        assertNotNull(result[0]);
+        assertEquals(result[0].getMtID(),"16015184");
         System.out.println("moneySearch OK");
     }
 
@@ -89,10 +90,10 @@ public class MtUnistreamAdapterTest {
     @Test
     public void testMoneyPay() throws Exception {
         System.out.println("moneyPay");
-        String mtcn = "828105025765";
+        String mtcn = "706238946521";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
-        BigDecimal bd = new BigDecimal("1500");
+        BigDecimal bd = new BigDecimal("1000");
         approxDstFunds.setAmount(bd);
         approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
