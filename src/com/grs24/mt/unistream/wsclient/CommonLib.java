@@ -32,6 +32,7 @@ import org.datacontract.schemas._2004._07.wcfservicelib.PersonAddress;
 import org.datacontract.schemas._2004._07.wcfservicelib.Phone;
 import org.datacontract.schemas._2004._07.wcfservicelib.PhoneType;
 import org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory;
+import org.datacontract.schemas._2004._07.wcfservicelib.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +43,8 @@ import org.slf4j.LoggerFactory;
  */
 public class CommonLib {
     private static final Logger logger = LoggerFactory.getLogger(CommonLib.class);
-    private final static QName _DocNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "DocNumber");
-    private final static QName _DocSeries_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "DocSeries");
+    private final static QName _DocNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Number");
+    private final static QName _DocSeries_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Series");
     private final static QName _PhoneArea_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "PhoneArea");
     private final static QName _PhoneNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "PhoneNumber");
     private final static QName _Ext_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Ext");
@@ -109,6 +110,7 @@ public class CommonLib {
 * @throws Exception в случае провала выполение
 */ 
     public static JAXBElement<ArrayOfDocument> getDocuments(CredentialsHolder credholder) throws Exception {
+        QName _ArrayOfDocument_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Documents");
         logger.debug("Create JAXBElement<ArrayOfDocument>");
         ObjectFactory factory = new ObjectFactory();
         ArrayOfDocument valuearr = factory.createArrayOfDocument();
@@ -123,7 +125,7 @@ public class CommonLib {
             if (credholder.getCredType() != null) valdoc.setTypeID(GetDocumentType.getDocumentsID(credholder.getCredType()));
             valuearr.getDocument().add(valdoc);
         }
-        JAXBElement<ArrayOfDocument> result = factory.createArrayOfDocument(valuearr);
+        JAXBElement<ArrayOfDocument> result = new JAXBElement<ArrayOfDocument>(_ArrayOfDocument_QNAME, ArrayOfDocument.class, null, valuearr);
         return result;
     }
 /**
@@ -133,6 +135,7 @@ public class CommonLib {
 * @throws Exception в случае провала выполение
 */ 
     public static JAXBElement<PersonAddress> getAdressElem(AddressHolder registr) throws Exception {
+        QName _PersonAddress_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Address");
         logger.debug("Create JAXBElement<PersonAddress>");
         ObjectFactory factoryp = new ObjectFactory();
         PersonAddress value = factoryp.createPersonAddress();
@@ -141,7 +144,7 @@ public class CommonLib {
         if (registr.getStreet1() != null) value.setStreet(CommonLib.MakeString(_Street_QNAME,registr.getStreet1()));
         if (registr.getZipCode() != null) value.setPostalCode(CommonLib.MakeString(_PostalCode_QNAME,registr.getZipCode()));
         if (registr.getCountry() != null) value.setCountryID(GetCountry.getCountriesID(registr.getCountry()));
-        JAXBElement<PersonAddress> result = factoryp.createPersonAddress(value);
+        JAXBElement<PersonAddress> result = new JAXBElement<PersonAddress>(_PersonAddress_QNAME, PersonAddress.class, Person.class, value);
         return result;
     }
 
@@ -153,6 +156,7 @@ public class CommonLib {
 */ 
     
     public static JAXBElement<ArrayOfPhone> getPhones(String[] phones) throws Exception {
+        QName _ArrayOfPhone_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib.Clients", "Phones");
         logger.debug("Create JAXBElement<ArrayOfPhone>");
         ObjectFactory factoryp = new ObjectFactory();
         ArrayOfPhone valuearr = factoryp.createArrayOfPhone();
@@ -164,7 +168,7 @@ public class CommonLib {
                 valuearr.getPhone().add(valphone);
             }
         }
-        JAXBElement<ArrayOfPhone> result = factoryp.createArrayOfPhone(valuearr);
+        JAXBElement<ArrayOfPhone> result = new JAXBElement<ArrayOfPhone>(_ArrayOfPhone_QNAME, ArrayOfPhone.class, null, valuearr);
         return result;
     }
 

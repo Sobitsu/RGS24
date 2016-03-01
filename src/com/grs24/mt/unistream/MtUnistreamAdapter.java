@@ -564,7 +564,7 @@ public class MtUnistreamAdapter implements MtAdapter
                     CreatePersonResponseMessage cprm;
                     logger.debug("Создание клиента");
                     cprm = CreatePerson.CreatePersonJAXb(persh);
-                    CommonLib.CheckFault(fprm);                    
+                    CommonLib.CheckFault(cprm);                    
                     if (cprm.getPerson().isNil()) {
                         logger.error("Ошибка при создании клиента");
                         throw new RemittanceException("Ошибка при создании клиента", 40003, "","");                    
@@ -573,7 +573,7 @@ public class MtUnistreamAdapter implements MtAdapter
                 }
             else
                 {
-                    person = persons.get(1);
+                    person = persons.get(0);
                 }
             Consumer consumer = factory.createConsumer();
             JAXBElement<Person> xperson = factory.createPerson(person);
