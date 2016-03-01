@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -63,7 +64,8 @@ public class GetDocumentTypeTest {
         assertEquals(expResult, result);
         System.out.println("getDocumentsID OK");
     }
-
+    
+    @Ignore
     @Test
     public void testgetDocumentTypeList() throws Exception {
         System.out.println("getDocumentsID");
