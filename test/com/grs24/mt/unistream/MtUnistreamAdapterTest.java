@@ -523,6 +523,7 @@ RUB
         String orgCountry = "Russia";
         String dstCountry = "Russia";
         RemittanceHolder[] result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+        assertNotNull(result[0]);
         String mtID = result[0].getMtID();
         PersonHolder payee = new PersonHolder();
         payee.setCitizenCountry("RUS");
