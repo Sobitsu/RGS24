@@ -99,7 +99,6 @@ public void moneyUnhold(String mtID, String mtcn, PersonHolder payee) throws Rem
 * @param docDate дата документа-проводки
 * @return
 * @throws RemittanceException если возникли проблемы выдачи перевода в СДП.
-     * @throws java.io.IOException
 */ 
 public void moneyPay(String mtID, String mtcn, PersonHolder payee, String docID, 
 			String docDate) throws RemittanceException, IOException;
