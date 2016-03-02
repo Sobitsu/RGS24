@@ -593,7 +593,7 @@ public class MtUnistreamAdapter implements MtAdapter
             logger.debug("Оплата перевода");
             retval = PayOutTransfer.payoutTransfer(transfer);
             CommonLib.printXml(retval);
-            CommonLib.CheckFault(fprm);
+            CommonLib.CheckFault(retval);
             if (retval.getTransfer().isNil())
             {
                 logger.error("Ошибка при оплате перевода");
