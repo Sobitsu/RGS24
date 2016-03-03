@@ -5,10 +5,14 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
+import com.grs24.mt.RemittanceException;
+import com.sun.xml.ws.client.BindingProviderProperties;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
 import java.io.IOException;
+import java.util.Map;
 import javax.xml.bind.JAXBElement;
+import javax.xml.ws.BindingProvider;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.Country;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCountriesChangesResponseMessage;
@@ -26,6 +30,9 @@ public class GetCountry {
                 requestMessage.setAuthenticationHeader(ahh);
                 requestMessage.setUpdateCount(0L);
                 IWebService service = new WebService().getWS2007HttpBindingIWebService();
+                Map<String, Object> requestContext = ((BindingProvider)service).getRequestContext();
+                requestContext.put(BindingProviderProperties.REQUEST_TIMEOUT, 3000); // Timeout in millis
+                requestContext.put(BindingProviderProperties.CONNECT_TIMEOUT, 1000); // Timeout in millis
                 return service.getCountriesChanges(requestMessage);
             }
         catch (Exception ex) 
@@ -38,10 +45,10 @@ public class GetCountry {
 * Выполнение запроса на получение ID страны
 * @param code - ISO 4217 символьный код страны
 * @return ID страны
-* 
-* @throws Exception в случае провала выполение
+* @throws java.io.IOException
+* @throws com.grs24.mt.RemittanceException
 */ 
-    public static Integer getCountriesID(String code)throws Exception {
+    public static Integer getCountriesID(String code)throws IOException, RemittanceException {
         GetCountriesChangesResponseMessage rm = getCountriesChanges();
         CommonLib.CheckFault(rm);
         if (rm.getCountries().isNil()) return null;
@@ -58,11 +65,12 @@ public class GetCountry {
 * Выполнение запроса на получение кода валюты
 * @param cuntryId - ID валюты
 * @return ISO 4217 символьный код валюты
+* @throws java.io.IOException
+* @throws com.grs24.mt.RemittanceException
 * 
-* @throws Exception в случае провала выполение
 */ 
 
-    public static String getCuntryCode(Integer cuntryId) throws Exception {
+    public static String getCuntryCode(Integer cuntryId) throws IOException, RemittanceException {
         GetCountriesChangesResponseMessage rm = getCountriesChanges();
         CommonLib.CheckFault(rm);
         if (rm.getCountries().isNil()) return null;

@@ -58,9 +58,13 @@ public class GetCurrencyTest {
     @Test
     public void testGetCurrencyID() throws Exception {
         System.out.println("getCurrencyID");
-        String сode = "RUB";
-        Integer expResult = 1;
+        String сode = "USD";
+        Integer expResult = 2;
         Integer result = GetCurrency.getCurrencyID(сode);
+        assertEquals(expResult, result);
+        сode = "RUB";
+        expResult = 1;
+        result = GetCurrency.getCurrencyID(сode);
         assertEquals(expResult, result);
         System.out.println("getCurrencyID OK");
     }

@@ -5,6 +5,7 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
+import com.grs24.mt.RemittanceException;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
 import java.io.IOException;
@@ -23,9 +24,10 @@ public class GetCurrency {
 * @param сode - ISO 4217 символьный код валюты
 * @return ID валюты
 * 
-* @throws Exception в случае провала выполение
+* @throws IOException в случае провала выполение
+     * @throws com.grs24.mt.RemittanceException
 */ 
-    public static Integer getCurrencyID(String сode) throws Exception {
+    public static Integer getCurrencyID(String сode) throws IOException, RemittanceException {
         GetCurrenciesChangesResponseMessage rm = getCurrenciesChanges();
         CommonLib.CheckFault(rm);
         for (Currency i : rm.getCurrencies().getValue().getCurrency())
@@ -41,10 +43,17 @@ public class GetCurrency {
 * @param currencyId - ID валюты
 * @return ISO 4217 символьный код валюты
 * 
-* @throws Exception в случае провала выполение
+* @throws IOException в случае провала выполение
 */ 
 
-    public static String getCurrencyCode(Integer currencyId) throws Exception {
+    /**
+     * Выполнение запроса на получение кода валюты
+     * @param currencyId - ID валюты
+     * @return ISO 4217 символьный код валюты
+     * @throws IOException в случае провала выполение
+     * @throws com.grs24.mt.RemittanceException
+     */
+    public static String getCurrencyCode(Integer currencyId) throws IOException, RemittanceException {
         GetCurrenciesChangesResponseMessage rm = getCurrenciesChanges();
         CommonLib.CheckFault(rm);
         for (Currency i : rm.getCurrencies().getValue().getCurrency())

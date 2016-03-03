@@ -425,11 +425,10 @@ public class MtUnistreamAdapter implements MtAdapter
             Transfer rettransfer;
             Double mtsum = approxDstFunds.getAmount().doubleValue();
             Integer mtval;
-            try {
-                mtval = GetCurrency.getCurrencyID(approxDstFunds.getCur());
-            } catch (Exception ex) {
-                logger.error("Валюты с кодом = " + approxDstFunds.getCur() + "не найдено", ex);
-                throw new RemittanceException("Валюты с кодом = " + approxDstFunds.getCur() + "не найдено" , 10011, "","");
+            mtval = GetCurrency.getCurrencyID(approxDstFunds.getCur());
+            if (mtval==null) {
+                logger.error("Ошибка при определении валюты перевода");
+                throw new RemittanceException("Не найдена валюта с кодом = " + approxDstFunds.getCur(), 10011,"","");
             }
             RemittanceHolder retval = new RemittanceHolder();
             RemittanceHolder[] expResult = new RemittanceHolder[1];
