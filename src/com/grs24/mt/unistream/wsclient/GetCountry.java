@@ -30,9 +30,6 @@ public class GetCountry {
                 requestMessage.setAuthenticationHeader(ahh);
                 requestMessage.setUpdateCount(0L);
                 IWebService service = new WebService().getWS2007HttpBindingIWebService();
-                Map<String, Object> requestContext = ((BindingProvider)service).getRequestContext();
-                requestContext.put(BindingProviderProperties.REQUEST_TIMEOUT, 3000); // Timeout in millis
-                requestContext.put(BindingProviderProperties.CONNECT_TIMEOUT, 1000); // Timeout in millis
                 return service.getCountriesChanges(requestMessage);
             }
         catch (Exception ex) 

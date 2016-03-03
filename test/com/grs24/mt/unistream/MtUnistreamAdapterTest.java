@@ -505,6 +505,21 @@ RUB
         RemittanceHolder[] result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
         assertNotNull(result[0]);
         assertEquals(result[0].getMtID(),"16016598");
+        mtcn = "475500139583";
+        approxOrgFunds = null;
+        approxDstFunds = new FundsHolder();
+        bd = new BigDecimal("-900");
+        approxDstFunds.setAmount(bd);
+        approxDstFunds.setCur("RUB");
+        orgCountry = "RUS";
+        dstCountry = "RUS";
+        try {
+            result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+        }
+        catch (RemittanceException ex)
+        {
+            if (ex.getCode() != 50003) fail("Ошибка валидации перевода");
+        }
         System.out.println("moneySearch OK");
     }
 

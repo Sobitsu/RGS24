@@ -5,8 +5,6 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import com.unistream.test.wcflib.IWebService;
-import com.unistream.test.wcflib.WebService;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
@@ -36,8 +34,9 @@ private static final Logger logger = LoggerFactory.getLogger(GetTransferByID.cla
             JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
             gtrm.setAuthenticationHeader(ahh);
             gtrm.setTransferID(transferId);
-            IWebService service = new WebService().getWS2007HttpBindingIWebService();
-            GetTransferByIDResponseMessage rm = service.getTransferByID(gtrm);
+            //IWebService service = new WebService().getWS2007HttpBindingIWebService();
+            WebServiceSingl ws = WebServiceSingl.getInstance();
+            GetTransferByIDResponseMessage rm = ws.service.getTransferByID(gtrm);
             logger.debug("Finish GetTransferByIDResponseMessage");        
             return rm;
         }

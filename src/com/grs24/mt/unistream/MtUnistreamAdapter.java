@@ -73,6 +73,8 @@ public class MtUnistreamAdapter implements MtAdapter
 * @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
 * code 50001: Не указан номер перевода
 * code 50002: Не указаны валюта и сумма перевода
+* code 50003: Cумма перевода меньше нуля
+* code 50011: Не верно указан код валюты перевода
 * code 40003: Проблемы при создании клиента
 * code 40004: Проблемы при оплате перевода
 */ 
@@ -91,9 +93,17 @@ public class MtUnistreamAdapter implements MtAdapter
                     logger.error("Не указана сумма перевода"); 
                     throw new RemittanceException("Не указана сумма перевода", 50002, "","");
                 }
+            if (approxDstFunds.getAmount().floatValue() < 0) {
+                    logger.error("Сумма перевода меньше нуля"); 
+                    throw new RemittanceException("Cумма перевода меньше нуля", 50003, "","");            
+            }
             if (approxDstFunds.getCur() == null)    {
                     logger.error("Не указана валюта перевода"); 
                     throw new RemittanceException("Не валюта перевода", 50002, "","");
+                }
+            if (approxDstFunds.getCur().length() != 3)    {
+                    logger.error("Не верно указан код валюты перевода"); 
+                    throw new RemittanceException("Не верно указан код валюты перевода", 50011, "","");
                 }
         }
 
@@ -451,6 +461,8 @@ public class MtUnistreamAdapter implements MtAdapter
             retval.setOrgFunds(getFundsHolder(rettransfer.getAmounts().getValue().getAmount(),AmountType.MAIN));
             retval.setPayer(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.SENDER));
             retval.setPayee(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.EXPECTED_RECEIVER));
+            //retval.setOrgCountry(getCountry(rettransfer, ParticipatorRole.SENDER_POS));
+            //retval.setDstCountry(getCountry(rettransfer, ParticipatorRole.EXPECTED_RECEIVER_POS));
             expResult[0] = retval;
             logger.debug("moneySearch finish");  
             return expResult;

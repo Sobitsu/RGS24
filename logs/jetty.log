@@ -10,3 +10,5 @@
 28.02.2016 16:46:01 [ERROR] .mt.unistream.MtUnistreamAdapter - Ошибка при оплате перевода
 28.02.2016 16:47:04 [ERROR] .mt.unistream.MtUnistreamAdapter - Ошибка при оплате перевода
 01.03.2016 13:59:39 [ERROR] .mt.unistream.wsclient.CommonLib - Unistream returned error: {0}
+03.03.2016 15:55:55 [ERROR] .mt.unistream.MtUnistreamAdapter - Сумма перевода меньше нуля
+03.03.2016 16:02:22 [ERROR] .mt.unistream.MtUnistreamAdapter - Сумма перевода меньше нуля
