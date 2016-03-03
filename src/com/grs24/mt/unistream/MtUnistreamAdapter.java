@@ -60,7 +60,18 @@ public class MtUnistreamAdapter implements MtAdapter
 	public static String KEY_USER_AUTHED_PASSWORD;// = "7!LrO7i7";
         public static Integer KEY_BANK_ID;// = 383589;
         public static Integer KEY_PARTICIPATOR_ID;
-        private static Logger logger = LoggerFactory.getLogger(MtUnistreamAdapter.class);
+        public static Integer KEY_SERVER_REQUEST_TUMEOUT;
+        public static Integer KEY_SERVER_CONNECT_TUMEOUT;
+        private static final Logger logger = LoggerFactory.getLogger(MtUnistreamAdapter.class);
+        private final String PROPERTY_KEY_SERVER_REQUEST_TUMEOUT = "SERVER.REQUEST_TIMEOUT";
+        private final String PROPERTY_KEY_SERVER_CONNECT_TUMEOUT = "SERVER.CONNECT_TIMEOUT";
+        private final String PROPERTY_KEY_USER_AUTHED_APIKEY = "APIKEY";
+        private final String PROPERTY_KEY_USER_AUTHED_LOGIN = "LOGIN";
+        private final String PROPERTY_KEY_USER_AUTHED_PASSWORD = "PASSWORD";
+        private final String PROPERTY_KEY_BANK_ID = "BANKID";
+        private final String PROPERTY_KEY_PART_ID = "PARTID";
+        private final Integer DEFAULT_REQUEST_TIMEOUT = 3000;
+        private final Integer DEFAULT_CONNECT_TIMEOUT = 1000;
 
 
  /**
@@ -391,6 +402,8 @@ public class MtUnistreamAdapter implements MtAdapter
 * PASSWORD  - Пароль пользователя. Выдается UNIStream при регистрации участника
 * BANKID  - Код банка в системе. Выдается UNIStream при регистрации участника
 * PARTID - Код точки выдачи. Выдается UNIStream при регистрации участника
+* SERVER.REQUEST_TIMEOUT - Таймаут ожидания ответа на запрос от сервера в милисекундах
+* SERVER.CONNECT_TIMEOUT - Таймаут ожидания установки соединения с сервером в милисекундах
 * @throws IOException в случае проблем инициализации (например, ошибка соединения 
 * с СУБД.
 * 
@@ -399,13 +412,46 @@ public class MtUnistreamAdapter implements MtAdapter
         public void init(Properties init) throws IOException {
             try{
                     logger.debug( "init start"); 
-                    KEY_USER_AUTHED_APIKEY = init.getProperty("APIKEY");
-                    KEY_USER_AUTHED_LOGIN = init.getProperty("LOGIN");
-                    KEY_USER_AUTHED_PASSWORD = init.getProperty("PASSWORD");
-                    KEY_BANK_ID = BaseDataParser.parseInteger(init.getProperty("BANKID"));
-                    KEY_PARTICIPATOR_ID = BaseDataParser.parseInteger(init.getProperty("PARTID"));
-                    logger.debug( "init compleate"); 
-            } catch (Exception ex) {
+                    String val;
+                    KEY_USER_AUTHED_APIKEY = init.getProperty(PROPERTY_KEY_USER_AUTHED_APIKEY, String.valueOf(PROPERTY_KEY_USER_AUTHED_APIKEY));
+                    KEY_USER_AUTHED_LOGIN = init.getProperty(PROPERTY_KEY_USER_AUTHED_LOGIN, String.valueOf(PROPERTY_KEY_USER_AUTHED_LOGIN));
+                    KEY_USER_AUTHED_PASSWORD = init.getProperty(PROPERTY_KEY_USER_AUTHED_PASSWORD,String.valueOf(PROPERTY_KEY_USER_AUTHED_PASSWORD));
+                    val = init.getProperty(PROPERTY_KEY_BANK_ID, String.valueOf(PROPERTY_KEY_BANK_ID));
+                    try{
+                            KEY_BANK_ID = Integer.parseInt(val);
+                        }
+                    catch(NumberFormatException e)
+                        {
+                            throw new UnsupportedOperationException("Not correct value of BANKID");
+                        }
+                    val = init.getProperty(PROPERTY_KEY_PART_ID, String.valueOf(PROPERTY_KEY_PART_ID));
+                    try{
+                            KEY_PARTICIPATOR_ID = Integer.parseInt(val);
+                        }
+                    catch(NumberFormatException e)
+                        {
+                            throw new UnsupportedOperationException("Not correct value of PARTID");
+                        }
+                    val = init.getProperty(PROPERTY_KEY_SERVER_REQUEST_TUMEOUT, String.valueOf(PROPERTY_KEY_SERVER_REQUEST_TUMEOUT));
+                    try{
+                            KEY_SERVER_REQUEST_TUMEOUT = Integer.parseInt(val);
+                        }
+                    catch(NumberFormatException e)
+                        {
+                            KEY_SERVER_REQUEST_TUMEOUT = DEFAULT_REQUEST_TIMEOUT;
+                        }
+
+                    val = init.getProperty(PROPERTY_KEY_SERVER_CONNECT_TUMEOUT, String.valueOf(PROPERTY_KEY_SERVER_CONNECT_TUMEOUT));
+                    try{
+                            KEY_SERVER_CONNECT_TUMEOUT = Integer.parseInt(val);
+                        }
+                    catch(NumberFormatException e)
+                        {
+                            KEY_SERVER_CONNECT_TUMEOUT = DEFAULT_CONNECT_TIMEOUT;
+                        }
+
+                                logger.debug( "init compleate"); 
+                        } catch (Exception ex) {
                     logger.error("Error while try to take properties", ex);
                     throw new UnsupportedOperationException("Not supported configuration. Check cfg info");
                 }
