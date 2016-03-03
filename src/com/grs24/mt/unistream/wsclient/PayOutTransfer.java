@@ -1,7 +1,5 @@
 package com.grs24.mt.unistream.wsclient;
 
-import com.unistream.test.wcflib.IWebService;
-import com.unistream.test.wcflib.WebService;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
@@ -24,7 +22,7 @@ private static final Logger logger = LoggerFactory.getLogger(PayOutTransfer.clas
 *  @return результат обработки 
 * @throws IOException в случае провала выполение
 */  
-    public static PayoutTransferResponseMessage payoutTransfer(Transfer transfer) throws IOException {
+    public static PayoutTransferResponseMessage payoutTransfer(Transfer transfer) throws UnsupportedOperationException, IOException {
         try {
             logger.debug("Start PayoutTransferResponseMessage");
             ObjectFactory factory = new ObjectFactory();
@@ -34,12 +32,13 @@ private static final Logger logger = LoggerFactory.getLogger(PayOutTransfer.clas
             ptrm.setAuthenticationHeader(ahh);
             ptrm.setTransfer(tr);
             debug(ptrm);
-            IWebService service = new WebService().getWS2007HttpBindingIWebService();
-            PayoutTransferResponseMessage rm = service.payoutTransfer(ptrm);
+            WebServiceSingl ws = WebServiceSingl.getInstance();
+            //IWebService service = new WebService().getWS2007HttpBindingIWebService();
+            PayoutTransferResponseMessage rm = ws.service.payoutTransfer(ptrm);
             logger.debug("Finish PayoutTransferResponseMessage");
             return rm;
         }
-            catch (Exception ex)
+            catch (IOException ex)
         {throw new IOException("Ошибка доступа к Unistream",ex);}
     }
     private static void debug(PayoutTransferRequestMessage ptrm)

@@ -5,8 +5,6 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import com.unistream.test.wcflib.IWebService;
-import com.unistream.test.wcflib.WebService;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +32,11 @@ public class FindTransfer {
 * 
 * @throws IOException в случае провала выполение
 */   
-    public static FindTransferResponseMessage FindTransfer(String controlNumber, Double sum, Integer val, Integer bankId) throws IOException {
+    public static FindTransferResponseMessage FindTransfer(String controlNumber, Double sum, Integer val, Integer bankId) throws UnsupportedOperationException, IOException {
     try {
         logger.debug("Start FindTransferResponseMessage");
         FindTransferRequestMessage ftrm = new FindTransferRequestMessage();
-        org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
+        //org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
         JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
         ftrm.setAuthenticationHeader(ahh);
         ftrm.setBankID(bankId); 
@@ -46,12 +44,13 @@ public class FindTransfer {
         ftrm.setCurrencyID(val);
         ftrm.setSum(sum);
         debug(ftrm);
-        IWebService service = new WebService().getWS2007HttpBindingIWebService();
-        FindTransferResponseMessage rm = service.findTransfer(ftrm);
+        WebServiceSingl ws = WebServiceSingl.getInstance();
+        //IWebService service = new WebService().getWS2007HttpBindingIWebService();
+        FindTransferResponseMessage rm = ws.service.findTransfer(ftrm);
         logger.debug("Finish FindTransferResponseMessage");        
         return rm;
     }
-    catch (Exception ex)
+    catch (IOException ex)
         {throw new IOException("Ошибка доступа к Unistream",ex);}
     }
     private static void debug(FindTransferRequestMessage ftrm)

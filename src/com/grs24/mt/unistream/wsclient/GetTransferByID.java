@@ -27,7 +27,7 @@ private static final Logger logger = LoggerFactory.getLogger(GetTransferByID.cla
 * @throws IOException в случае провала выполение
 */   
     
-    public static GetTransferByIDResponseMessage getTransferByID(Integer transferId) throws IOException {
+    public static GetTransferByIDResponseMessage getTransferByID(Integer transferId) throws UnsupportedOperationException, IOException {
         try {
             logger.debug("Start GetTransferByIDResponseMessage");
             GetTransferByIDRequestMessage gtrm = new GetTransferByIDRequestMessage();
@@ -40,7 +40,7 @@ private static final Logger logger = LoggerFactory.getLogger(GetTransferByID.cla
             logger.debug("Finish GetTransferByIDResponseMessage");        
             return rm;
         }
-        catch (Exception ex)
+        catch (IOException ex)
             {
                  throw new IOException("Ошибка доступа к Unistream",ex); 
             }

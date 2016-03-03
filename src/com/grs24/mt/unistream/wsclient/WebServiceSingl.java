@@ -14,9 +14,9 @@ import javax.xml.ws.BindingProvider;
  */
 public class WebServiceSingl {
     private static volatile WebServiceSingl instance;
-    public static volatile IWebService service = null;
+    public volatile IWebService service = null;
     private final Properties properties;
-    private final String PROPERTY_FILE_PATH = "WEB-INF\\config.properties";
+    private final String PROPERTY_FILE_PATH = "config.properties";
     private final String PROPERTY_KEY_SERVER_REQUEST_TUMEOUT = "SERVER.REQUEST_TIMEOUT";
     private final String PROPERTY_KEY_SERVER_CONNECT_TUMEOUT = "SERVER.CONNECT_TIMEOUT";
     private final Integer DEFAULT_REQUEST_TIMEOUT = 3000;
@@ -65,9 +65,9 @@ public class WebServiceSingl {
     private void loadProperties() throws UnsupportedOperationException, IOException
     {
             File propFile = getPopertyFile();
-            FileInputStream fis = new FileInputStream(propFile);
+        try (FileInputStream fis = new FileInputStream(propFile)) {
             properties.load(fis);
-            fis.close();
+        }
     }
 
     private File getPopertyFile() throws UnsupportedOperationException

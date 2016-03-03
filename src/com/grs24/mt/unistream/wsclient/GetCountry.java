@@ -6,13 +6,8 @@
 package com.grs24.mt.unistream.wsclient;
 
 import com.grs24.mt.RemittanceException;
-import com.sun.xml.ws.client.BindingProviderProperties;
-import com.unistream.test.wcflib.IWebService;
-import com.unistream.test.wcflib.WebService;
 import java.io.IOException;
-import java.util.Map;
 import javax.xml.bind.JAXBElement;
-import javax.xml.ws.BindingProvider;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.Country;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCountriesChangesResponseMessage;
@@ -23,16 +18,17 @@ import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCountrie
  */
 public class GetCountry {
 
-    private static GetCountriesChangesResponseMessage getCountriesChanges( ) throws IOException {
+    private static GetCountriesChangesResponseMessage getCountriesChanges( ) throws UnsupportedOperationException, IOException {
         try {
                 JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
                 org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCountriesChangesRequestMessage requestMessage = new org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCountriesChangesRequestMessage();
                 requestMessage.setAuthenticationHeader(ahh);
                 requestMessage.setUpdateCount(0L);
-                IWebService service = new WebService().getWS2007HttpBindingIWebService();
-                return service.getCountriesChanges(requestMessage);
+                //IWebService service = new WebService().getWS2007HttpBindingIWebService();
+                WebServiceSingl ws = WebServiceSingl.getInstance();
+                return ws.service.getCountriesChanges(requestMessage);
             }
-        catch (Exception ex) 
+        catch (IOException ex) 
             {
                 throw new IOException("Ошибка доступа к Unistream",ex); 
             }

@@ -6,8 +6,6 @@
 package com.grs24.mt.unistream.wsclient;
 
 import com.grs24.mt.RemittanceException;
-import com.unistream.test.wcflib.IWebService;
-import com.unistream.test.wcflib.WebService;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
@@ -65,16 +63,17 @@ public class GetCurrency {
         return null;
      }
 
-    private static GetCurrenciesChangesResponseMessage getCurrenciesChanges() throws IOException {
+    private static GetCurrenciesChangesResponseMessage getCurrenciesChanges() throws UnsupportedOperationException, IOException {
         try {
                 JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
                 org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCurrenciesChangesRequestMessage requestMessage = new org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCurrenciesChangesRequestMessage();
                 requestMessage.setAuthenticationHeader(ahh);
                 requestMessage.setUpdateCount(1L);
-                IWebService service = new WebService().getWS2007HttpBindingIWebService();
-                return service.getCurrenciesChanges(requestMessage);
+                //IWebService service = new WebService().getWS2007HttpBindingIWebService();
+                WebServiceSingl ws = WebServiceSingl.getInstance();
+                return ws.service.getCurrenciesChanges(requestMessage);
         }
-        catch (Exception ex) 
+        catch (IOException ex) 
             {
                 throw new IOException("Ошибка доступа к Unistream",ex); 
             }

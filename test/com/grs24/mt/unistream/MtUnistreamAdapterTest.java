@@ -494,18 +494,18 @@ RUB
     @Test
     public void testMoneySearch() throws Exception {
         System.out.println("moneySearch");
-        String mtcn = "475500139583";
+        String mtcn = "743818837598";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
-        BigDecimal bd = new BigDecimal("900");
+        BigDecimal bd = new BigDecimal("50000");
         approxDstFunds.setAmount(bd);
         approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
         String dstCountry = "Russia";
         RemittanceHolder[] result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
         assertNotNull(result[0]);
-        assertEquals(result[0].getMtID(),"16016598");
-        mtcn = "475500139583";
+        assertEquals(result[0].getMtID(),"16016603");
+        mtcn = "036530144512";
         approxOrgFunds = null;
         approxDstFunds = new FundsHolder();
         bd = new BigDecimal("-900");
@@ -525,14 +525,15 @@ RUB
 
     /**
      * Test of moneyPay method, of class MtUnistreamAdapter.
+     * 19.658 сек
      */
     @Test
     public void testMoneyPay() throws Exception {
         System.out.println("moneyPay");
-        String mtcn = "158881050302";
+        String mtcn = "036530144512";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
-        BigDecimal bd = new BigDecimal("999");
+        BigDecimal bd = new BigDecimal("50000");
         approxDstFunds.setAmount(bd);
         approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
