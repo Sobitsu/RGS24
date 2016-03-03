@@ -48,7 +48,6 @@ public class WebServiceSingl {
         Map<String, Object> requestContext = ((BindingProvider)service).getRequestContext();
         requestContext.put(BindingProviderProperties.REQUEST_TIMEOUT, request_timeout); // Timeout in millis
         requestContext.put(BindingProviderProperties.CONNECT_TIMEOUT, connect_timeout); // Timeout in millis
-
     }
     
     public static WebServiceSingl getInstance() throws UnsupportedOperationException, IOException {
