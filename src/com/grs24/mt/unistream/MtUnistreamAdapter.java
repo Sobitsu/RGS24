@@ -18,6 +18,10 @@ import com.grs24.mt.unistream.wsclient.FindTransfer;
 import com.grs24.mt.unistream.wsclient.GetCurrency;
 import com.grs24.mt.unistream.wsclient.GetTransferByID;
 import com.grs24.mt.unistream.wsclient.PayOutTransfer;
+import java.security.GeneralSecurityException;
+import java.security.PrivateKey;
+import java.security.cert.Certificate;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.xml.bind.JAXBElement;
@@ -62,12 +66,20 @@ public class MtUnistreamAdapter implements MtAdapter
         public static Integer KEY_PARTICIPATOR_ID;
         public static Integer KEY_SERVER_REQUEST_TUMEOUT;
         public static Integer KEY_SERVER_CONNECT_TUMEOUT;
+        public static PrivateKey KEY_KEYSTORE_PKCS12;
+        public static String KEY_KEYSTORE_PASSWORD;
+        public static Certificate KEY_TRUSTSTORE_JKS;
+        public static String KEY_TRUSTSTORE_PASSWORD;
         private static final Logger logger = LoggerFactory.getLogger(MtUnistreamAdapter.class);
         private final String PROPERTY_KEY_SERVER_REQUEST_TUMEOUT = "SERVER.REQUEST_TIMEOUT";
         private final String PROPERTY_KEY_SERVER_CONNECT_TUMEOUT = "SERVER.CONNECT_TIMEOUT";
         private final String PROPERTY_KEY_USER_AUTHED_APIKEY = "APIKEY";
         private final String PROPERTY_KEY_USER_AUTHED_LOGIN = "LOGIN";
         private final String PROPERTY_KEY_USER_AUTHED_PASSWORD = "PASSWORD";
+        private final String PROPERTY_KEY_JKS_KEYSTORE_KEY = "KEYSTORE.PKCS12";
+        private final String PROPERTY_KEY_JKS_KEYSTORE_PASSWORD = "KEYSTORE.PASSWORD";
+        private final String PROPERTY_KEY_JKS_TRUSTSTORE_KEY = "TRUSTSTORE.JKS";
+        private final String PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD = "TRUSTSTORE.PASSWORD";
         private final String PROPERTY_KEY_BANK_ID = "BANKID";
         private final String PROPERTY_KEY_PART_ID = "PARTID";
         private final Integer DEFAULT_REQUEST_TIMEOUT = 3000;
@@ -417,6 +429,10 @@ public class MtUnistreamAdapter implements MtAdapter
 * PARTID - Код точки выдачи. Выдается UNIStream при регистрации участника
 * SERVER.REQUEST_TIMEOUT - Таймаут ожидания ответа на запрос от сервера в милисекундах
 * SERVER.CONNECT_TIMEOUT - Таймаут ожидания установки соединения с сервером в милисекундах
+* KEYSTORE.PKCS12 - base64 строка представляющая байты хранилища секретного ключа и сертификатов в pkcs#12 формате
+* KEYSTORE.PASSWORD - пароль к хранилищу
+* TRUSTSTORE.JKS - base64 строка представляющая байты хранилища доверенных сертификатов в JKS формате
+* TRUSTSTORE.PASSWORD - пароль хранилища доверенных сертификатов
 * @throws IOException в случае проблем инициализации (например, ошибка соединения 
 * с СУБД.
 * 
@@ -429,7 +445,17 @@ public class MtUnistreamAdapter implements MtAdapter
                     KEY_USER_AUTHED_APIKEY = init.getProperty(PROPERTY_KEY_USER_AUTHED_APIKEY, String.valueOf(PROPERTY_KEY_USER_AUTHED_APIKEY));
                     KEY_USER_AUTHED_LOGIN = init.getProperty(PROPERTY_KEY_USER_AUTHED_LOGIN, String.valueOf(PROPERTY_KEY_USER_AUTHED_LOGIN));
                     KEY_USER_AUTHED_PASSWORD = init.getProperty(PROPERTY_KEY_USER_AUTHED_PASSWORD,String.valueOf(PROPERTY_KEY_USER_AUTHED_PASSWORD));
+
+                    val = init.getProperty(PROPERTY_KEY_JKS_KEYSTORE_KEY, String.valueOf(PROPERTY_KEY_JKS_KEYSTORE_KEY));
+                    KEY_KEYSTORE_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_KEYSTORE_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_KEYSTORE_PASSWORD));
+                    KEY_KEYSTORE_PKCS12 = KeyTools.getPrivateKeyPKCS12(val, KEY_KEYSTORE_PASSWORD);
+
+                    val = init.getProperty(PROPERTY_KEY_JKS_TRUSTSTORE_KEY, String.valueOf(PROPERTY_KEY_JKS_TRUSTSTORE_KEY));
+                    KEY_TRUSTSTORE_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD));
+                    KEY_TRUSTSTORE_JKS = KeyTools.getCertificatesPKCS12(val, KEY_TRUSTSTORE_PASSWORD)[0];
+                    
                     val = init.getProperty(PROPERTY_KEY_BANK_ID, String.valueOf(PROPERTY_KEY_BANK_ID));
+                    
                     try{
                             KEY_BANK_ID = Integer.parseInt(val);
                         }
@@ -467,7 +493,10 @@ public class MtUnistreamAdapter implements MtAdapter
                 } catch (UnsupportedOperationException ex) {
                     logger.error("Error while try to take properties", ex);
                     throw new UnsupportedOperationException("Not supported configuration. Check cfg info");
-                }
+                } catch (GeneralSecurityException ex) {
+                    logger.error("Error while try to take properties", ex);
+                    throw new UnsupportedOperationException("Not supported configuration. Check cfg info",ex);
+            }
         }
 
 /**
