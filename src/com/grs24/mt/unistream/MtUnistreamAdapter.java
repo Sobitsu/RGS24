@@ -258,12 +258,25 @@ public class MtUnistreamAdapter implements MtAdapter
                          if (i.getPerson().isNil()) {
                             throw new RemittanceException("Ошибка при получении данных о клиентах по переводу", 10022, "","" );
                          }
-                         if (!i.getPerson().getValue().getFirstName().isNil()){
-                         individual.setFirst(i.getPerson().getValue().getFirstName().getValue());}
-                         if (!i.getPerson().getValue().getLastName().isNil()) {
-                         individual.setLast(i.getPerson().getValue().getLastName().getValue());}
-                         if (!i.getPerson().getValue().getMiddleName().isNil()) {
-                         individual.setMiddle(i.getPerson().getValue().getMiddleName().getValue());}
+                         Person pers = i.getPerson().getValue();
+                         String firstName;
+                         String lastName;
+                         String middleName;
+                         
+                         if (!pers.getFirstNameLat().isNil()) firstName = pers.getFirstNameLat().getValue();
+                         else  firstName = pers.getFirstName().getValue();
+
+                         if (!pers.getLastNameLat().isNil()) lastName = pers.getLastNameLat().getValue();
+                         else  lastName = pers.getLastName().getValue();
+                         
+                         if (!pers.getMiddleNameLat().isNil()) middleName = pers.getMiddleNameLat().getValue();
+                         else  middleName = pers.getMiddleName().getValue();
+
+                         
+                         individual.setFirst(firstName);
+                         individual.setLast(lastName);
+                         individual.setMiddle(middleName);
+                      
                          retval.setIndividual(individual);
                          logger.debug("getConsumer finish");
                          return retval;
@@ -451,7 +464,7 @@ public class MtUnistreamAdapter implements MtAdapter
                         }
 
                                 logger.debug( "init compleate"); 
-                        } catch (Exception ex) {
+                } catch (UnsupportedOperationException ex) {
                     logger.error("Error while try to take properties", ex);
                     throw new UnsupportedOperationException("Not supported configuration. Check cfg info");
                 }
