@@ -469,7 +469,7 @@ public class MtUnistreamAdapter implements MtAdapter
                         }
                     catch(NumberFormatException e)
                         {
-                            throw new UnsupportedOperationException("Not correct value of PARTID");
+                            KEY_PARTICIPATOR_ID = KEY_BANK_ID;
                         }
                     val = init.getProperty(PROPERTY_KEY_SERVER_REQUEST_TUMEOUT, String.valueOf(PROPERTY_KEY_SERVER_REQUEST_TUMEOUT));
                     try{
