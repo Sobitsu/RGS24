@@ -24,9 +24,10 @@ import static org.junit.Assert.*;
  */
 public class KeyToolsTest {
     private final String KEYSTOREPATH = "xws-security/client.jks";
-    private final String KEYSTOREPASS = "1234567890";
+    private final String KEYSTOREPASS = "123456";
     private final String TRUSTSTOREPATH = "xws-security/server.jks";
     private final String TRUSTSTOREPASS = "123456";
+    private final String KEYPASS = "1234567890";
     
     private String computeB64(File target) throws IOException {
       FileInputStream stream = (new FileInputStream(target));
@@ -78,11 +79,10 @@ public class KeyToolsTest {
         System.out.println("getPrivateKeyPKCS12file");
         String filename = KEYSTOREPATH;
         String keyStorePassword = KEYSTOREPASS;
-        PrivateKey expResult = null;
-        PrivateKey result = KeyTools.getPrivateKeyPKCS12file(filename, keyStorePassword);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String keyPassword = KEYPASS;
+        PrivateKey result = KeyTools.getPrivateKeyPKCS12file(filename, keyStorePassword, keyPassword);
+        assertNotNull(result);
+        assertEquals(result.getAlgorithm(),"RSA");
     }
 
     /**

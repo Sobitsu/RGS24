@@ -48,7 +48,7 @@ public class KeyTools {
 		}
 		
 		try {
-			ks = KeyStore.getInstance("PKCS12");
+			ks = KeyStore.getInstance("JKS");
                         
 			ByteArrayInputStream keyStoreIS = new ByteArrayInputStream(Base64.getDecoder().decode(keyBody));
 			ks.load(keyStoreIS, keyStorePassword.toCharArray());
@@ -99,7 +99,7 @@ public class KeyTools {
 		}
 		
 		try {
-			ks = KeyStore.getInstance("PKCS12");
+			ks = KeyStore.getInstance("JKS");
 			
 			ByteArrayInputStream keyStoreIS = new ByteArrayInputStream(Base64.getDecoder().decode(keyBody));;
 			ks.load(keyStoreIS, keyStorePassword.toCharArray());
@@ -197,20 +197,24 @@ public class KeyTools {
 	 * @param keyStorePassword - пароль защиты файла.
 	 * @return PrivateKey - секретный ключ или null.
 	 */
-	public static PrivateKey getPrivateKeyPKCS12file(String filename, String keyStorePassword) throws GeneralSecurityException {
+	public static PrivateKey getPrivateKeyPKCS12file(String filename, String keyStorePassword, String keyPassword) throws GeneralSecurityException {
 		Key key = null;
 		KeyStore ks = null;
 
 		if (filename==null) {
-			logger.error("getPrivateKeyPKCS12: Empty filename - illegal argument.");
-			throw new GeneralSecurityException("getPrivateKeyPKCS12: Empty filename - illegal argument.");
+			logger.error("getPrivateKeyPKCS12file: Empty filename - illegal argument.");
+			throw new GeneralSecurityException("getPrivateKeyPKCS12file: Empty filename - illegal argument.");
 		}
 		if (keyStorePassword==null) {
-			logger.error("getPrivateKeyPKCS12: Empty keyStorePassword - illegal argument.");
-			throw new GeneralSecurityException("getPrivateKeyPKCS12: Empty keyStorePassword - illegal argument.");
+			logger.error("getPrivateKeyPKCS12file: Empty keyStorePassword - illegal argument.");
+			throw new GeneralSecurityException("getPrivateKeyPKCS12file: Empty keyStorePassword - illegal argument.");
 		}
-		if (logger.isDebugEnabled()) {
-			logger.debug("getPrivateKeyPKCS12: <- filename='"+filename+"', keyStorePassword="+keyStorePassword.replaceAll(".", "*"));
+		if (keyPassword==null) {
+			logger.error("getPrivateKeyPKCS12file: Empty keyPassword - illegal argument.");
+			throw new GeneralSecurityException("getPrivateKeyPKCS12file: Empty keyPassword - illegal argument.");
+		}
+                if (logger.isDebugEnabled()) {
+			logger.debug("getPrivateKeyPKCS12file: <- filename='"+filename+"', keyStorePassword="+keyStorePassword.replaceAll(".", "*")+"', keyPassword="+keyPassword.replaceAll(".", "*"));
 		}
 		
 		try {
@@ -223,17 +227,17 @@ public class KeyTools {
 			while (aliases.hasMoreElements()) {
 				String alias = (String) aliases.nextElement();
 				if (ks.isKeyEntry(alias)) {
-					key = ks.getKey(alias, keyStorePassword.toCharArray());
+					key = ks.getKey(alias, keyPassword.toCharArray());
 					if (key instanceof PrivateKey) {
 						if (logger.isDebugEnabled()) 
-							logger.debug("getPrivateKeyPKCS12: -> key="+key);
+							logger.debug("getPrivateKeyPKCS12file: -> key="+key);
 						return (PrivateKey) key;
 					}
 				}
 			}
 		} catch (Exception ex) {
-			logger.error("getPrivateKeyPKCS12: Can't get private key:", ex);
-			throw new GeneralSecurityException("getPrivateKeyPKCS12: Can't get private key:");
+			logger.error("getPrivateKeyPKCS12file: Can't get private key:", ex);
+			throw new GeneralSecurityException("getPrivateKeyPKCS12file: Can't get private key:");
 		}
 		return null;
 	}
