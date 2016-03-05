@@ -448,11 +448,11 @@ public class MtUnistreamAdapter implements MtAdapter
 
                     val = init.getProperty(PROPERTY_KEY_JKS_KEYSTORE_KEY, String.valueOf(PROPERTY_KEY_JKS_KEYSTORE_KEY));
                     KEY_KEYSTORE_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_KEYSTORE_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_KEYSTORE_PASSWORD));
-                    KEY_KEYSTORE_PKCS12 = KeyTools.getPrivateKeyPKCS12(val, KEY_KEYSTORE_PASSWORD);
+                    //KEY_KEYSTORE_PKCS12 = KeyTools.getPrivateKeyPKCS12(val, KEY_KEYSTORE_PASSWORD);
 
                     val = init.getProperty(PROPERTY_KEY_JKS_TRUSTSTORE_KEY, String.valueOf(PROPERTY_KEY_JKS_TRUSTSTORE_KEY));
                     KEY_TRUSTSTORE_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD));
-                    KEY_TRUSTSTORE_JKS = KeyTools.getCertificatesPKCS12(val, KEY_TRUSTSTORE_PASSWORD)[0];
+                    //KEY_TRUSTSTORE_JKS = KeyTools.getCertificatesJKS(val, KEY_TRUSTSTORE_PASSWORD)[0];
                     
                     val = init.getProperty(PROPERTY_KEY_BANK_ID, String.valueOf(PROPERTY_KEY_BANK_ID));
                     
@@ -493,9 +493,9 @@ public class MtUnistreamAdapter implements MtAdapter
                 } catch (UnsupportedOperationException ex) {
                     logger.error("Error while try to take properties", ex);
                     throw new UnsupportedOperationException("Not supported configuration. Check cfg info");
-                } catch (GeneralSecurityException ex) {
+            /*    } catch (GeneralSecurityException ex) {
                     logger.error("Error while try to take properties", ex);
-                    throw new UnsupportedOperationException("Not supported configuration. Check cfg info",ex);
+                    throw new UnsupportedOperationException("Not supported configuration. Check cfg info",ex);*/
             }
         }
 
