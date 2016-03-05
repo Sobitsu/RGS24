@@ -8,10 +8,8 @@ package com.grs24.mt.unistream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
-import java.util.Arrays;
 import java.util.Base64;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,7 +17,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import sun.misc.BASE64Encoder;
 
 /**
  *
@@ -74,36 +71,6 @@ public class KeyToolsTest {
     }
 
     /**
-     * Test of getCertificatesPKCS12 method, of class KeyTools.
-     */
-    @Test
-    public void testGetCertificatesPKCS12() throws Exception {
-        System.out.println("getCertificatesPKCS12");
-        String keyBody = "";
-        String keyStorePassword = "";
-        Certificate[] expResult = null;
-        Certificate[] result = KeyTools.getCertificatesPKCS12(keyBody, keyStorePassword);
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getCertificatesJKS method, of class KeyTools.
-     */
-    @Test
-    public void testGetCertificatesJKS() throws Exception {
-        System.out.println("getCertificatesJKS");
-        String keyBody = "";
-        String keyStorePassword = "";
-        Certificate[] expResult = null;
-        Certificate[] result = KeyTools.getCertificatesJKS(keyBody, keyStorePassword);
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of getPrivateKeyPKCS12file method, of class KeyTools.
      */
     @Test
@@ -119,18 +86,33 @@ public class KeyToolsTest {
     }
 
     /**
-     * Test of getCertificatesPKCS12file method, of class KeyTools.
+     * Test of getCertificatesJKS method, of class KeyTools.
      */
     @Test
-    public void testGetCertificatesPKCS12file() throws Exception {
-        System.out.println("getCertificatesPKCS12file");
-        String filename = "";
-        String keyStorePassword = "";
+    public void testGetCertificatesJKS() throws Exception {
+        System.out.println("getCertificatesJKS");
+        String keyBody = computeB64(new File(TRUSTSTOREPATH));
+        String keyStorePassword = TRUSTSTOREPASS;
         Certificate[] expResult = null;
-        Certificate[] result = KeyTools.getCertificatesPKCS12file(filename, keyStorePassword);
+        Certificate[] result = KeyTools.getCertificatesJKS(keyBody, keyStorePassword);
         assertArrayEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
     
+    /**
+     * Test of getCertificatesPKCS12file method, of class KeyTools.
+     */
+    @Test
+    public void testGetCertificatesPKCS12file() throws Exception {
+        System.out.println("getCertificatesPKCS12file");
+        String filename = TRUSTSTOREPATH;
+        String keyStorePassword = TRUSTSTOREPASS;
+        Certificate[] result = KeyTools.getCertificatesPKCS12file(filename, keyStorePassword);
+        //System.out.println(result[0].toString());
+        assertEquals(result[0].getType(),"X.509");
+        assertEquals(result[0].getPublicKey().getAlgorithm(),"RSA");
+        assertNotNull(result[0]);
+    }
 }
+

@@ -265,7 +265,7 @@ public class KeyTools {
 		}
 		
 		try {
-			ks = KeyStore.getInstance("PKCS12");
+			ks = KeyStore.getInstance("JKS");
 			
 			InputStream keyStoreIS = new FileInputStream(filename);
 			ks.load(keyStoreIS, keyStorePassword.toCharArray());
