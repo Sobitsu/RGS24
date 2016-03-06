@@ -26,72 +26,67 @@ import javax.security.auth.message.callback.TrustStoreCallback;
  *
  * @author Dale
  */
-public class TrustStoreHandler extends CallbackHandler {
-    }
-
-public class KeyStoreHandler extends CallbackHandler {
-    }
 public abstract class CallbackHandler implements javax.security.auth.callback.CallbackHandler {
 
   @Override
   public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException 
     {
-        for (int i = 0; i < callbacks.length; i++) {
-            if (callbacks[i] instanceof KeyStoreCallback) { 
-                KeyStore ks = null;
-                KeyStoreCallback kscb = (KeyStoreCallback)callbacks[i];                
-                try {
-                    ks = KeyStore.getInstance("JKS");
-                } catch (KeyStoreException ex) {
-                    Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                ByteArrayInputStream keyStoreIS = new ByteArrayInputStream(Base64.getDecoder().decode(MtUnistreamAdapter.KEY_KEYSTORE_PKCS12_BODY));
-                try {
-                    ks.load(keyStoreIS, MtUnistreamAdapter.KEY_KEYSTORE_PASSWORD.toCharArray());
-                } 
-                catch (NoSuchAlgorithmException ex) {
-                    Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (CertificateException ex) {
-                    Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-                }                finally {
-                    keyStoreIS.close();
-                }
-                kscb.setKeystore(ks);
-            }
-            if (callbacks[i] instanceof TrustStoreCallback) { 
-                KeyStore ks = null;
-                TrustStoreCallback tscb = (TrustStoreCallback)callbacks[i];
-                try {
-                    ks = KeyStore.getInstance("JKS");
-                } catch (KeyStoreException ex) {
-                    Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                ByteArrayInputStream keyStoreIS = new ByteArrayInputStream(Base64.getDecoder().decode(MtUnistreamAdapter.KEY_TRUSTSTORE_JKS_BODY));
-                try {
-                    ks.load(keyStoreIS, MtUnistreamAdapter.KEY_TRUSTSTORE_PASSWORD.toCharArray());
-                } 
-                catch (NoSuchAlgorithmException ex) {
-                    Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (CertificateException ex) {
-                    Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-                }                finally {
-                    keyStoreIS.close();
-                }
-                tscb.setTrustStore(ks);            
-            }
-            if (callbacks[i] instanceof PrivateKeyCallback) { 
-                PrivateKeyCallback pkcb = (PrivateKeyCallback)callbacks[i];
-                pkcb.setAlias("6583c384-94e1-4b26-ad40-f88dc77b14e0");
-                try {
-                    pkcb.setKey((PrivateKey) pkcb.getKeystore().getKey("6583c384-94e1-4b26-ad40-f88dc77b14e0", MtUnistreamAdapter.KEY_KEY_PASSWORD.toCharArray()));
-                } catch (KeyStoreException ex) {
-                    Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NoSuchAlgorithmException ex) {
-                    Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (UnrecoverableKeyException ex) {
-                    Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                }
-            }
+      for (Callback callback : callbacks) {
+          if (callback instanceof KeyStoreCallback) {
+              KeyStore ks = null;
+              KeyStoreCallback kscb = (KeyStoreCallback) callback;
+              try {
+                  ks = KeyStore.getInstance("JKS");
+              } catch (KeyStoreException ex) {
+                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
+              }
+              ByteArrayInputStream keyStoreIS = new ByteArrayInputStream(Base64.getDecoder().decode(MtUnistreamAdapter.KEY_KEYSTORE_PKCS12_BODY));
+              try {
+                  ks.load(keyStoreIS, MtUnistreamAdapter.KEY_KEYSTORE_PASSWORD.toCharArray());
+              }
+              catch (NoSuchAlgorithmException ex) {
+                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
+              } catch (CertificateException ex) {
+                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
+              }                finally {
+                  keyStoreIS.close();
+              }
+              kscb.setKeystore(ks);
+          }
+          if (callback instanceof TrustStoreCallback) {
+              KeyStore ks = null;
+              TrustStoreCallback tscb = (TrustStoreCallback) callback;
+              try {
+                  ks = KeyStore.getInstance("JKS");
+              } catch (KeyStoreException ex) {
+                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
+              }
+              ByteArrayInputStream keyStoreIS = new ByteArrayInputStream(Base64.getDecoder().decode(MtUnistreamAdapter.KEY_TRUSTSTORE_JKS_BODY));
+              try {
+                  ks.load(keyStoreIS, MtUnistreamAdapter.KEY_TRUSTSTORE_PASSWORD.toCharArray());
+              }
+              catch (NoSuchAlgorithmException ex) {
+                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
+              } catch (CertificateException ex) {
+                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
+              }                finally {
+                  keyStoreIS.close();
+              }
+              tscb.setTrustStore(ks);
+          }
+          if (callback instanceof PrivateKeyCallback) {
+              PrivateKeyCallback pkcb = (PrivateKeyCallback) callback;
+              pkcb.setAlias("6583c384-94e1-4b26-ad40-f88dc77b14e0");
+              try {
+                  pkcb.setKey((PrivateKey) pkcb.getKeystore().getKey("6583c384-94e1-4b26-ad40-f88dc77b14e0", MtUnistreamAdapter.KEY_KEY_PASSWORD.toCharArray()));
+              } catch (KeyStoreException ex) {
+                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
+              } catch (NoSuchAlgorithmException ex) {
+                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
+              } catch (UnrecoverableKeyException ex) {
+                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
+              }
+          }
+      }
         }
     }
