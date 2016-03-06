@@ -24,8 +24,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.math.BigDecimal;
-import java.security.PrivateKey;
-import java.security.cert.Certificate;
 import java.util.Base64;
 
 /**
@@ -41,10 +39,8 @@ public class MtUnistreamAdapterTest {
     private static final Integer KEY_PARTICIPATOR_ID = 383589;
     private static final Integer KEY_SERVER_REQUEST_TUMEOUT = 3000;
     private static final Integer KEY_SERVER_CONNECT_TUMEOUT = 1000;
-    private static PrivateKey KEY_KEYSTORE_PKCS12;
     private static final String KEY_KEYSTORE_PASSWORD = "123456";
     private static final String KEY_KEY_PASSWORD = "1234567890";
-    private static Certificate KEY_TRUSTSTORE_JKS;
     private static final String KEY_TRUSTSTORE_PASSWORD = "123456";
     private static final String KEYSTOREPATH = "xws-security/client.jks";
     private static final String TRUSTSTOREPATH = "xws-security/server.jks";
