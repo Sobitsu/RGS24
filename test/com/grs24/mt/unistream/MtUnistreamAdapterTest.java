@@ -13,6 +13,8 @@ import com.grs24.msg.IndividualHolder;
 import com.grs24.msg.PersonHolder;
 import com.grs24.mt.RemittanceException;
 import com.grs24.mt.RemittanceHolder;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 import org.junit.After;
@@ -22,6 +24,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.math.BigDecimal;
+import java.security.PrivateKey;
+import java.security.cert.Certificate;
+import java.util.Base64;
 
 /**
  *
@@ -29,13 +34,31 @@ import java.math.BigDecimal;
  */
 public class MtUnistreamAdapterTest {
     
-    public static String KEY_USER_AUTHED_APIKEY = "1wwteyFGFew624";
-    public static String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
-    public static String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
-    public static Integer KEY_BANK_ID = 383589;
-    public static Integer KEY_PARTICIPATOR_ID = 383589;
+    private static final String KEY_USER_AUTHED_APIKEY = "1wwteyFGFew624";
+    private static final String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
+    private static final String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
+    private static final Integer KEY_BANK_ID = 383589;
+    private static final Integer KEY_PARTICIPATOR_ID = 383589;
+    private static final Integer KEY_SERVER_REQUEST_TUMEOUT = 3000;
+    private static final Integer KEY_SERVER_CONNECT_TUMEOUT = 1000;
+    private static PrivateKey KEY_KEYSTORE_PKCS12;
+    private static final String KEY_KEYSTORE_PASSWORD = "123456";
+    private static final String KEY_KEY_PASSWORD = "1234567890";
+    private static Certificate KEY_TRUSTSTORE_JKS;
+    private static final String KEY_TRUSTSTORE_PASSWORD = "123456";
+    private static final String KEYSTOREPATH = "xws-security/client.jks";
+    private static final String TRUSTSTOREPATH = "xws-security/server.jks";
     private static MtUnistreamAdapter instance;
+    
     public MtUnistreamAdapterTest() {
+    }
+    
+    private static String computeB64(String filename) throws IOException {
+        File target = new File(filename);
+        FileInputStream stream = (new FileInputStream(target));
+        byte[] buffer = new byte[stream.available()];
+        stream.read(buffer);
+        return Base64.getEncoder().encodeToString(buffer);
     }
     
     @BeforeClass
@@ -46,6 +69,13 @@ public class MtUnistreamAdapterTest {
         cfg.setProperty("PASSWORD", KEY_USER_AUTHED_PASSWORD);
         cfg.setProperty("BANKID", KEY_BANK_ID.toString());
         cfg.setProperty("PARTID",KEY_PARTICIPATOR_ID.toString());
+        cfg.setProperty("SERVER.REQUEST_TIMEOUT", KEY_SERVER_REQUEST_TUMEOUT.toString());
+        cfg.setProperty("SERVER.CONNECT_TIMEOUT", KEY_SERVER_CONNECT_TUMEOUT.toString());
+        cfg.setProperty("KEYSTORE.PASSWORD", KEY_KEYSTORE_PASSWORD);
+        cfg.setProperty("KEY.PASSWORD", KEY_KEY_PASSWORD);
+        cfg.setProperty("TRUSTSTORE.PASSWORD", KEY_TRUSTSTORE_PASSWORD);
+        cfg.setProperty("KEYSTORE.PKCS12", computeB64(KEYSTOREPATH));
+        cfg.setProperty("TRUSTSTORE.JKS",  computeB64(TRUSTSTOREPATH));
         instance = new MtUnistreamAdapter();
         instance.init(cfg);    
     }
