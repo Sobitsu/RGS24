@@ -33,7 +33,7 @@ public class KeyToolsTest {
       FileInputStream stream = (new FileInputStream(target));
       byte[] buffer = new byte[stream.available()];
       stream.read(buffer);
-      return Base64.getEncoder().encode(buffer).toString();
+      return Base64.getEncoder().encodeToString(buffer);
     }
     
     public KeyToolsTest() {
@@ -64,11 +64,10 @@ public class KeyToolsTest {
         File file = new File(KEYSTOREPATH);
         String keyBody = computeB64(file);
         String keyStorePassword = KEYSTOREPASS;
-        PrivateKey expResult = null;
-        PrivateKey result = KeyTools.getPrivateKeyPKCS12(keyBody, keyStorePassword);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String keyPassword = KEYPASS;
+        PrivateKey result = KeyTools.getPrivateKeyPKCS12(keyBody, keyStorePassword, keyPassword);
+        assertNotNull(result);
+        assertEquals(result.getAlgorithm(),"RSA");
     }
 
     /**
@@ -95,9 +94,9 @@ public class KeyToolsTest {
         String keyStorePassword = TRUSTSTOREPASS;
         Certificate[] expResult = null;
         Certificate[] result = KeyTools.getCertificatesJKS(keyBody, keyStorePassword);
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(result[0].getType(),"X.509");
+        assertEquals(result[0].getPublicKey().getAlgorithm(),"RSA");
+        assertNotNull(result[0]);
     }
     
     /**

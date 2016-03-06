@@ -31,7 +31,7 @@ public class KeyTools {
 	 * @param keyStorePassword - пароль защиты файла.
 	 * @return PrivateKey - секретный ключ или null.
 	 */
-	public static PrivateKey getPrivateKeyPKCS12(String keyBody, String keyStorePassword) throws GeneralSecurityException {
+	public static PrivateKey getPrivateKeyPKCS12(String keyBody, String keyStorePassword,String keyPassword) throws GeneralSecurityException {
 		Key key = null;
 		KeyStore ks = null;
 
@@ -43,7 +43,12 @@ public class KeyTools {
 			logger.error("getPrivateKeyPKCS12: Empty keyStorePassword - illegal argument.");
 			throw new GeneralSecurityException("getPrivateKeyPKCS12: Empty keyStorePassword - illegal argument.");
 		}
-		if (logger.isDebugEnabled()) {
+		if (keyPassword==null) {
+			logger.error("getPrivateKeyPKCS12: Empty keyPassword - illegal argument.");
+			throw new GeneralSecurityException("getPrivateKeyPKCS12: Empty keyPassword - illegal argument.");
+		}
+
+                if (logger.isDebugEnabled()) {
 			logger.debug("getPrivateKeyPKCS12: <- keyBody='"+keyBody+"', keyStorePassword="+keyStorePassword.replaceAll(".", "*"));
 		}
 		
@@ -57,7 +62,7 @@ public class KeyTools {
 			while (aliases.hasMoreElements()) {
 				String alias = (String) aliases.nextElement();
 				if (ks.isKeyEntry(alias)) {
-					key = ks.getKey(alias, keyStorePassword.toCharArray());
+					key = ks.getKey(alias, keyPassword.toCharArray());
 					if (key instanceof PrivateKey) {
 						if (logger.isDebugEnabled()) 
 							logger.debug("getPrivateKeyPKCS12: -> key="+key);
