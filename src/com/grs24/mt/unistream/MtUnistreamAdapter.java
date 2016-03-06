@@ -1,5 +1,6 @@
 package com.grs24.mt.unistream;
 
+import com.grs24.mt.security.KeyTools;
 import com.grs24.mt.RemittanceException;
 import com.grs24.mt.RemittanceHolder;
 import com.grs24.msg.FundsHolder;
@@ -21,7 +22,6 @@ import com.grs24.mt.unistream.wsclient.PayOutTransfer;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.security.cert.Certificate;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.xml.bind.JAXBElement;
@@ -69,6 +69,8 @@ public class MtUnistreamAdapter implements MtAdapter
         public static PrivateKey KEY_KEYSTORE_PKCS12;
         public static String KEY_KEYSTORE_PASSWORD;
         public static String KEY_KEY_PASSWORD;
+        public static String KEY_KEYSTORE_PKCS12_BODY;
+        public static String KEY_TRUSTSTORE_JKS_BODY;
         public static Certificate KEY_TRUSTSTORE_JKS;
         public static String KEY_TRUSTSTORE_PASSWORD;
         private static final Logger logger = LoggerFactory.getLogger(MtUnistreamAdapter.class);
@@ -450,11 +452,13 @@ public class MtUnistreamAdapter implements MtAdapter
                     KEY_USER_AUTHED_PASSWORD = init.getProperty(PROPERTY_KEY_USER_AUTHED_PASSWORD,String.valueOf(PROPERTY_KEY_USER_AUTHED_PASSWORD));
 
                     val = init.getProperty(PROPERTY_KEY_JKS_KEYSTORE_KEY, String.valueOf(PROPERTY_KEY_JKS_KEYSTORE_KEY));
+                    KEY_KEYSTORE_PKCS12_BODY = val;
                     KEY_KEYSTORE_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_KEYSTORE_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_KEYSTORE_PASSWORD));
                     KEY_KEY_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_KEY_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_KEY_PASSWORD));
                     KEY_KEYSTORE_PKCS12 = KeyTools.getPrivateKeyPKCS12(val, KEY_KEYSTORE_PASSWORD,KEY_KEY_PASSWORD);
 
                     val = init.getProperty(PROPERTY_KEY_JKS_TRUSTSTORE_KEY, String.valueOf(PROPERTY_KEY_JKS_TRUSTSTORE_KEY));
+                    KEY_TRUSTSTORE_JKS_BODY = val;
                     KEY_TRUSTSTORE_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD));
                     KEY_TRUSTSTORE_JKS = KeyTools.getCertificatesJKS(val, KEY_TRUSTSTORE_PASSWORD)[0];
                     

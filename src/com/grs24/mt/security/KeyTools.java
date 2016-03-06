@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.grs24.mt.unistream;
+package com.grs24.mt.security;
 
 import java.util.Base64;
 import java.io.ByteArrayInputStream;
