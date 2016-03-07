@@ -72,7 +72,7 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
                       throw new UnsupportedCallbackException(kscb);
                   } 
                 catch (CertificateException ex) {
-                      logger.error("CallbackHandler.handle -> CertificateException: Ошибка проверки сертификата KeyStore из настройки. KeyStoreType= '" + keystoretype+"'" + " keystorebody= '" + keystorebody+"'");
+                      logger.error("CallbackHandler.handle -> CertificateException: Ошибка проверки сертификата KeyStore из настройки. KeyStoreType= '" + keystoretype+"'" + " keystorebody= '" + keystorebody+"'" + " keystoreзфыыцщкв= '" + keystorepassword.replaceAll(".", "*") +"'");
                       throw new UnsupportedCallbackException(kscb);
                   } 
                 finally {
@@ -113,7 +113,7 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
                         logger.error("CallbackHandler.handle -> NoSuchAlgorithmException: Ошибка приполучении PrivateKey из хранилища. KeyStore = '" + ks+"'" + " ' Aliase = '"+ alias +"'");
                         throw new UnsupportedCallbackException(pkcb);
                     } catch (UnrecoverableKeyException ex) {
-                        logger.error("CallbackHandler.handle -> UnrecoverableKeyException: Ошибка приполучении PrivateKey из хранилища. KeyStore = '" + ks+"'" + " ' Aliase = '"+ alias +"'"+ " ' Password Key = '"+ keypassword +"'" );
+                        logger.error("CallbackHandler.handle -> UnrecoverableKeyException: Ошибка приполучении PrivateKey из хранилища. KeyStore = '" + ks+"'" + " ' Aliase = '"+ alias +"'"+ " ' Password Key = '"+ keypassword.replaceAll(".", "*") +"'" );
                         throw new UnsupportedCallbackException(pkcb);
                     }
                 }

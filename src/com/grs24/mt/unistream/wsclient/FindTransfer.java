@@ -44,7 +44,7 @@ public class FindTransfer {
         ftrm.setControlNumber(CommonLib.MakeString(_ControlNumber_QNAME, controlNumber));
         ftrm.setCurrencyID(val);
         ftrm.setSum(sum);
-        debug(ftrm);
+        if (logger.isDebugEnabled()) debug(ftrm);
         WebServiceSingl ws = WebServiceSingl.getInstance();
         //IWebService service = new WebService().getWS2007HttpBindingIWebService();
         FindTransferResponseMessage rm = ws.service.findTransfer(ftrm);

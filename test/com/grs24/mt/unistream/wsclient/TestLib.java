@@ -25,7 +25,7 @@ public class TestLib {
     private static final Integer KEY_SERVER_REQUEST_TUMEOUT = 3000;
     private static final Integer KEY_SERVER_CONNECT_TUMEOUT = 1000;
     private static final String KEY_KEYSTORE_PASSWORD = "123456";
-    private static final String KEY_KEY_PASSWORD = "123456";
+   // private static final String KEY_KEY_PASSWORD = "123456";
     private static final String KEY_TRUSTSTORE_PASSWORD = "123456";
     private static final String KEYSTOREPATH = "xws-security/prv_key_unistream.pfx";//"xws-security/client.jks";
     private static final String TRUSTSTOREPATH = "xws-security/server.jks";
