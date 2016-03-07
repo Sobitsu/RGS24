@@ -31,8 +31,9 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
   @Override
   public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException 
     {
-      for (Callback callback : callbacks) {
-          if (callback instanceof KeyStoreCallback) {
+      System.out.println(this.toString());
+        for (Callback callback : callbacks) {
+          if (callback instanceof KeyStoreCallback && this instanceof KeyStoreHandler) {
               KeyStore ks = null;
               KeyStoreCallback kscb = (KeyStoreCallback) callback;
               try {
@@ -53,9 +54,9 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
               }
               kscb.setKeystore(ks);
           }
-          if (callback instanceof TrustStoreCallback) {
+          if (callback instanceof KeyStoreCallback && this instanceof TrustStoreHandler) {
               KeyStore ks = null;
-              TrustStoreCallback tscb = (TrustStoreCallback) callback;
+               KeyStoreCallback kscb = (KeyStoreCallback) callback;
               try {
                   ks = KeyStore.getInstance("JKS");
               } catch (KeyStoreException ex) {
@@ -72,7 +73,7 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
               }                finally {
                   keyStoreIS.close();
               }
-              tscb.setTrustStore(ks);
+              kscb.setKeystore(ks);
           }
           if (callback instanceof PrivateKeyCallback) {
               PrivateKeyCallback pkcb = (PrivateKeyCallback) callback;
