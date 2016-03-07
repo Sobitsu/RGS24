@@ -13,10 +13,8 @@ import com.grs24.msg.IndividualHolder;
 import com.grs24.msg.PersonHolder;
 import com.grs24.mt.RemittanceException;
 import com.grs24.mt.RemittanceHolder;
-import java.io.File;
-import java.io.FileInputStream;
+import com.grs24.mt.unistream.wsclient.TestLib;
 import java.io.IOException;
-import java.util.Properties;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -24,7 +22,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.math.BigDecimal;
-import java.util.Base64;
 
 /**
  *
@@ -32,48 +29,11 @@ import java.util.Base64;
  */
 public class MtUnistreamAdapterTest {
     
-    private static final String KEY_USER_AUTHED_APIKEY = "1wwteyFGFew624";
-    private static final String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
-    private static final String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
-    private static final Integer KEY_BANK_ID = 383589;
-    private static final Integer KEY_PARTICIPATOR_ID = 383589;
-    private static final Integer KEY_SERVER_REQUEST_TUMEOUT = 3000;
-    private static final Integer KEY_SERVER_CONNECT_TUMEOUT = 1000;
-    private static final String KEY_KEYSTORE_PASSWORD = "123456";
-    private static final String KEY_KEY_PASSWORD = "1234567890";
-    private static final String KEY_TRUSTSTORE_PASSWORD = "123456";
-    private static final String KEYSTOREPATH = "xws-security/client.jks";
-    private static final String TRUSTSTOREPATH = "xws-security/server.jks";
-    private static MtUnistreamAdapter instance;
-    
-    public MtUnistreamAdapterTest() {
-    }
-    
-    private static String computeB64(String filename) throws IOException {
-        File target = new File(filename);
-        FileInputStream stream = (new FileInputStream(target));
-        byte[] buffer = new byte[stream.available()];
-        stream.read(buffer);
-        return Base64.getEncoder().encodeToString(buffer);
-    }
-    
     @BeforeClass
     public static void setUpClass() throws IOException {
-        Properties cfg = new Properties();
-        cfg.setProperty("APIKEY", KEY_USER_AUTHED_APIKEY);
-        cfg.setProperty("LOGIN", KEY_USER_AUTHED_LOGIN);
-        cfg.setProperty("PASSWORD", KEY_USER_AUTHED_PASSWORD);
-        cfg.setProperty("BANKID", KEY_BANK_ID.toString());
-        cfg.setProperty("PARTID",KEY_PARTICIPATOR_ID.toString());
-        cfg.setProperty("SERVER.REQUEST_TIMEOUT", KEY_SERVER_REQUEST_TUMEOUT.toString());
-        cfg.setProperty("SERVER.CONNECT_TIMEOUT", KEY_SERVER_CONNECT_TUMEOUT.toString());
-        cfg.setProperty("KEYSTORE.PASSWORD", KEY_KEYSTORE_PASSWORD);
-        cfg.setProperty("KEY.PASSWORD", KEY_KEY_PASSWORD);
-        cfg.setProperty("TRUSTSTORE.PASSWORD", KEY_TRUSTSTORE_PASSWORD);
-        cfg.setProperty("KEYSTORE.PKCS12", computeB64(KEYSTOREPATH));
-        cfg.setProperty("TRUSTSTORE.JKS",  computeB64(TRUSTSTOREPATH));
-        instance = new MtUnistreamAdapter();
-        instance.init(cfg);    
+        TestLib.setUpClass();
+    }
+    public MtUnistreamAdapterTest() {
     }
     
     @AfterClass
@@ -528,7 +488,7 @@ RUB
         approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
         String dstCountry = "Russia";
-        RemittanceHolder[] result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+        RemittanceHolder[] result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
         assertNotNull(result[0]);
         assertEquals(result[0].getMtID(),"16016603");
         mtcn = "036530144512";
@@ -539,13 +499,7 @@ RUB
         approxDstFunds.setCur("RUB");
         orgCountry = "RUS";
         dstCountry = "RUS";
-        try {
-            result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
-        }
-        catch (RemittanceException ex)
-        {
-            if (ex.getCode() != 50003) fail("Ошибка валидации перевода");
-        }
+        result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
         System.out.println("moneySearch OK");
     }
 
@@ -564,7 +518,7 @@ RUB
         approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
         String dstCountry = "Russia";
-        RemittanceHolder[] result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+        RemittanceHolder[] result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
         assertNotNull(result[0]);
         String mtID = result[0].getMtID();
         PersonHolder payee = new PersonHolder();
@@ -599,7 +553,7 @@ RUB
         String docID = "";
         String docDate = "";
         try{
-            instance.moneyPay(mtID, mtcn, payee, docID, docDate);
+            TestLib.instance.moneyPay(mtID, mtcn, payee, docID, docDate);
         }
         catch (RemittanceException ex) {
             if (ex.getCode() == 30000)  {System.out.println("moneyHold OK");}
@@ -619,7 +573,7 @@ RUB
         String mtcn = "";
         PersonHolder payee = null;
         try {
-            instance.moneyHold(mtID, mtcn, payee);}
+            TestLib.instance.moneyHold(mtID, mtcn, payee);}
         catch (RemittanceException ex) {
             if (ex.getCode() == 30001)  {System.out.println("moneyHold OK");}
         }
@@ -635,7 +589,7 @@ RUB
         String mtcn = "";
         PersonHolder payee = null;
         try {
-            instance.moneyUnhold(mtID, mtcn, payee);
+            TestLib.instance.moneyUnhold(mtID, mtcn, payee);
             }
         catch (RemittanceException ex) {
             if (ex.getCode() == 30001)  {System.out.println("moneyUnhold OK");}
