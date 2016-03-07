@@ -31,7 +31,7 @@ public class KeyTools {
 	 * @param keyStorePassword - пароль защиты файла.
 	 * @return PrivateKey - секретный ключ или null.
 	 */
-	public static PrivateKey getPrivateKeyPKCS12(String keyBody, String keyStorePassword,String keyPassword) throws GeneralSecurityException {
+	public static PrivateKey getPrivateKeyPKCS12(String keyBody, String keyStorePassword,String keyPassword, String keyType) throws GeneralSecurityException {
 		Key key = null;
 		KeyStore ks = null;
 
@@ -53,7 +53,7 @@ public class KeyTools {
 		}
 		
 		try {
-			ks = KeyStore.getInstance("JKS");
+			ks = KeyStore.getInstance(keyType);
                         
 			ByteArrayInputStream keyStoreIS = new ByteArrayInputStream(Base64.getDecoder().decode(keyBody));
 			ks.load(keyStoreIS, keyStorePassword.toCharArray());

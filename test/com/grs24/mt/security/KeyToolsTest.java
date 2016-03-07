@@ -24,6 +24,7 @@ import static org.junit.Assert.*;
  */
 public class KeyToolsTest {
     private final String KEYSTOREPATH = "xws-security/client.jks";
+    private final String KEYSTOREPATHNEW = "xws-security/prv_key_unistream.pfx";
     private final String KEYSTOREPASS = "123456";
     private final String TRUSTSTOREPATH = "xws-security/server.jks";
     private final String TRUSTSTOREPASS = "123456";
@@ -65,7 +66,15 @@ public class KeyToolsTest {
         String keyBody = computeB64(file);
         String keyStorePassword = KEYSTOREPASS;
         String keyPassword = KEYPASS;
-        PrivateKey result = KeyTools.getPrivateKeyPKCS12(keyBody, keyStorePassword, keyPassword);
+        PrivateKey result = KeyTools.getPrivateKeyPKCS12(keyBody, keyStorePassword, keyPassword, "JKS");
+        assertNotNull(result);
+        assertEquals(result.getAlgorithm(),"RSA");
+
+        file = new File(KEYSTOREPATHNEW);
+        keyBody = computeB64(file);
+        keyStorePassword = KEYSTOREPASS;
+        keyPassword = KEYSTOREPASS;
+        result = KeyTools.getPrivateKeyPKCS12(keyBody, keyStorePassword, keyPassword, "PKCS12");
         assertNotNull(result);
         assertEquals(result.getAlgorithm(),"RSA");
     }

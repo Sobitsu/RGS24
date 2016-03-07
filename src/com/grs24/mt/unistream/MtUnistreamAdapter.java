@@ -77,11 +77,11 @@ public class MtUnistreamAdapter implements MtAdapter
         private final String PROPERTY_KEY_USER_AUTHED_PASSWORD = "PASSWORD";
         private final String PROPERTY_KEY_JKS_KEYSTORE_KEY = "KEYSTORE.PKCS12";
         private final String PROPERTY_KEY_JKS_KEYSTORE_PASSWORD = "KEYSTORE.PASSWORD";
-        private final String PROPERTY_KEY_JKS_KEYSTORE_TYPE = "KEYSTORE.TYPE";
+        //private final String PROPERTY_KEY_JKS_KEYSTORE_TYPE = "KEYSTORE.TYPE";
         private final String PROPERTY_KEY_JKS_KEY_PASSWORD = "KEY.PASSWORD";
         private final String PROPERTY_KEY_JKS_TRUSTSTORE_KEY = "TRUSTSTORE.JKS";
         private final String PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD = "TRUSTSTORE.PASSWORD";
-        private final String PROPERTY_KEY_JKS_TRUSTSTORE_TYPE = "TRUSTSTORE.TYPE";
+        //private final String PROPERTY_KEY_JKS_TRUSTSTORE_TYPE = "TRUSTSTORE.TYPE";
         private final String PROPERTY_KEY_BANK_ID = "BANKID";
         private final String PROPERTY_KEY_PART_ID = "PARTID";
         private final Integer DEFAULT_REQUEST_TIMEOUT = 3000;
@@ -433,11 +433,9 @@ public class MtUnistreamAdapter implements MtAdapter
 * SERVER.CONNECT_TIMEOUT - Таймаут ожидания установки соединения с сервером в милисекундах
 * KEYSTORE.PKCS12 - base64 строка представляющая байты хранилища секретного ключа и сертификатов в pkcs#12 формате
 * KEYSTORE.PASSWORD - пароль к хранилищу
-* KEYSTORE.TYPE - тип хранилища с сертификатами по default JKS
 * KEY.PASSWORD - парль приватного ключа
 * TRUSTSTORE.JKS - base64 строка представляющая байты хранилища доверенных сертификатов в JKS формате
 * TRUSTSTORE.PASSWORD - пароль хранилища доверенных сертификатов
-* TRUSTSTORE.TYPE - тип хранилища с сертификатами по default JKS
 * @throws IOException в случае проблем инициализации (например, ошибка соединения 
 * с СУБД.
 * 
@@ -455,14 +453,16 @@ public class MtUnistreamAdapter implements MtAdapter
                     KEY_KEYSTORE_PKCS12_BODY = val;
                     KEY_KEYSTORE_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_KEYSTORE_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_KEYSTORE_PASSWORD));
                     KEY_KEY_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_KEY_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_KEY_PASSWORD));
-                    KEY_KEYSTORE_TYPE = init.getProperty(PROPERTY_KEY_JKS_KEYSTORE_TYPE, String.valueOf(PROPERTY_KEY_JKS_KEYSTORE_TYPE));
-                    if (KEY_KEYSTORE_TYPE.isEmpty()) KEY_KEYSTORE_TYPE = "JKS";
+                    //KEY_KEYSTORE_TYPE = init.getProperty(PROPERTY_KEY_JKS_KEYSTORE_TYPE, String.valueOf(PROPERTY_KEY_JKS_KEYSTORE_TYPE));
+                    //if (KEY_KEYSTORE_TYPE.isEmpty()) 
+                    KEY_KEYSTORE_TYPE = "PKCS12";
                     
                     val = init.getProperty(PROPERTY_KEY_JKS_TRUSTSTORE_KEY, String.valueOf(PROPERTY_KEY_JKS_TRUSTSTORE_KEY));
                     KEY_TRUSTSTORE_JKS_BODY = val;
                     KEY_TRUSTSTORE_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD));
-                    KEY_TRUSTSTORE_TYPE = init.getProperty(PROPERTY_KEY_JKS_TRUSTSTORE_TYPE, String.valueOf(PROPERTY_KEY_JKS_TRUSTSTORE_TYPE));
-                    if (KEY_TRUSTSTORE_TYPE.isEmpty()) KEY_TRUSTSTORE_TYPE = "JKS";
+                    //KEY_TRUSTSTORE_TYPE = init.getProperty(PROPERTY_KEY_JKS_TRUSTSTORE_TYPE, String.valueOf(PROPERTY_KEY_JKS_TRUSTSTORE_TYPE));
+                    //if (KEY_TRUSTSTORE_TYPE.isEmpty()) 
+                    KEY_TRUSTSTORE_TYPE = "JKS";
                     
                     val = init.getProperty(PROPERTY_KEY_BANK_ID, String.valueOf(PROPERTY_KEY_BANK_ID));
                     
