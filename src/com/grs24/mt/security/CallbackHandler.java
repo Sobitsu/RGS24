@@ -21,17 +21,20 @@ import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.security.auth.callback.UnsupportedCallbackException;
-import javax.security.auth.message.callback.TrustStoreCallback;
+import org.slf4j.LoggerFactory;
 /**
  *
  * @author Dale
  */
 public abstract class CallbackHandler implements javax.security.auth.callback.CallbackHandler {
-
+  private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CallbackHandler.class);
+  
   @Override
   public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException 
     {
-      System.out.println(this.toString());
+        if (logger.isDebugEnabled()) {
+            logger.debug("CallbackHandler.handle: <- callbacks ='"+callbacks.toString());
+	}
         for (Callback callback : callbacks) {
           if (callback instanceof KeyStoreCallback && this instanceof KeyStoreHandler) {
               KeyStore ks = null;
