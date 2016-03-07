@@ -43,8 +43,8 @@ public class FindTransferTest {
     @Test
     public void testFindTransfer() throws Exception {
         System.out.println("FindTransfer");
-        String controlNumber = "475500139583";
-        Double sum = 900D;
+        String controlNumber = "743818837598";
+        Double sum = 50000D;
         Integer val = GetCurrency.getCurrencyID("RUB");
         Integer bankId = TestLib.instance.KEY_BANK_ID;
         FindTransferResponseMessage result = FindTransfer.FindTransfer(controlNumber, sum, val, bankId);
@@ -52,7 +52,7 @@ public class FindTransferTest {
         assertFalse(result.getTransfer().isNil());
         assertNotNull(result.getTransfer().getValue());
         assertFalse(result.getTransfer().getValue().getAmounts().isNil());
-        assertEquals(result.getTransfer().getValue().getID().longValue(),16016598L);
+        assertEquals(result.getTransfer().getValue().getID().longValue(),16016603L);
         System.out.println("FindTransfer OK");
     }
 }

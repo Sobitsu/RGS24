@@ -499,7 +499,13 @@ RUB
         approxDstFunds.setCur("RUB");
         orgCountry = "RUS";
         dstCountry = "RUS";
-        result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+        try {
+                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                }
+        catch (RemittanceException ex) 
+                {
+                 if (ex.getCode() == 50003)  {System.out.println("moneySearch OK");}
+                }
         System.out.println("moneySearch OK");
     }
 
