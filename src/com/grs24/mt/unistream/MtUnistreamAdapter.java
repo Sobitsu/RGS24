@@ -433,7 +433,7 @@ public class MtUnistreamAdapter implements MtAdapter
 * SERVER.CONNECT_TIMEOUT - Таймаут ожидания установки соединения с сервером в милисекундах
 * KEYSTORE.PKCS12 - base64 строка представляющая байты хранилища секретного ключа и сертификатов в pkcs#12 формате
 * KEYSTORE.PASSWORD - пароль к хранилищу
-* KEY.PASSWORD - парль приватного ключа
+* KEY.PASSWORD - пароль приватного ключа, в случае если не задан берет значение из  KEYSTORE.PASSWORD
 * TRUSTSTORE.JKS - base64 строка представляющая байты хранилища доверенных сертификатов в JKS формате
 * TRUSTSTORE.PASSWORD - пароль хранилища доверенных сертификатов
 * @throws IOException в случае проблем инициализации (например, ошибка соединения 
