@@ -12,14 +12,14 @@ import com.sun.xml.wss.impl.callback.PrivateKeyCallback;
 import java.io.ByteArrayInputStream;
 import java.security.KeyStore;
 import java.io.IOException;
+import java.security.Key;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Enumeration;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import org.slf4j.LoggerFactory;
 /**
@@ -36,61 +36,88 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
             logger.debug("CallbackHandler.handle: <- callbacks ='"+callbacks.toString());
 	}
         for (Callback callback : callbacks) {
-          if (callback instanceof KeyStoreCallback && this instanceof KeyStoreHandler) {
-              KeyStore ks = null;
-              KeyStoreCallback kscb = (KeyStoreCallback) callback;
-              try {
-                  ks = KeyStore.getInstance("JKS");
-              } catch (KeyStoreException ex) {
-                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-              }
-              ByteArrayInputStream keyStoreIS = new ByteArrayInputStream(Base64.getDecoder().decode(MtUnistreamAdapter.KEY_KEYSTORE_PKCS12_BODY));
-              try {
-                  ks.load(keyStoreIS, MtUnistreamAdapter.KEY_KEYSTORE_PASSWORD.toCharArray());
-              }
-              catch (NoSuchAlgorithmException ex) {
-                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-              } catch (CertificateException ex) {
-                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-              }                finally {
-                  keyStoreIS.close();
-              }
-              kscb.setKeystore(ks);
-          }
-          if (callback instanceof KeyStoreCallback && this instanceof TrustStoreHandler) {
-              KeyStore ks = null;
-               KeyStoreCallback kscb = (KeyStoreCallback) callback;
-              try {
-                  ks = KeyStore.getInstance("JKS");
-              } catch (KeyStoreException ex) {
-                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-              }
-              ByteArrayInputStream keyStoreIS = new ByteArrayInputStream(Base64.getDecoder().decode(MtUnistreamAdapter.KEY_TRUSTSTORE_JKS_BODY));
-              try {
-                  ks.load(keyStoreIS, MtUnistreamAdapter.KEY_TRUSTSTORE_PASSWORD.toCharArray());
-              }
-              catch (NoSuchAlgorithmException ex) {
-                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-              } catch (CertificateException ex) {
-                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-              }                finally {
-                  keyStoreIS.close();
-              }
-              kscb.setKeystore(ks);
-          }
-          if (callback instanceof PrivateKeyCallback) {
-              PrivateKeyCallback pkcb = (PrivateKeyCallback) callback;
-              pkcb.setAlias("6583c384-94e1-4b26-ad40-f88dc77b14e0");
-              try {
-                  pkcb.setKey((PrivateKey) pkcb.getKeystore().getKey("6583c384-94e1-4b26-ad40-f88dc77b14e0", MtUnistreamAdapter.KEY_KEY_PASSWORD.toCharArray()));
-              } catch (KeyStoreException ex) {
-                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-              } catch (NoSuchAlgorithmException ex) {
-                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-              } catch (UnrecoverableKeyException ex) {
-                  Logger.getLogger(CallbackHandler.class.getName()).log(Level.SEVERE, null, ex);
-              }
-          }
-      }
+            if (logger.isDebugEnabled()) {
+                logger.debug("CallbackHandler.handle: <- callback ='"+callback.toString() +"'");
+                }
+            if (callback instanceof KeyStoreCallback) {
+                KeyStore ks = null;
+                ByteArrayInputStream keyStoreIS;
+                String keystorepassword = null;
+                String keystorebody = null;
+                KeyStoreCallback kscb = (KeyStoreCallback) callback;
+                String keystoretype = null;
+                if (this instanceof KeyStoreHandler) {
+                          keystoretype = MtUnistreamAdapter.KEY_KEYSTORE_TYPE;
+                          keystorebody = MtUnistreamAdapter.KEY_KEYSTORE_PKCS12_BODY;
+                          keystorepassword = MtUnistreamAdapter.KEY_KEYSTORE_PASSWORD;
+                      }
+                if (this instanceof TrustStoreHandler) {
+                          keystoretype = MtUnistreamAdapter.KEY_TRUSTSTORE_TYPE;
+                          keystorebody = MtUnistreamAdapter.KEY_TRUSTSTORE_JKS_BODY;
+                          keystorepassword = MtUnistreamAdapter.KEY_TRUSTSTORE_PASSWORD;
+                      }
+                try {
+                    ks = KeyStore.getInstance(keystoretype);
+                } 
+                catch (KeyStoreException ex) {
+                      logger.error("CallbackHandler.handle: Ошибка приполучении KeyStore. KeyStoreType = '" + keystoretype+"'");
+                      throw new UnsupportedCallbackException(kscb);
+                }
+                keyStoreIS = new ByteArrayInputStream(Base64.getDecoder().decode(keystorebody));
+                try {
+                    ks.load(keyStoreIS, keystorepassword.toCharArray());
+                }
+                catch (NoSuchAlgorithmException ex) {
+                      logger.error("CallbackHandler.handle -> NoSuchAlgorithmException: Ошибка определения алгоритма KeyStore из настройки. KeyStoreType= '" + keystoretype +"'" + " keystorebody '" + keystorebody+"'");
+                      throw new UnsupportedCallbackException(kscb);
+                  } 
+                catch (CertificateException ex) {
+                      logger.error("CallbackHandler.handle -> CertificateException: Ошибка проверки сертификата KeyStore из настройки. KeyStoreType= '" + keystoretype+"'" + " keystorebody= '" + keystorebody+"'");
+                      throw new UnsupportedCallbackException(kscb);
+                  } 
+                finally {
+                        keyStoreIS.close();
+                    }
+                kscb.setKeystore(ks);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("CallbackHandler.handle: <- KeyStore ='"+kscb.getKeystore()+ "'");
+                }
+            }
+            if (callback instanceof PrivateKeyCallback) {
+                PrivateKeyCallback pkcb = (PrivateKeyCallback) callback;
+                KeyStore ks = pkcb.getKeystore();
+                Key key;
+                String keypassword = MtUnistreamAdapter.KEY_KEY_PASSWORD;
+                Enumeration<String> aliases;
+                try {
+                    aliases = ks.aliases();
+                } catch (KeyStoreException ex) {
+                    logger.error("CallbackHandler.handle: Ошибка приполучении Алиаса. KeyStore = '" + ks+"'");
+                    throw new UnsupportedCallbackException(pkcb);
+                }
+                while (aliases.hasMoreElements()) {
+                    String alias = (String) aliases.nextElement();
+                    try {
+                        if (ks.isKeyEntry(alias)) {
+                            key = ks.getKey(alias, keypassword.toCharArray());
+                            if (key instanceof PrivateKey) {
+                                if (logger.isDebugEnabled())
+                                    logger.debug("CallbackHandler.handle: -> key="+key);
+                                pkcb.setKey((PrivateKey) key);
+                            }
+                        }
+                    } catch (KeyStoreException ex) {
+                        logger.error("CallbackHandler.handle: Ошибка приполучении PrivateKey из хранилища. KeyStore = '" + ks+"'" + " ' Aliase = '"+ alias +"'");
+                        throw new UnsupportedCallbackException(pkcb);
+                    } catch (NoSuchAlgorithmException ex) {
+                        logger.error("CallbackHandler.handle -> NoSuchAlgorithmException: Ошибка приполучении PrivateKey из хранилища. KeyStore = '" + ks+"'" + " ' Aliase = '"+ alias +"'");
+                        throw new UnsupportedCallbackException(pkcb);
+                    } catch (UnrecoverableKeyException ex) {
+                        logger.error("CallbackHandler.handle -> UnrecoverableKeyException: Ошибка приполучении PrivateKey из хранилища. KeyStore = '" + ks+"'" + " ' Aliase = '"+ alias +"'");
+                        throw new UnsupportedCallbackException(pkcb);
+                    }
+                }
+            }
         }
     }
+}
