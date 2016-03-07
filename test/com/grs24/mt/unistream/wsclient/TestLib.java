@@ -52,7 +52,7 @@ public class TestLib {
         cfg.setProperty("SERVER.REQUEST_TIMEOUT", KEY_SERVER_REQUEST_TUMEOUT.toString());
         cfg.setProperty("SERVER.CONNECT_TIMEOUT", KEY_SERVER_CONNECT_TUMEOUT.toString());
         cfg.setProperty("KEYSTORE.PASSWORD", KEY_KEYSTORE_PASSWORD);
-        cfg.setProperty("KEY.PASSWORD", KEY_KEY_PASSWORD);
+       // cfg.setProperty("KEY.PASSWORD", KEY_KEY_PASSWORD);
         cfg.setProperty("TRUSTSTORE.PASSWORD", KEY_TRUSTSTORE_PASSWORD);
         cfg.setProperty("KEYSTORE.PKCS12", computeB64(KEYSTOREPATH));
         cfg.setProperty("TRUSTSTORE.JKS",  computeB64(TRUSTSTOREPATH));

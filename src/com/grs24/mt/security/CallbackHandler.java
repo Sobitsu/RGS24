@@ -113,7 +113,7 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
                         logger.error("CallbackHandler.handle -> NoSuchAlgorithmException: Ошибка приполучении PrivateKey из хранилища. KeyStore = '" + ks+"'" + " ' Aliase = '"+ alias +"'");
                         throw new UnsupportedCallbackException(pkcb);
                     } catch (UnrecoverableKeyException ex) {
-                        logger.error("CallbackHandler.handle -> UnrecoverableKeyException: Ошибка приполучении PrivateKey из хранилища. KeyStore = '" + ks+"'" + " ' Aliase = '"+ alias +"'");
+                        logger.error("CallbackHandler.handle -> UnrecoverableKeyException: Ошибка приполучении PrivateKey из хранилища. KeyStore = '" + ks+"'" + " ' Aliase = '"+ alias +"'"+ " ' Password Key = '"+ keypassword +"'" );
                         throw new UnsupportedCallbackException(pkcb);
                     }
                 }

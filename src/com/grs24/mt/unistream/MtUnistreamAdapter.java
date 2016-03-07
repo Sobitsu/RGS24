@@ -452,7 +452,8 @@ public class MtUnistreamAdapter implements MtAdapter
                     val = init.getProperty(PROPERTY_KEY_JKS_KEYSTORE_KEY, String.valueOf(PROPERTY_KEY_JKS_KEYSTORE_KEY));
                     KEY_KEYSTORE_PKCS12_BODY = val;
                     KEY_KEYSTORE_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_KEYSTORE_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_KEYSTORE_PASSWORD));
-                    KEY_KEY_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_KEY_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_KEY_PASSWORD));
+                    if (init.containsKey(PROPERTY_KEY_JKS_KEY_PASSWORD)) KEY_KEY_PASSWORD = init.getProperty(PROPERTY_KEY_JKS_KEY_PASSWORD, String.valueOf(PROPERTY_KEY_JKS_KEY_PASSWORD));
+                    else KEY_KEY_PASSWORD = KEY_KEYSTORE_PASSWORD;
                     //KEY_KEYSTORE_TYPE = init.getProperty(PROPERTY_KEY_JKS_KEYSTORE_TYPE, String.valueOf(PROPERTY_KEY_JKS_KEYSTORE_TYPE));
                     //if (KEY_KEYSTORE_TYPE.isEmpty()) 
                     KEY_KEYSTORE_TYPE = "PKCS12";

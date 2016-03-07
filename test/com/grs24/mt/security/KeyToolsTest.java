@@ -5,12 +5,22 @@
  */
 package com.grs24.mt.security;
 
+import com.grs24.mt.unistream.MtUnistreamAdapter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.Key;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.util.Base64;
+import java.util.Enumeration;
+import javax.security.auth.callback.UnsupportedCallbackException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -93,6 +103,44 @@ public class KeyToolsTest {
         assertEquals(result.getAlgorithm(),"RSA");
     }
 
+        /**
+     * Test of getPrivateKeyPKCS12file method, of class KeyTools.
+     */
+   /* @Test
+    public void testGetPrivateKeyPKCS12file1() throws Exception {
+        System.out.println("getPrivateKeyPKCS12file");
+        String filename = KEYSTOREPATH;
+        String keyStorePassword = KEYSTOREPASS;
+        String keyPassword = KEYPASS;
+        KeyStore ks = null;
+        PrivateKey result = KeyTools.getPrivateKeyPKCS12file(filename, keyStorePassword, keyPassword);
+        String keystoretype = MtUnistreamAdapter.KEY_KEYSTORE_TYPE;
+        String keystorebody = MtUnistreamAdapter.KEY_KEYSTORE_PKCS12_BODY;
+        String keystorepassword = MtUnistreamAdapter.KEY_KEYSTORE_PASSWORD;
+        ks = KeyStore.getInstance(keystoretype);
+        keyStoreIS = new ByteArrayInputStream(Base64.getDecoder().decode(keystorebody));
+        ks.load(keyStoreIS, keystorepassword.toCharArray());
+        keyStoreIS.close();
+        Key key;
+        String keypassword = MtUnistreamAdapter.KEY_KEY_PASSWORD;
+        Enumeration<String> aliases;
+        aliases = ks.aliases();
+        while (aliases.hasMoreElements()) {
+            String alias = (String) aliases.nextElement();
+            
+            try {
+                if (ks.isKeyEntry(alias)) {
+                    key = ks.getKey(alias, keypassword.toCharArray());
+                    if (key instanceof PrivateKey) {
+                        if (logger.isDebugEnabled())
+                            logger.debug("CallbackHandler.handle: -> key="+key);
+                    }
+                }
+        assertNotNull(result);
+        assertEquals(result.getAlgorithm(),"RSA");
+    }
+    */
+    
     /**
      * Test of getCertificatesJKS method, of class KeyTools.
      */
