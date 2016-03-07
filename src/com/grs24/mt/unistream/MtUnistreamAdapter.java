@@ -18,7 +18,6 @@ import com.grs24.mt.unistream.wsclient.FindTransfer;
 import com.grs24.mt.unistream.wsclient.GetCurrency;
 import com.grs24.mt.unistream.wsclient.GetTransferByID;
 import com.grs24.mt.unistream.wsclient.PayOutTransfer;
-import java.security.GeneralSecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.xml.bind.JAXBElement;
