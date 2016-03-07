@@ -7,6 +7,7 @@ package com.grs24.mt.unistream.wsclient;
 
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
+import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.GetTransferByIDRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.GetTransferByIDResponseMessage;
@@ -40,9 +41,7 @@ private static final Logger logger = LoggerFactory.getLogger(GetTransferByID.cla
             logger.debug("Finish GetTransferByIDResponseMessage");        
             return rm;
         }
-        catch (IOException ex)
-            {
-                 throw new IOException("Ошибка доступа к Unistream",ex); 
-            }
+    catch (IOException|WebServiceException ex)
+        {throw new IOException("Ошибка доступа к Unistream",ex);}
     }
 }

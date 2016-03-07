@@ -8,7 +8,9 @@ package com.grs24.mt.unistream.wsclient;
 import com.grs24.mt.RemittanceException;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
+import java.io.IOException;
 import javax.xml.bind.JAXBElement;
+import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.Bank;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetBanksChangesResponseMessage;
@@ -19,13 +21,18 @@ import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetBanksCha
  */
 public class GetBanks {
 
-    private static GetBanksChangesResponseMessage getBanksChanges() {
-        JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
-        org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetBanksChangesRequestMessage requestMessage = new org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetBanksChangesRequestMessage();
-        requestMessage.setAuthenticationHeader(ahh);
-        requestMessage.setUpdateCount(0L);
-        IWebService service = new WebService().getWS2007HttpBindingIWebService();
-        return service.getBanksChanges(requestMessage);
+    private static GetBanksChangesResponseMessage getBanksChanges() throws IOException {
+        try {
+            JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+            org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetBanksChangesRequestMessage requestMessage = new org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetBanksChangesRequestMessage();
+            requestMessage.setAuthenticationHeader(ahh);
+            requestMessage.setUpdateCount(0L);
+            IWebService service = new WebService().getWS2007HttpBindingIWebService();
+            return service.getBanksChanges(requestMessage);
+        }
+        catch (WebServiceException ex) {
+        throw new IOException("Ошибка доступа к Unistream",ex);
+        }
     }
 /**
 * Выполнение запроса на получение ID точки доступа (пока берется первая попавшаяся для указанного парента
@@ -33,7 +40,7 @@ public class GetBanks {
 * @return ID первой точки 
      * @throws com.grs24.mt.RemittanceException 
 */ 
-    public static Integer getBankId(Integer parrentID) throws RemittanceException {
+    public static Integer getBankId(Integer parrentID) throws RemittanceException, IOException {
         GetBanksChangesResponseMessage listBankXml = getBanksChanges();
         CommonLib.CheckFault(listBankXml);
         for (Bank i : listBankXml.getBanks().getValue().getBank())

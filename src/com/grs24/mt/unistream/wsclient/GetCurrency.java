@@ -8,6 +8,7 @@ package com.grs24.mt.unistream.wsclient;
 import com.grs24.mt.RemittanceException;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
+import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.Currency;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCurrenciesChangesResponseMessage;
@@ -73,7 +74,7 @@ public class GetCurrency {
                 WebServiceSingl ws = WebServiceSingl.getInstance();
                 return ws.service.getCurrenciesChanges(requestMessage);
         }
-        catch (IOException ex) 
+        catch (IOException|WebServiceException ex) 
             {
                 throw new IOException("Ошибка доступа к Unistream",ex); 
             }

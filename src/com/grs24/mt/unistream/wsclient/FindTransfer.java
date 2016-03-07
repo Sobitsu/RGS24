@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
+import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindTransferRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindTransferResponseMessage;
@@ -50,7 +51,7 @@ public class FindTransfer {
         logger.debug("Finish FindTransferResponseMessage");        
         return rm;
     }
-    catch (IOException ex)
+    catch (IOException|WebServiceException ex)
         {throw new IOException("Ошибка доступа к Unistream",ex);}
     }
     private static void debug(FindTransferRequestMessage ftrm)

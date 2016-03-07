@@ -8,6 +8,7 @@ package com.grs24.mt.unistream.wsclient;
 import com.grs24.mt.unistream.BaseDataParser;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
+import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.ObjectStatus;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.DocumentType;
@@ -29,10 +30,8 @@ public class GetDocumentType {
                 WebServiceSingl ws = WebServiceSingl.getInstance();
                 return ws.service.getDocumentTypeChanges(requestMessage);
             }
-        catch (IOException ex) 
-            {
-                throw new IOException("Ошибка доступа к Unistream",ex); 
-            }
+        catch (IOException|WebServiceException ex)
+            {throw new IOException("Ошибка доступа к Unistream",ex);}
     }
    
     /**

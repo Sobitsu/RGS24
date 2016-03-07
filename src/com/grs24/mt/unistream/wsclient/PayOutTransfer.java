@@ -2,6 +2,7 @@ package com.grs24.mt.unistream.wsclient;
 
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
+import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.PayoutTransferRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.PayoutTransferResponseMessage;
@@ -38,8 +39,10 @@ private static final Logger logger = LoggerFactory.getLogger(PayOutTransfer.clas
             logger.debug("Finish PayoutTransferResponseMessage");
             return rm;
         }
-            catch (IOException ex)
-        {throw new IOException("Ошибка доступа к Unistream",ex);}
+    catch (IOException|WebServiceException ex)
+        {
+                throw new IOException("Ошибка доступа к Unistream",ex);
+        }
     }
     private static void debug(PayoutTransferRequestMessage ptrm)
         {

@@ -7,6 +7,7 @@ package com.grs24.mt.unistream.wsclient;
 
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
+import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonResponseMessage;
@@ -56,7 +57,7 @@ public class FindPerson {
             logger.debug("Finish FindPersonResponseMessage");
             return rm;
         }
-        catch (IOException ex) 
+        catch (IOException|WebServiceException ex) 
             {
                 throw new IOException("Ошибка доступа к Unistream",ex); 
             }
