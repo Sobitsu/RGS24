@@ -519,7 +519,6 @@ public class MtUnistreamAdapter implements MtAdapter
 * code 30002: Перевод выплачен другим банком<br>
 * code 30003: Перевод отозван<br>
 * code 30004: Перевод отменен<br>
-* code 30000: Перевод оплачен в текущей сессии<br>
 * code 40001: Ошибка при поиске перевода<br>
 * code 50001: Не указан номер перевода<br>
 * code 50002: Не указаны валюта и сумма перевода<br>
@@ -573,9 +572,8 @@ public class MtUnistreamAdapter implements MtAdapter
 * @param mtID
 * @param mtcn Money Transfer Control Number, Контрольный Номер Перевода (КНП)
 * @param payee
-
-* @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
 * @throws java.io.IOException
+* @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса)<br>
 * code 30001 Операция HOLD не поддерживается Unistream<br>
 */
         @Override
@@ -588,9 +586,8 @@ public class MtUnistreamAdapter implements MtAdapter
 * @param mtID
 * @param mtcn Money Transfer Control Number, Контрольный Номер Перевода (КНП)
 * @param payee
-
-* @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) 
 * @throws java.io.IOException
+* @throws com.grs24.mt.RemittanceException в случае провала поиска (например, неверный формат запроса) <br>
 * code 30001 Операция UNHOLD не поддерживается Unistream<br>
 */
         @Override
