@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 public class GetTransferByID {
 private static final Logger logger = LoggerFactory.getLogger(GetTransferByID.class);
 /**
-* Выполнение запроса на поиск перевода по ID
+* Выполнение запроса на получение перевода по ID
 * @param transferId - ID перевода в СДП
 * @return Найденный перевод
 * 

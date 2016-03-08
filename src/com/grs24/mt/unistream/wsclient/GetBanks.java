@@ -35,10 +35,11 @@ public class GetBanks {
         }
     }
 /**
-* Выполнение запроса на получение ID точки доступа (пока берется первая попавшаяся для указанного парента
+* Выполнение запроса на получение ID точки доступа
 * @param parrentID - ID банка предка
 * @return ID первой точки 
-     * @throws com.grs24.mt.RemittanceException 
+* @throws com.grs24.mt.RemittanceException 
+* @throws java.io.IOException 
 */ 
     public static Integer getBankId(Integer parrentID) throws RemittanceException, IOException {
         GetBanksChangesResponseMessage listBankXml = getBanksChanges();

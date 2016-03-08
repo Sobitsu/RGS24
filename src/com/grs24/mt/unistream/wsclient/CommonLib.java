@@ -27,6 +27,7 @@ import javax.xml.namespace.QName;
 import org.datacontract.schemas._2004._07.wcfservicelib.ArrayOfDocument;
 import org.datacontract.schemas._2004._07.wcfservicelib.ArrayOfPhone;
 import org.datacontract.schemas._2004._07.wcfservicelib.Document;
+import org.datacontract.schemas._2004._07.wcfservicelib.Fault;
 import org.datacontract.schemas._2004._07.wcfservicelib.PersonAddress;
 import org.datacontract.schemas._2004._07.wcfservicelib.Phone;
 import org.datacontract.schemas._2004._07.wcfservicelib.PhoneType;
@@ -73,16 +74,17 @@ public class CommonLib {
     public static void CheckFault(WsResponse response) throws RemittanceException {
         if(!response.getFault().isNil())
         {
-            logger.error("Unistream returned error: {0}", response.getFault().getValue().getMessage().getValue());
+            logger.error("Unistream returned error:", response.getFault().getValue().getMessage().getValue());
+            Fault fault = response.getFault().getValue();
             int code = 0;
             String stan = null;
             String mtError = null;
-            if (response.getFault().getValue().getCode() != null) 
+            if (fault.getCode() != null) 
                 {
-                    stan = response.getFault().getValue().getCode().value();
-                    code = response.getFault().getValue().getCode().ordinal();
+                    stan = fault.getCode().value();
+                    code = fault.getCode().ordinal();
                 }
-            if (!response.getFault().getValue().getMessage().isNil()) mtError = response.getFault().getValue().getMessage().getValue();
+            if (!fault.getMessage().isNil()) mtError = fault.getMessage().getValue();
             throw new RemittanceException("Unistream returned error", code, stan,mtError);
         }
     }  
@@ -90,6 +92,10 @@ public class CommonLib {
 /**
 * Формирование авторизационного заголовка запросов
 * Используются настройки:
+* MtUnistreamAdapter.KEY_USER_AUTHED_APIKEY<br>
+* MtUnistreamAdapter.KEY_USER_AUTHED_LOGIN<br>
+* MtUnistreamAdapter.KEY_USER_AUTHED_PASSWORD<br>
+* 
 * @see MtUnistreamAdapter#KEY_USER_AUTHED_APIKEY
 * @see MtUnistreamAdapter#KEY_USER_AUTHED_LOGIN
 * @see MtUnistreamAdapter#KEY_USER_AUTHED_PASSWORD
@@ -110,9 +116,10 @@ public class CommonLib {
 
 /**
 * Формирование простого строкового JAXBElement
-* @param qname 
-* @param value
+* @param qname Квалификатор
+* @param value Значение 
 * @return строкового JAXBElement
+* @see QName
 */ 
     
     public static JAXBElement<String> MakeString(QName qname, String value)
@@ -123,9 +130,11 @@ public class CommonLib {
 /**
 * Формирование JAXBElement массива удостоверений личности<br>
 * Заполняется транспортный объект для хранения реквизитов удостоверений личности приводя их к ныжным типам<br>
-* @param credholder 
+* @param credholder Данные удостоверения личности клиента
 * @return массив JAXBElement 
 * @throws Exception в случае провала выполение
+* @see ArrayOfDocument
+* @see CredentialsHolder
 */ 
     public static JAXBElement<ArrayOfDocument> getDocuments(CredentialsHolder credholder) throws Exception {
         QName _ArrayOfDocument_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Documents");
@@ -149,9 +158,11 @@ public class CommonLib {
 /**
 * Формирование JAXBElement массива адресов<br>
 * Заполняется транспортный объект для хранения адресов приводя их к ныжным типам<br>
-* @param registr 
+* @param registr Информация об адресе клиента
 * @return массива JAXBElement
 * @throws Exception в случае провала выполение
+* @see PersonAddress
+* @see AddressHolder
 */ 
     public static JAXBElement<PersonAddress> getAdressElem(AddressHolder registr) throws Exception {
         QName _PersonAddress_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Address");
@@ -169,9 +180,11 @@ public class CommonLib {
 
 /**
 * Формирование JAXBElement массива номеров телефона
-* @param phones
+* Заполняется транспортный объект для хранения телефонных номеров приводя их к ныжным типам<br>
+* @param phones Телефон клиента
 * @return массива JAXBElement
 * @throws Exception в случае провала выполение
+* @see ArrayOfPhone
 */ 
     
     public static JAXBElement<ArrayOfPhone> getPhones(String[] phones) throws Exception {
@@ -193,9 +206,11 @@ public class CommonLib {
 
 /**
 * Преобразование Даты в XMLGregorianCalendar
-* @param date
+* Заполняется транспортный объект для хранения данных типа Date приводя их к ныжным типам<br>
+* @param date - Дата в Java формате
 * @return XMLGregorianCalendar
 * @throws Exception в случае провала выполение
+* @see XMLGregorianCalendar
 */ 
     
     
@@ -212,8 +227,9 @@ public class CommonLib {
 
 /**
 * Логгирование XML запросов к серверу
-* @param x
-
+* Ключевой момент если у класса нет аннотации @XmlRootElement вызывает JAXBException поэтому использовать надо очень осторожно. 
+* Возможно придется править автогенерированные классы
+* @param x - JAXB запрос
 */ 
     
     public static void printXml(Object x)

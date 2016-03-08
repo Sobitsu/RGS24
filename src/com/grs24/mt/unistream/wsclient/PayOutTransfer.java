@@ -17,11 +17,13 @@ import org.slf4j.LoggerFactory;
  */
 public class PayOutTransfer {
 private static final Logger logger = LoggerFactory.getLogger(PayOutTransfer.class);
-    /**
+/**
 * Выполнение запроса на поиск перевода
-* @param transfer - перевод к оплате
-*  @return результат обработки 
+* @param transfer - подготовленный перевод к оплате
+* @return результат обработки 
 * @throws IOException в случае провала выполение
+* @see Transfer
+* @see PayoutTransferResponseMessage
 */  
     public static PayoutTransferResponseMessage payoutTransfer(Transfer transfer) throws UnsupportedOperationException, IOException {
         try {

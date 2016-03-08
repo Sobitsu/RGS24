@@ -23,29 +23,11 @@ import org.slf4j.LoggerFactory;
 public class CreatePerson {
 private static final Logger logger = LoggerFactory.getLogger(CreatePerson.class);
     /**
-* Выполнение запроса на создание клиента
-* @param persh 
-* @XmlType(name = "Person", propOrder = {
-    "address",
-    "birthDate",
-    "birthPlace",
-    "documents",
-    "finDetails",
-    "firstName",
-    "firstNameLat",
-    "id",
-    "lastName",
-    "lastNameLat",
-    "middleName",
-    "middleNameLat",
-    "phones",
-    "rBank",
-    "residentships",
-    "unistreamCardNumber"
-}
+* Выполнение запроса на создание клиента в базе Unistream
+* @param persh Параметр типа Person c заполнеными реквизитами клиента
 * @return Созданный клиент
-* 
-* @throws IOException в случае провала выполение
+* @throws IOException в случае обрыва связи
+* @see Person
 */ 
     
     public static CreatePersonResponseMessage CreatePersonJAXb(Person persh) throws UnsupportedOperationException, IOException {

@@ -21,28 +21,12 @@ import org.slf4j.LoggerFactory;
 public class FindPerson {
  private static final Logger logger = LoggerFactory.getLogger(FindPerson.class);
     /**
-* Выполнение запроса на создание клиента
-* @param fprm 
-    @XmlType(name = "FindPersonRequestMessage", propOrder = {
-    "birthDate",
-    "docExpiryDate",
-    "docIssueDate",
-    "docNumber",
-    "docSeries",
-    "docTypeID",
-    "firstname",
-    "fullName",
-    "lastname",
-    "middlename",
-    "phone",
-    "phoneArea",
-    "phoneCountryID",
-    "phoneNumber",
-    "unistreamCardNumber"
-}
+* Выполнение запроса на поиск клиента
+* @param fprm Подготовленный транспортный объект
 * @return Найденный клиент
-* 
 * @throws IOException в случае провала выполение
+* @see FindPersonRequestMessage
+* @see FindPersonResponseMessage
 */ 
     public static FindPersonResponseMessage FindPersonJAXb(FindPersonRequestMessage fprm) throws UnsupportedOperationException,IOException {
         try {

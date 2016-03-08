@@ -30,7 +30,6 @@ public class FindTransfer {
 * @param val - код валюты в СДП
 * @param bankId - банк ИД 
 * @return Найденный перевод
-* 
 * @throws IOException в случае провала выполение
 */   
     public static FindTransferResponseMessage FindTransfer(String controlNumber, Double sum, Integer val, Integer bankId) throws UnsupportedOperationException, IOException {
