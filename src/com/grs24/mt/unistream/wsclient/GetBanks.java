@@ -38,8 +38,8 @@ public class GetBanks {
 * Выполнение запроса на получение ID точки доступа
 * @param parrentID - ID банка предка
 * @return ID первой точки 
-* @throws com.grs24.mt.RemittanceException 
-* @throws java.io.IOException 
+* @throws com.grs24.mt.RemittanceException в случае отрицательного разбора сообщения от UniStream
+* @throws java.io.IOException  - в случае недоступности UniStream
 */ 
     public static Integer getBankId(Integer parrentID) throws RemittanceException, IOException {
         GetBanksChangesResponseMessage listBankXml = getBanksChanges();

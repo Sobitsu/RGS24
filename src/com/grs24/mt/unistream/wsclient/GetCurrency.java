@@ -22,8 +22,8 @@ public class GetCurrency {
 * Получение ID валюты из справочника
 * @param сode - ISO 4217 символьный код валюты
 * @return ID валюты
-* @throws IOException в случае провала выполение
-* @throws com.grs24.mt.RemittanceException
+* @throws com.grs24.mt.RemittanceException в случае отрицательного разбора сообщения от UniStream
+* @throws java.io.IOException  - в случае недоступности UniStream
 */ 
     public static Integer getCurrencyID(String сode) throws IOException, RemittanceException {
         GetCurrenciesChangesResponseMessage rm = getCurrenciesChanges();
@@ -42,8 +42,8 @@ public class GetCurrency {
 * Выполнение запроса на получение кода валюты
 * @param currencyId - ID валюты
 * @return ISO 4217 символьный код валюты
-* @throws IOException в случае провала выполение
-* @throws com.grs24.mt.RemittanceException
+* @throws com.grs24.mt.RemittanceException в случае отрицательного разбора сообщения от UniStream
+* @throws java.io.IOException  - в случае недоступности UniStream
 */
     public static String getCurrencyCode(Integer currencyId) throws IOException, RemittanceException {
         GetCurrenciesChangesResponseMessage rm = getCurrenciesChanges();

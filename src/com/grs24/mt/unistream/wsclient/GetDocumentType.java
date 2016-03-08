@@ -5,6 +5,7 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
+import com.grs24.mt.RemittanceException;
 import com.grs24.mt.unistream.BaseDataParser;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
@@ -184,10 +185,11 @@ Inprisonment release certificate in Russian<br>
 /**
 *Получение справочника типов удостоверений личности
 * @return справочник типов удостоверений личности
-* @throws java.lang.Exception 
+* @throws com.grs24.mt.RemittanceException в случае отрицательного разбора сообщения от UniStream
+* @throws java.io.IOException  - в случае недоступности UniStream
 **/
    
-    public static String getDocumentTypeList() throws Exception {
+    public static String getDocumentTypeList() throws RemittanceException, IOException {
         GetDocumentTypeChangesResponseMessage rm = getDocumentTypeChanges();
         CommonLib.CheckFault(rm);
         if (rm.getDocumentTypes().isNil()) return null;

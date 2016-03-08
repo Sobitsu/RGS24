@@ -38,8 +38,8 @@ public class GetCountry {
 * Получение ID страны по ее коду из справочника
 * @param code - ISO 4217 символьный код страны
 * @return ID страны
-* @throws java.io.IOException
-* @throws com.grs24.mt.RemittanceException
+* @throws com.grs24.mt.RemittanceException в случае отрицательного разбора сообщения от UniStream
+* @throws java.io.IOException  - в случае недоступности UniStream
 */ 
     public static Integer getCountriesID(String code)throws IOException, RemittanceException {
         GetCountriesChangesResponseMessage rm = getCountriesChanges();
@@ -58,8 +58,8 @@ public class GetCountry {
 * Получение кода страны по ее ID из справочника
 * @param cuntryId - ID страны
 * @return ISO 4217 символьный код страны
-* @throws java.io.IOException
-* @throws com.grs24.mt.RemittanceException
+* @throws com.grs24.mt.RemittanceException в случае отрицательного разбора сообщения от UniStream
+* @throws java.io.IOException  - в случае недоступности UniStream
 * 
 */ 
 

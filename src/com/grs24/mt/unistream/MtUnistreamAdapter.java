@@ -42,14 +42,18 @@ import org.datacontract.schemas._2004._07.wcfservicelib.Person;
 /**
  *
  * @author Date
- * Класс реализует интерфейс MtAdapter
- * Для интеграции с СДП Unistream
- * В указанной СДП hold и unhold функции не реализуются
- * Для начала работы необходимо инициировать вызвав метод init данного класса и передав ему настройки
- * Метод moneySearch используется для поиска указанного перевода @see MtUnistreamAdapter#moneySearch
- * Метод moneyPay используется для выплаты предварительно найденного перевода @see MtUnistreamAdapter#moneyPay
- * При выплате перевода необходимо указывать ID перевода найденого предварительно через @see MtUnistreamAdapter#moneySearch
- */
+ * Класс реализует интерфейс MtAdapter<br>
+ * Для интеграции с СДП Unistream<br>
+ * В указанной СДП hold и unhold функции не реализуются<br>
+ * Для начала работы необходимо инициировать вызвав метод init данного класса и передав ему настройки<br>
+ * Метод moneySearch используется для поиска указанного перевода MtUnistreamAdapter.moneySearch <br>
+ * @see MtUnistreamAdapter#moneySearch
+ * Метод moneyPay используется для выплаты предварительно найденного перевода MtUnistreamAdapter.moneyPay <br>
+ * @see MtUnistreamAdapter#moneyPay
+ * При выплате перевода необходимо указывать ID перевода найденого предварительно через MtUnistreamAdapter.moneySearch<br>
+ * @see MtUnistreamAdapter#moneySearch
+ * 
+ **/
 public class MtUnistreamAdapter implements MtAdapter
         
 {       
