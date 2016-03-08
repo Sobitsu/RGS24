@@ -687,7 +687,6 @@ public class MtUnistreamAdapter implements MtAdapter
             consumer.setPerson(xperson);
             consumer.setRole(ConsumerRole.ACTUAL_RECEIVER);
             consumers.add(consumer);
-  //TODO Проверить данные о пункте выдачи
             Participator part = factory.createParticipator();
             part.setID(KEY_PARTICIPATOR_ID);
             part.setRole(ParticipatorRole.ACTUAL_RECEIVER_POS);
@@ -699,7 +698,6 @@ public class MtUnistreamAdapter implements MtAdapter
             PayoutTransferResponseMessage retval;
             logger.debug("Оплата перевода");
             retval = PayOutTransfer.payoutTransfer(transfer);
-            CommonLib.printXml(retval);
             CommonLib.CheckFault(retval);
             if (retval.getTransfer().isNil())
             {

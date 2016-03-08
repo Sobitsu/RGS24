@@ -53,7 +53,7 @@ public class FindPerson {
             //IWebService service = new WebService().getWS2007HttpBindingIWebService();
             WebServiceSingl ws = WebServiceSingl.getInstance();
             FindPersonResponseMessage rm = ws.service.findPerson(fprm);
-            debug(fprm);
+            if (logger.isDebugEnabled()) debug(fprm);
             logger.debug("Finish FindPersonResponseMessage");
             return rm;
         }

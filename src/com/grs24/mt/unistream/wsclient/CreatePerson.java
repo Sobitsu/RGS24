@@ -57,7 +57,7 @@ private static final Logger logger = LoggerFactory.getLogger(CreatePerson.class)
         JAXBElement<Person> persel = factory.createPerson(persh);
         cprm.setAuthenticationHeader(ahh);
         cprm.setPerson(persel);
-        debug(cprm);
+        if (logger.isDebugEnabled()) debug(cprm);
         //IWebService service = new WebService().getWS2007HttpBindingIWebService();
         WebServiceSingl ws = WebServiceSingl.getInstance();
         CreatePersonResponseMessage rm = ws.service.createPerson(cprm);

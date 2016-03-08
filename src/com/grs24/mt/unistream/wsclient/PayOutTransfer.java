@@ -32,7 +32,7 @@ private static final Logger logger = LoggerFactory.getLogger(PayOutTransfer.clas
             JAXBElement<Transfer> tr = factory.createTransfer(transfer);
             ptrm.setAuthenticationHeader(ahh);
             ptrm.setTransfer(tr);
-            debug(ptrm);
+            if (logger.isDebugEnabled()) debug(ptrm);
             WebServiceSingl ws = WebServiceSingl.getInstance();
             //IWebService service = new WebService().getWS2007HttpBindingIWebService();
             PayoutTransferResponseMessage rm = ws.service.payoutTransfer(ptrm);

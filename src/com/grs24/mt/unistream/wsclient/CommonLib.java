@@ -70,7 +70,16 @@ public class CommonLib {
         if(!response.getFault().isNil())
         {
             logger.error("Unistream returned error: {0}", response.getFault().getValue().getMessage().getValue());
-            throw new RemittanceException("Unistream returned error", BaseDataParser.parseInteger(response.getFault().getValue().getID().getValue()), response.getFault().getValue().getCode().value(),response.getFault().getValue().getMessage().getValue());
+            int code = 0;
+            String stan = null;
+            String mtError = null;
+            if (response.getFault().getValue().getCode() != null) 
+                {
+                    stan = response.getFault().getValue().getCode().value();
+                    code = response.getFault().getValue().getCode().ordinal();
+                }
+            if (!response.getFault().getValue().getMessage().isNil()) mtError = response.getFault().getValue().getMessage().getValue();
+            throw new RemittanceException("Unistream returned error", code, stan,mtError);
         }
     }  
 
