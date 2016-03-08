@@ -33,25 +33,38 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
 * Метод обработки CallBack от системы безопасности на подмену ключей и хранилищь с ключами<br>
 * Настройка вызова производится в файле META-INF/wsit-client.xml и META-INF/service.svc.wsdl_wsdl0.xml<br>
 * @param callbacks - Обрабатываемый запрос
+* @see Callback
 * Обрабатываются два типа CallBack:<br>
-* KeyStoreCallBack<br>
-* KeyStore получаются из параметров:<br>
-* MtUnistreamAdapter.KEY_KEYSTORE_PKCS12_BODY @see MtUnistreamAdapter#KEY_KEYSTORE_PKCS12_BODY<br>
-* MtUnistreamAdapter.KEY_TRUSTSTORE_JKS_BODY @see MtUnistreamAdapter#KEY_TRUSTSTORE_JKS_BODY<br>
+* KeyStoreCallBack
+* @see KeyStoreCallBack
+* KeyStore получаются из параметров:
+* MtUnistreamAdapter.KEY_KEYSTORE_PKCS12_BODY 
+* @see MtUnistreamAdapter#KEY_KEYSTORE_PKCS12_BODY<br>
+* MtUnistreamAdapter.KEY_TRUSTSTORE_JKS_BODY 
+* @see MtUnistreamAdapter#KEY_TRUSTSTORE_JKS_BODY<br>
 * Разделение происходит на основании источника вызова:<br>
-* KeyStoreHandler или TrustStoreHandler<br>
+* KeyStoreHandler
+* @see KeyStoreHandler
+* или 
+* TrustStoreHandler
+* @see TrustStoreHandler<br>
+
 * Пароли к KeyStore получаются из параметров: <br>
-* MtUnistreamAdapter.KEY_KEYSTORE_PASSWORD @see MtUnistreamAdapter#KEY_KEYSTORE_PASSWORD
-* MtUnistreamAdapter.KEY_TRUSTSTORE_PASSWORD @see MtUnistreamAdapter#KEY_TRUSTSTORE_PASSWORD
-* PrivateKeyCallback<br>
-* Из полученного на входе PrivateKeyCallback @see PrivateKeyCallback получаем KeyStore и из него получаем PrivateKey @PrivateKey
+* MtUnistreamAdapter.KEY_KEYSTORE_PASSWORD 
+* @see MtUnistreamAdapter#KEY_KEYSTORE_PASSWORD<br>
+* MtUnistreamAdapter.KEY_TRUSTSTORE_PASSWORD 
+* @see MtUnistreamAdapter#KEY_TRUSTSTORE_PASSWORD<br>
+* PrivateKeyCallback
+* @see PrivateKeyCallback<br>
+
+* Из полученного на входе PrivateKeyCallback 
+* @see PrivateKeyCallback 
+* получаем KeyStore и из него получаем PrivateKey 
+* @PrivateKey
 * @throws java.io.IOException
 * @throws javax.security.auth.callback.UnsupportedCallbackException
-* @see Callback
-* @see KeyStoreCallBack
-* @see PrivateKeyCallback
-* @see KeyStoreHandler
-* @see TrustStoreHandler
+
+
 * 
 */ 
   @Override

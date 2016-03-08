@@ -81,7 +81,8 @@ public class MtUnistreamAdapter implements MtAdapter
         public static String KEY_KEYSTORE_PASSWORD;
         /** Свойство тип хранилища ключей PRCS12**/
         public static String KEY_KEYSTORE_TYPE;
-        /** Свойство пароль доступа к клдючу в хранилищу ключей, по умолчанию равен @see MtUnistreamAdapter#KEY_KEYSTORE_PASSWORD **/
+        /** Свойство пароль доступа к клдючу в хранилищу ключей, по умолчанию равен 
+         *@see MtUnistreamAdapter#KEY_KEYSTORE_PASSWORD **/
         public static String KEY_KEY_PASSWORD;
         /** Свойство строка в base64 с хранилищем ключей в формате PKCS12**/
         public static String KEY_KEYSTORE_PKCS12_BODY;
