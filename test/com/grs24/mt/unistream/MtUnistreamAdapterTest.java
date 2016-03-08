@@ -564,8 +564,25 @@ RUB
                 }
         catch (RemittanceException ex) 
                 {
+                 assertEquals(ex.getCode(), 10011);
+                }
+
+        mtcn = "036530144512";
+        approxOrgFunds = null;
+        approxDstFunds = new FundsHolder();
+        bd = new BigDecimal("1900");
+        approxDstFunds.setAmount(bd);
+        approxDstFunds.setCur("RU");
+        orgCountry = "RUS";
+        dstCountry = "RUS";
+        try {
+                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                }
+        catch (RemittanceException ex) 
+                {
                  assertEquals(ex.getCode(), 50011);
                 }
+
         System.out.println("moneySearch OK");
     }
 

@@ -124,7 +124,7 @@ public class MtUnistreamAdapter implements MtAdapter
 
         private void mscheckInparam(String mtcn, FundsHolder approxOrgFunds, FundsHolder approxDstFunds, String orgCountry, String dstCountry) throws RemittanceException
         {
-            if (mtcn == null) {
+            if (mtcn == null || mtcn.isEmpty()) {
                     logger.error("Не указан номер перевода");
                     throw new RemittanceException("Не указан номер перевода", 50001, "","");
                 }
@@ -140,7 +140,7 @@ public class MtUnistreamAdapter implements MtAdapter
                     logger.error("Сумма перевода меньше нуля"); 
                     throw new RemittanceException("Cумма перевода меньше нуля", 50003, "","");            
             }
-            if (approxDstFunds.getCur() == null)    {
+            if (approxDstFunds.getCur() == null || approxDstFunds.getCur().isEmpty())    {
                     logger.error("Не указана валюта перевода"); 
                     throw new RemittanceException("Не валюта перевода", 50002, "","");
                 }

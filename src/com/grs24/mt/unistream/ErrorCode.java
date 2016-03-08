@@ -10,8 +10,8 @@ package com.grs24.mt.unistream;
  * @author Dale
  */
 public enum ErrorCode {
-    
-    PERSON_DOCUMENT_LISTED("PersonDocumentListed");
+
+    code_30001("Операция HOLD не поддерживается Unistream");
     
     private final String value;    
     ErrorCode(String v) {
