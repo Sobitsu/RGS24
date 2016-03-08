@@ -41,7 +41,14 @@ import org.datacontract.schemas._2004._07.wcfservicelib.Person;
 
 /**
  *
- * @author Ctac
+ * @author Date
+ * Класс реализует интерфейс MtAdapter
+ * Для интеграции с СДП Unistream
+ * В указанной СДП hold и unhold функции не реализуются
+ * Для начала работы необходимо инициировать вызвав метод init данного класса и передав ему настройки
+ * Метод moneySearch используется для поиска указанного перевода @see MtUnistreamAdapter#moneySearch
+ * Метод moneyPay используется для выплаты предварительно найденного перевода @see MtUnistreamAdapter#moneyPay
+ * При выплате перевода необходимо указывать ID перевода найденого предварительно через @see MtUnistreamAdapter#moneySearch
  */
 public class MtUnistreamAdapter implements MtAdapter
         
@@ -519,7 +526,6 @@ public class MtUnistreamAdapter implements MtAdapter
 * code 30002: Перевод выплачен другим банком<br>
 * code 30003: Перевод отозван<br>
 * code 30004: Перевод отменен<br>
-* code 40001: Ошибка при поиске перевода<br>
 * code 50001: Не указан номер перевода<br>
 * code 50002: Не указаны валюта и сумма перевода<br>
 * code 50003: Cумма перевода меньше нуля<br>
@@ -611,28 +617,30 @@ public class MtUnistreamAdapter implements MtAdapter
 * @param docDate дата документа-проводки - не обрабатывается
 * @throws java.io.IOException
 * @throws RemittanceException если возникли проблемы выдачи перевода в СДП.
-* <p> Ошибки при валидаци входных параметров</p>
+* <p> Нарушение целостности данных ответов от UniStream, необходимо проверить валидность автогенерированных пакетов</p>
 * code 10023: Нарушение целостности Unistream Не заполнено поле consumer в полученном переводе<br>
 * code 10024: Нарушение целостности Unistream Не заполнено поле persons в инфомации о клиенте<br>
 * code 10025: Нарушение целостности Unistream Не заполнено поле Participators в инфомации о переводе<br>
 * code 10026: Нарушение целостности Unistream при поиске перевода по ID<br>
+* code 40002: Нарушение целостности Unistream. Проблемы при поиске клиента<br>
+* code 40003: Нарушение целостности Unistream. Проблемы при создании клиента<br>
+* code 40004: Нарушение целостности Unistream. Проблемы при оплате перевода<br>
+* <p> Ошибки при генерации XML обектов обмена, необходимо проверить валидность автогенерированных пакетов </p>
 * code 20001: Ошибка приведения даты к Грегориансокму календарю<br>
-* code 20002: Ошибка обработки адреса<br>
-* code 20003: Ошибка обработки удостоверения личности<br>
-* code 20004: Ошибка обработки номера телефона<br>
+* code 20002: Ошибка при обработки адреса клиента<br>
+* code 20003: Ошибка при обработки удостоверения личности<br>
+* code 20004: Ошибка при обработки номера телефона<br>
+* <p> Контроль состояния перевода</p>
 * code 30000: Перевод оплачен в текущей сессии<br>
 * code 30002: Перевод выплачен другим банком<br>
 * code 30003: Перевод отозван<br>
 * code 30004: Перевод отменен<br>
-* code 40001: Не указан ID перевода<br>
-* code 40002: Проблемы при поиске клиента<br>
-* code 40003: Проблемы при создании клиента<br>
-* code 40004: Проблемы при оплате перевода<br>
+* <p> Ошибки при валидаци входных параметров</p>
 * code 50004: Не указан ID перевода<br>
 * code 50005: Не указан получатель перевода<br>
 * code 50006: Не указаны ФИО получателя перевода<br>
 * code 50007: Не указанна дата рождения получателя перевода<br>
-* code 50008: Не указанны  реквизиты удостоверения личности получателя перевода<br>
+* code 50008: Не указанны реквизиты удостоверения личности получателя перевода<br>
 * code 50009: Не указан телефон получателя перевода<br>
 * code 50010: Не указан адресс регистрации получателя перевода<br>
 */ 
@@ -641,29 +649,21 @@ public class MtUnistreamAdapter implements MtAdapter
             logger.debug("moneyPay start");  
             mpCheckInParam(mtID, payee);
             Transfer transfer = null;
-            if (mtID != null) 
-                {
-                    Integer id = BaseDataParser.parseInteger(mtID);
-                    GetTransferByIDResponseMessage gtrm;
-                    logger.debug("Получение перевода по ID");
-                    gtrm = GetTransferByID.getTransferByID(id);
-                    CommonLib.CheckFault(gtrm);
-                    if (!gtrm.getTransfer().isNil()) {
-                        transfer = gtrm.getTransfer().getValue();
-                        checkTransferStatus(transfer);
-                        }
-                    else
-                        {
-                            logger.error("Ошибка при поиске перевода");
-                            throw new RemittanceException("Ошибка при поиске перевода", 10026, "","");
-                        }
+            Integer id = BaseDataParser.parseInteger(mtID);
+            GetTransferByIDResponseMessage gtrm;
+            logger.debug("Получение перевода по ID");
+            gtrm = GetTransferByID.getTransferByID(id);
+            CommonLib.CheckFault(gtrm);
+            if (!gtrm.getTransfer().isNil()) {
+                transfer = gtrm.getTransfer().getValue();
+                checkTransferStatus(transfer);
                 }
             else
-            {
-            //по уму надо искать заного но нема информации о сумме и валюте перевода и найти его не удастся. поэтому генерим exception
-                logger.error("Не указан ID перевода");
-                throw new RemittanceException("Не достаточно информации для поиска перевода",40001,"","");
-            }
+                {
+                    logger.error("Ошибка при поиске перевода");
+                    throw new RemittanceException("Ошибка при поиске перевода", 10026, "","");
+                }
+
             Person persh = getPerson(payee);
             ObjectFactory factory = new ObjectFactory();
             if (transfer.getConsumers().isNil()){

@@ -480,6 +480,7 @@ RUB
     @Test
     public void testMoneySearch() throws Exception {
         System.out.println("moneySearch");
+        RemittanceHolder[] result = null;
         String mtcn = "743818837598";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
@@ -488,9 +489,10 @@ RUB
         approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
         String dstCountry = "Russia";
-        RemittanceHolder[] result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+        result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
         assertNotNull(result[0]);
         assertEquals(result[0].getMtID(),"16016603");
+
         mtcn = "036530144512";
         approxOrgFunds = null;
         approxDstFunds = new FundsHolder();
@@ -504,7 +506,65 @@ RUB
                 }
         catch (RemittanceException ex) 
                 {
-                 if (ex.getCode() == 50003)  {System.out.println("moneySearch OK");}
+                 assertEquals(ex.getCode(), 50003);
+                }
+
+        mtcn = "036530144512";
+        approxOrgFunds = null;
+        approxDstFunds = new FundsHolder();
+        bd = new BigDecimal("50000");
+        approxDstFunds.setAmount(bd);
+        approxDstFunds.setCur("RUB");
+        orgCountry = "RUS";
+        dstCountry = "RUS";
+        try {
+                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                }
+        catch (RemittanceException ex) 
+                {
+                 assertEquals(ex.getCode(), 30002);
+                }
+        
+        mtcn = "";
+        approxDstFunds = new FundsHolder();
+        bd = new BigDecimal("1900");
+        approxDstFunds.setAmount(bd);
+        approxDstFunds.setCur("RUB");
+        try {
+                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                }
+        catch (RemittanceException ex) 
+                {
+                 assertEquals(ex.getCode(), 50001);
+                }
+
+        mtcn = "036530144512";
+        approxOrgFunds = null;
+        approxDstFunds = new FundsHolder();
+        orgCountry = "RUS";
+        dstCountry = "RUS";
+        try {
+                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                }
+        catch (RemittanceException ex) 
+                {
+                 assertEquals(ex.getCode(), 50002);
+                }
+
+        mtcn = "036530144512";
+        approxOrgFunds = null;
+        approxDstFunds = new FundsHolder();
+        bd = new BigDecimal("1900");
+        approxDstFunds.setAmount(bd);
+        approxDstFunds.setCur("RUR");
+        orgCountry = "RUS";
+        dstCountry = "RUS";
+        try {
+                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                }
+        catch (RemittanceException ex) 
+                {
+                 assertEquals(ex.getCode(), 50011);
                 }
         System.out.println("moneySearch OK");
     }
@@ -581,8 +641,9 @@ RUB
         try {
             TestLib.instance.moneyHold(mtID, mtcn, payee);}
         catch (RemittanceException ex) {
-            if (ex.getCode() == 30001)  {System.out.println("moneyHold OK");}
+            assertEquals(ex.getCode(), 30001);
         }
+        System.out.println("moneyHold OK");
     }
 
     /**
@@ -598,9 +659,8 @@ RUB
             TestLib.instance.moneyUnhold(mtID, mtcn, payee);
             }
         catch (RemittanceException ex) {
-            if (ex.getCode() == 30001)  {System.out.println("moneyUnhold OK");}
-    }
-
+            assertEquals(ex.getCode(), 30001);
         }
-    
+        System.out.println("moneyUnhold OK");
+        }
 }
