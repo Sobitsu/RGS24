@@ -8,7 +8,6 @@ package com.grs24.mt.unistream.wsclient;
 import com.grs24.msg.AddressHolder;
 import com.grs24.msg.CredentialsHolder;
 import com.grs24.mt.RemittanceException;
-import com.grs24.mt.unistream.BaseDataParser;
 import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.WsResponse;
@@ -62,9 +61,14 @@ public class CommonLib {
     private final static QName _PostalCode_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "PostalCode");
 
 /**
-* Обработка отрицательного ответа от СДП 
-* @param response - ответ сервера
+* Обработка отрицательного ответа от СДП <br>
+* Проверяется значение поля Fault в ответе и генерируется exception в котором:<br>
+* code - номер ошибки в Unistream <br>
+* stan - код ошибки в Unistream <br>
+* mtError - расшифровка ошибки в Unistream <br>
+* @param response - ответ сервера<br>
 * @throws RemittanceException в случае провала выполение
+* @see Fault
 */ 
     public static void CheckFault(WsResponse response) throws RemittanceException {
         if(!response.getFault().isNil())
@@ -84,7 +88,11 @@ public class CommonLib {
     }  
 
 /**
-* Формирование авторизационного заголовка запросов  
+* Формирование авторизационного заголовка запросов
+* Используются настройки:
+* @see MtUnistreamAdapter#KEY_USER_AUTHED_APIKEY
+* @see MtUnistreamAdapter#KEY_USER_AUTHED_LOGIN
+* @see MtUnistreamAdapter#KEY_USER_AUTHED_PASSWORD
 * @return заголовок
 */ 
 
@@ -113,9 +121,10 @@ public class CommonLib {
         }
 
 /**
-* Формирование JAXBElement массива удостоверений личности
+* Формирование JAXBElement массива удостоверений личности<br>
+* Заполняется транспортный объект для хранения реквизитов удостоверений личности приводя их к ныжным типам<br>
 * @param credholder 
-* @return массива JAXBElement
+* @return массив JAXBElement 
 * @throws Exception в случае провала выполение
 */ 
     public static JAXBElement<ArrayOfDocument> getDocuments(CredentialsHolder credholder) throws Exception {
@@ -138,7 +147,8 @@ public class CommonLib {
         return result;
     }
 /**
-* Формирование JAXBElement массива адресов
+* Формирование JAXBElement массива адресов<br>
+* Заполняется транспортный объект для хранения адресов приводя их к ныжным типам<br>
 * @param registr 
 * @return массива JAXBElement
 * @throws Exception в случае провала выполение
