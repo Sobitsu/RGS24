@@ -589,11 +589,76 @@ RUB
     /**
      * Test of moneyPay method, of class MtUnistreamAdapter.
      * 19.658 сек
+     * 
+     * 
+     * call adapter with mtID=16016056, 
+     * payee=Person( fullName=FullNameType( 
+     * individual=Individual( 
+     * first=VALENTIN middle=OLEKSANDROVICH last=FEODOSOV) secondary=null) 
+     * identification=Credentials( credCountry=RUS 
+     * credType=1 serialNumber=012-876-321 credNumber=5011 issuer=Отдел милиции 
+     * issuerCode=777-666 issueCity=Москва issueDate=Tue Jan 12 00:00:00 MSK 2016 
+     * expiryDate=Thu Mar 01 00:00:00 MSK 2018) birthday=Mon Apr 01 00:00:00 MSD 1991 
+     * citizenCountry=TJK residentCountry=RUS phone[0]=+7 (812) 999-88-88 email=user@domain.com 
+     * registration=Address( country=RUS state=null city=Moscow zipCode=220068 street1=улица Кривая, дом 15, квартира 1 street2=null)), 
+     * docID=null, docDate=null
      */
+    
+    @Test
+    public void testMoneyPay1() throws Exception {
+        System.out.println("moneyPay");
+
+        String mtID = "16016056";
+        PersonHolder payee = new PersonHolder();
+        payee.setCitizenCountry("RUS");
+        payee.setBirthday(DateTimeUtils.parseDate("01.04.1991",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
+        FullNameTypeHolder fullName_ = new FullNameTypeHolder();
+        IndividualHolder individual_ = new IndividualHolder();
+        individual_.setFirst("VALENTIN");
+        individual_.setLast("FEODOSOV");
+        individual_.setMiddle("OLEKSANDROVICH");
+        payee.setCitizenCountry("TJK");
+        fullName_.setIndividual(individual_);
+        payee.setFullName(fullName_);
+        CredentialsHolder identification_ = new CredentialsHolder();
+        identification_.setCredCountry("RUS");
+        identification_.setCredNumber("5011");
+        identification_.setIssueCity("Москва");
+        identification_.setIssuer("Отдел милиции");
+        identification_.setSerialNumber("012-876-321");
+        identification_.setCredType("1");
+        identification_.setIssuerCode("777-666");
+        identification_.setIssueDate(DateTimeUtils.parseDate("12.01.2016",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
+        identification_.setExpiryDate(DateTimeUtils.parseDate("01.03.2018",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
+        payee.setIdentification(identification_);
+        String[] phone_ = new String[1];
+        phone_[0] = "+7 (812) 999-88-88";
+        payee.setPhone(phone_);
+        AddressHolder registration_ = new AddressHolder();
+        registration_.setCountry("RUS");
+        registration_.setCity("Moscow");
+        registration_.setStreet1("улица Кривая, дом 15, квартира 1");
+        registration_.setStreet2("");
+        registration_.setZipCode("220068");
+        payee.setRegistration(registration_);
+        payee.setResidentCountry("RUS");
+        String docID = "";
+        String docDate = "";
+        try{
+            TestLib.instance.moneyPay(mtID, "", payee, docID, docDate);
+        }
+        catch (RemittanceException ex) {
+            if (ex.getCode() == 30000)  {System.out.println("moneyHold OK");}
+            else
+            {fail(" Ошибка оплаты перевода");}
+        }
+    }
+
+    
     @Test
     public void testMoneyPay() throws Exception {
         System.out.println("moneyPay");
-        String mtcn = "036530144512";
+        String mtcn = "061019718735";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
         BigDecimal bd = new BigDecimal("50000");
@@ -633,6 +698,8 @@ RUB
         registration_.setZipCode("630090");
         payee.setRegistration(registration_);
         payee.setResidentCountry("RUS");
+        String ident = payee.toString();
+        System.out.println(ident);
         String docID = "";
         String docDate = "";
         try{
