@@ -13,8 +13,8 @@ import com.grs24.msg.IndividualHolder;
 import com.grs24.msg.PersonHolder;
 import com.grs24.mt.RemittanceException;
 import com.grs24.mt.RemittanceHolder;
+import com.grs24.mt.unistream.wsclient.TestLib;
 import java.io.IOException;
-import java.util.Properties;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -29,25 +29,11 @@ import java.math.BigDecimal;
  */
 public class MtUnistreamAdapterTest {
     
-    public static String KEY_USER_AUTHED_APIKEY = "1wwteyFGFew624";
-    public static String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
-    public static String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
-    public static Integer KEY_BANK_ID = 383589;
-    public static Integer KEY_PARTICIPATOR_ID = 383589;
-    private static MtUnistreamAdapter instance;
-    public MtUnistreamAdapterTest() {
-    }
-    
     @BeforeClass
     public static void setUpClass() throws IOException {
-        Properties cfg = new Properties();
-        cfg.setProperty("APIKEY", KEY_USER_AUTHED_APIKEY);
-        cfg.setProperty("LOGIN", KEY_USER_AUTHED_LOGIN);
-        cfg.setProperty("PASSWORD", KEY_USER_AUTHED_PASSWORD);
-        cfg.setProperty("BANKID", KEY_BANK_ID.toString());
-        cfg.setProperty("PARTID",KEY_PARTICIPATOR_ID.toString());
-        instance = new MtUnistreamAdapter();
-        instance.init(cfg);    
+        TestLib.setUpClass();
+    }
+    public MtUnistreamAdapterTest() {
     }
     
     @AfterClass
@@ -494,6 +480,7 @@ RUB
     @Test
     public void testMoneySearch() throws Exception {
         System.out.println("moneySearch");
+        RemittanceHolder[] result = null;
         String mtcn = "743818837598";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
@@ -502,9 +489,10 @@ RUB
         approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
         String dstCountry = "Russia";
-        RemittanceHolder[] result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+        result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
         assertNotNull(result[0]);
         assertEquals(result[0].getMtID(),"16016603");
+
         mtcn = "036530144512";
         approxOrgFunds = null;
         approxDstFunds = new FundsHolder();
@@ -514,23 +502,163 @@ RUB
         orgCountry = "RUS";
         dstCountry = "RUS";
         try {
-            result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
-        }
-        catch (RemittanceException ex)
-        {
-            if (ex.getCode() != 50003) fail("Ошибка валидации перевода");
-        }
+                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                }
+        catch (RemittanceException ex) 
+                {
+                 assertEquals(ex.getCode(), 50003);
+                }
+
+        mtcn = "036530144512";
+        approxOrgFunds = null;
+        approxDstFunds = new FundsHolder();
+        bd = new BigDecimal("50000");
+        approxDstFunds.setAmount(bd);
+        approxDstFunds.setCur("RUB");
+        orgCountry = "RUS";
+        dstCountry = "RUS";
+        try {
+                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                }
+        catch (RemittanceException ex) 
+                {
+                 assertEquals(ex.getCode(), 30002);
+                }
+        
+        mtcn = "";
+        approxDstFunds = new FundsHolder();
+        bd = new BigDecimal("1900");
+        approxDstFunds.setAmount(bd);
+        approxDstFunds.setCur("RUB");
+        try {
+                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                }
+        catch (RemittanceException ex) 
+                {
+                 assertEquals(ex.getCode(), 50001);
+                }
+
+        mtcn = "036530144512";
+        approxOrgFunds = null;
+        approxDstFunds = new FundsHolder();
+        orgCountry = "RUS";
+        dstCountry = "RUS";
+        try {
+                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                }
+        catch (RemittanceException ex) 
+                {
+                 assertEquals(ex.getCode(), 50002);
+                }
+
+        mtcn = "036530144512";
+        approxOrgFunds = null;
+        approxDstFunds = new FundsHolder();
+        bd = new BigDecimal("1900");
+        approxDstFunds.setAmount(bd);
+        approxDstFunds.setCur("RUR");
+        orgCountry = "RUS";
+        dstCountry = "RUS";
+        try {
+                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                }
+        catch (RemittanceException ex) 
+                {
+                 assertEquals(ex.getCode(), 10011);
+                }
+
+        mtcn = "036530144512";
+        approxOrgFunds = null;
+        approxDstFunds = new FundsHolder();
+        bd = new BigDecimal("1900");
+        approxDstFunds.setAmount(bd);
+        approxDstFunds.setCur("RU");
+        orgCountry = "RUS";
+        dstCountry = "RUS";
+        try {
+                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                }
+        catch (RemittanceException ex) 
+                {
+                 assertEquals(ex.getCode(), 50011);
+                }
+
         System.out.println("moneySearch OK");
     }
 
     /**
      * Test of moneyPay method, of class MtUnistreamAdapter.
      * 19.658 сек
+     * 
+     * 
+     * call adapter with mtID=16016056, 
+     * payee=Person( fullName=FullNameType( 
+     * individual=Individual( 
+     * first=VALENTIN middle=OLEKSANDROVICH last=FEODOSOV) secondary=null) 
+     * identification=Credentials( credCountry=RUS 
+     * credType=1 serialNumber=012-876-321 credNumber=5011 issuer=Отдел милиции 
+     * issuerCode=777-666 issueCity=Москва issueDate=Tue Jan 12 00:00:00 MSK 2016 
+     * expiryDate=Thu Mar 01 00:00:00 MSK 2018) birthday=Mon Apr 01 00:00:00 MSD 1991 
+     * citizenCountry=TJK residentCountry=RUS phone[0]=+7 (812) 999-88-88 email=user@domain.com 
+     * registration=Address( country=RUS state=null city=Moscow zipCode=220068 street1=улица Кривая, дом 15, квартира 1 street2=null)), 
+     * docID=null, docDate=null
      */
+    
+    @Test
+    public void testMoneyPay1() throws Exception {
+        System.out.println("moneyPay");
+
+        String mtID = "16016056";
+        PersonHolder payee = new PersonHolder();
+        payee.setCitizenCountry("RUS");
+        payee.setBirthday(DateTimeUtils.parseDate("01.04.1991",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
+        FullNameTypeHolder fullName_ = new FullNameTypeHolder();
+        IndividualHolder individual_ = new IndividualHolder();
+        individual_.setFirst("VALENTIN");
+        individual_.setLast("FEODOSOV");
+        individual_.setMiddle("OLEKSANDROVICH");
+        payee.setCitizenCountry("TJK");
+        fullName_.setIndividual(individual_);
+        payee.setFullName(fullName_);
+        CredentialsHolder identification_ = new CredentialsHolder();
+        identification_.setCredCountry("RUS");
+        identification_.setCredNumber("5011");
+        identification_.setIssueCity("Москва");
+        identification_.setIssuer("Отдел милиции");
+        identification_.setSerialNumber("012-876-321");
+        identification_.setCredType("1");
+        identification_.setIssuerCode("777-666");
+        identification_.setIssueDate(DateTimeUtils.parseDate("12.01.2016",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
+        identification_.setExpiryDate(DateTimeUtils.parseDate("01.03.2018",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
+        payee.setIdentification(identification_);
+        String[] phone_ = new String[1];
+        phone_[0] = "+7 (812) 999-88-88";
+        payee.setPhone(phone_);
+        AddressHolder registration_ = new AddressHolder();
+        registration_.setCountry("RUS");
+        registration_.setCity("Moscow");
+        registration_.setStreet1("улица Кривая, дом 15, квартира 1");
+        registration_.setStreet2("");
+        registration_.setZipCode("220068");
+        payee.setRegistration(registration_);
+        payee.setResidentCountry("RUS");
+        String docID = "";
+        String docDate = "";
+        try{
+            TestLib.instance.moneyPay(mtID, "", payee, docID, docDate);
+        }
+        catch (RemittanceException ex) {
+            if (ex.getCode() == 30000)  {System.out.println("moneyHold OK");}
+            else
+            {fail(" Ошибка оплаты перевода");}
+        }
+    }
+
+    
     @Test
     public void testMoneyPay() throws Exception {
         System.out.println("moneyPay");
-        String mtcn = "036530144512";
+        String mtcn = "061019718735";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
         BigDecimal bd = new BigDecimal("50000");
@@ -538,7 +666,7 @@ RUB
         approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
         String dstCountry = "Russia";
-        RemittanceHolder[] result = instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+        RemittanceHolder[] result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
         assertNotNull(result[0]);
         String mtID = result[0].getMtID();
         PersonHolder payee = new PersonHolder();
@@ -570,10 +698,12 @@ RUB
         registration_.setZipCode("630090");
         payee.setRegistration(registration_);
         payee.setResidentCountry("RUS");
+        String ident = payee.toString();
+        System.out.println(ident);
         String docID = "";
         String docDate = "";
         try{
-            instance.moneyPay(mtID, mtcn, payee, docID, docDate);
+            TestLib.instance.moneyPay(mtID, mtcn, payee, docID, docDate);
         }
         catch (RemittanceException ex) {
             if (ex.getCode() == 30000)  {System.out.println("moneyHold OK");}
@@ -593,10 +723,11 @@ RUB
         String mtcn = "";
         PersonHolder payee = null;
         try {
-            instance.moneyHold(mtID, mtcn, payee);}
+            TestLib.instance.moneyHold(mtID, mtcn, payee);}
         catch (RemittanceException ex) {
-            if (ex.getCode() == 30001)  {System.out.println("moneyHold OK");}
+            assertEquals(ex.getCode(), 30001);
         }
+        System.out.println("moneyHold OK");
     }
 
     /**
@@ -609,12 +740,11 @@ RUB
         String mtcn = "";
         PersonHolder payee = null;
         try {
-            instance.moneyUnhold(mtID, mtcn, payee);
+            TestLib.instance.moneyUnhold(mtID, mtcn, payee);
             }
         catch (RemittanceException ex) {
-            if (ex.getCode() == 30001)  {System.out.println("moneyUnhold OK");}
-    }
-
+            assertEquals(ex.getCode(), 30001);
         }
-    
+        System.out.println("moneyUnhold OK");
+        }
 }

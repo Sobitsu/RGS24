@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
+import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindTransferRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindTransferResponseMessage;
@@ -29,7 +30,6 @@ public class FindTransfer {
 * @param val - код валюты в СДП
 * @param bankId - банк ИД 
 * @return Найденный перевод
-* 
 * @throws IOException в случае провала выполение
 */   
     public static FindTransferResponseMessage FindTransfer(String controlNumber, Double sum, Integer val, Integer bankId) throws UnsupportedOperationException, IOException {
@@ -43,14 +43,14 @@ public class FindTransfer {
         ftrm.setControlNumber(CommonLib.MakeString(_ControlNumber_QNAME, controlNumber));
         ftrm.setCurrencyID(val);
         ftrm.setSum(sum);
-        debug(ftrm);
+        if (logger.isDebugEnabled()) debug(ftrm);
         WebServiceSingl ws = WebServiceSingl.getInstance();
         //IWebService service = new WebService().getWS2007HttpBindingIWebService();
         FindTransferResponseMessage rm = ws.service.findTransfer(ftrm);
         logger.debug("Finish FindTransferResponseMessage");        
         return rm;
     }
-    catch (IOException ex)
+    catch (IOException|WebServiceException ex)
         {throw new IOException("Ошибка доступа к Unistream",ex);}
     }
     private static void debug(FindTransferRequestMessage ftrm)

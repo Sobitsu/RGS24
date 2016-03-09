@@ -7,6 +7,7 @@ package com.grs24.mt.unistream.wsclient;
 
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
+import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonRequestMessage;
 import org.datacontract.schemas._2004._07.wcfservicelib.FindPersonResponseMessage;
@@ -20,28 +21,12 @@ import org.slf4j.LoggerFactory;
 public class FindPerson {
  private static final Logger logger = LoggerFactory.getLogger(FindPerson.class);
     /**
-* Выполнение запроса на создание клиента
-* @param fprm 
-    @XmlType(name = "FindPersonRequestMessage", propOrder = {
-    "birthDate",
-    "docExpiryDate",
-    "docIssueDate",
-    "docNumber",
-    "docSeries",
-    "docTypeID",
-    "firstname",
-    "fullName",
-    "lastname",
-    "middlename",
-    "phone",
-    "phoneArea",
-    "phoneCountryID",
-    "phoneNumber",
-    "unistreamCardNumber"
-}
+* Выполнение запроса на поиск клиента
+* @param fprm Подготовленный транспортный объект
 * @return Найденный клиент
-* 
 * @throws IOException в случае провала выполение
+* @see FindPersonRequestMessage
+* @see FindPersonResponseMessage
 */ 
     public static FindPersonResponseMessage FindPersonJAXb(FindPersonRequestMessage fprm) throws UnsupportedOperationException,IOException {
         try {
@@ -52,11 +37,11 @@ public class FindPerson {
             //IWebService service = new WebService().getWS2007HttpBindingIWebService();
             WebServiceSingl ws = WebServiceSingl.getInstance();
             FindPersonResponseMessage rm = ws.service.findPerson(fprm);
-            debug(fprm);
+            if (logger.isDebugEnabled()) debug(fprm);
             logger.debug("Finish FindPersonResponseMessage");
             return rm;
         }
-        catch (IOException ex) 
+        catch (IOException|WebServiceException ex) 
             {
                 throw new IOException("Ошибка доступа к Unistream",ex); 
             }

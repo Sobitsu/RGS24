@@ -8,6 +8,7 @@ package com.grs24.mt.unistream.wsclient;
 import com.grs24.mt.RemittanceException;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
+import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.Country;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCountriesChangesResponseMessage;
@@ -28,18 +29,17 @@ public class GetCountry {
                 WebServiceSingl ws = WebServiceSingl.getInstance();
                 return ws.service.getCountriesChanges(requestMessage);
             }
-        catch (IOException ex) 
-            {
-                throw new IOException("Ошибка доступа к Unistream",ex); 
-            }
+        catch (IOException|WebServiceException ex)
+            {throw new IOException("Ошибка доступа к Unistream",ex);
+        }
     }
     
 /**
-* Выполнение запроса на получение ID страны
+* Получение ID страны по ее коду из справочника
 * @param code - ISO 4217 символьный код страны
 * @return ID страны
-* @throws java.io.IOException
-* @throws com.grs24.mt.RemittanceException
+* @throws com.grs24.mt.RemittanceException в случае отрицательного разбора сообщения от UniStream
+* @throws java.io.IOException  - в случае недоступности UniStream
 */ 
     public static Integer getCountriesID(String code)throws IOException, RemittanceException {
         GetCountriesChangesResponseMessage rm = getCountriesChanges();
@@ -55,11 +55,11 @@ public class GetCountry {
      }
 
 /**
-* Выполнение запроса на получение кода валюты
-* @param cuntryId - ID валюты
-* @return ISO 4217 символьный код валюты
-* @throws java.io.IOException
-* @throws com.grs24.mt.RemittanceException
+* Получение кода страны по ее ID из справочника
+* @param cuntryId - ID страны
+* @return ISO 4217 символьный код страны
+* @throws com.grs24.mt.RemittanceException в случае отрицательного разбора сообщения от UniStream
+* @throws java.io.IOException  - в случае недоступности UniStream
 * 
 */ 
 

@@ -5,9 +5,7 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import com.grs24.mt.unistream.MtUnistreamAdapter;
 import java.io.IOException;
-import java.util.Properties;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,25 +19,12 @@ import org.junit.Ignore;
  * @author Dale
  */
 public class GetDocumentTypeTest {
- public static String KEY_USER_AUTHED_APIKEY = "1wwteyFGFew624";
-    public static String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
-    public static String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
-    public static Integer KEY_BANK_ID = 383589;
-    public static Integer KEY_PARTICIPATOR_ID = 383589;
-    private static MtUnistreamAdapter instance;
-  
+ 
     @BeforeClass
     public static void setUpClass() throws IOException {
-        Properties cfg = new Properties();
-        cfg.setProperty("APIKEY", KEY_USER_AUTHED_APIKEY);
-        cfg.setProperty("LOGIN", KEY_USER_AUTHED_LOGIN);
-        cfg.setProperty("PASSWORD", KEY_USER_AUTHED_PASSWORD);
-        cfg.setProperty("BANKID", KEY_BANK_ID.toString());
-        cfg.setProperty("PARTID",KEY_PARTICIPATOR_ID.toString());
-        instance = new MtUnistreamAdapter();
-        instance.init(cfg);    
+        TestLib.setUpClass();
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }

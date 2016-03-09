@@ -8,7 +8,6 @@ package com.grs24.mt.unistream.wsclient;
 import com.grs24.msg.AddressHolder;
 import com.grs24.msg.CredentialsHolder;
 import com.grs24.mt.RemittanceException;
-import com.grs24.mt.unistream.BaseDataParser;
 import javax.xml.bind.JAXBElement;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.WsResponse;
@@ -28,6 +27,7 @@ import javax.xml.namespace.QName;
 import org.datacontract.schemas._2004._07.wcfservicelib.ArrayOfDocument;
 import org.datacontract.schemas._2004._07.wcfservicelib.ArrayOfPhone;
 import org.datacontract.schemas._2004._07.wcfservicelib.Document;
+import org.datacontract.schemas._2004._07.wcfservicelib.Fault;
 import org.datacontract.schemas._2004._07.wcfservicelib.PersonAddress;
 import org.datacontract.schemas._2004._07.wcfservicelib.Phone;
 import org.datacontract.schemas._2004._07.wcfservicelib.PhoneType;
@@ -62,20 +62,43 @@ public class CommonLib {
     private final static QName _PostalCode_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "PostalCode");
 
 /**
-* Обработка отрицательного ответа от СДП 
-* @param response - ответ сервера
+* Обработка отрицательного ответа от СДП <br>
+* Проверяется значение поля Fault в ответе и генерируется exception в котором:<br>
+* code - номер ошибки в Unistream <br>
+* stan - код ошибки в Unistream <br>
+* mtError - расшифровка ошибки в Unistream <br>
+* @param response - ответ сервера<br>
 * @throws RemittanceException в случае провала выполение
+* @see Fault
 */ 
     public static void CheckFault(WsResponse response) throws RemittanceException {
         if(!response.getFault().isNil())
         {
-            logger.error("Unistream returned error: {0}", response.getFault().getValue().getMessage().getValue());
-            throw new RemittanceException("Unistream returned error", BaseDataParser.parseInteger(response.getFault().getValue().getID().getValue()), response.getFault().getValue().getCode().value(),response.getFault().getValue().getMessage().getValue());
+            logger.error("Unistream returned error:", response.getFault().getValue().getMessage().getValue());
+            Fault fault = response.getFault().getValue();
+            int code = 0;
+            String stan = null;
+            String mtError = null;
+            if (fault.getCode() != null) 
+                {
+                    stan = fault.getCode().value();
+                    code = fault.getCode().ordinal();
+                }
+            if (!fault.getMessage().isNil()) mtError = fault.getMessage().getValue();
+            throw new RemittanceException("Unistream returned error", code, stan,mtError);
         }
     }  
 
 /**
-* Формирование авторизационного заголовка запросов  
+* Формирование авторизационного заголовка запросов
+* Используются настройки:
+* MtUnistreamAdapter.KEY_USER_AUTHED_APIKEY<br>
+* MtUnistreamAdapter.KEY_USER_AUTHED_LOGIN<br>
+* MtUnistreamAdapter.KEY_USER_AUTHED_PASSWORD<br>
+* 
+* @see MtUnistreamAdapter#KEY_USER_AUTHED_APIKEY
+* @see MtUnistreamAdapter#KEY_USER_AUTHED_LOGIN
+* @see MtUnistreamAdapter#KEY_USER_AUTHED_PASSWORD
 * @return заголовок
 */ 
 
@@ -93,9 +116,10 @@ public class CommonLib {
 
 /**
 * Формирование простого строкового JAXBElement
-* @param qname 
-* @param value
+* @param qname Квалификатор
+* @param value Значение 
 * @return строкового JAXBElement
+* @see QName
 */ 
     
     public static JAXBElement<String> MakeString(QName qname, String value)
@@ -104,10 +128,13 @@ public class CommonLib {
         }
 
 /**
-* Формирование JAXBElement массива удостоверений личности
-* @param credholder 
-* @return массива JAXBElement
+* Формирование JAXBElement массива удостоверений личности<br>
+* Заполняется транспортный объект для хранения реквизитов удостоверений личности приводя их к ныжным типам<br>
+* @param credholder Данные удостоверения личности клиента
+* @return массив JAXBElement 
 * @throws Exception в случае провала выполение
+* @see ArrayOfDocument
+* @see CredentialsHolder
 */ 
     public static JAXBElement<ArrayOfDocument> getDocuments(CredentialsHolder credholder) throws Exception {
         QName _ArrayOfDocument_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Documents");
@@ -129,10 +156,13 @@ public class CommonLib {
         return result;
     }
 /**
-* Формирование JAXBElement массива адресов
-* @param registr 
+* Формирование JAXBElement массива адресов<br>
+* Заполняется транспортный объект для хранения адресов приводя их к ныжным типам<br>
+* @param registr Информация об адресе клиента
 * @return массива JAXBElement
 * @throws Exception в случае провала выполение
+* @see PersonAddress
+* @see AddressHolder
 */ 
     public static JAXBElement<PersonAddress> getAdressElem(AddressHolder registr) throws Exception {
         QName _PersonAddress_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Address");
@@ -150,9 +180,11 @@ public class CommonLib {
 
 /**
 * Формирование JAXBElement массива номеров телефона
-* @param phones
+* Заполняется транспортный объект для хранения телефонных номеров приводя их к ныжным типам<br>
+* @param phones Телефон клиента
 * @return массива JAXBElement
 * @throws Exception в случае провала выполение
+* @see ArrayOfPhone
 */ 
     
     public static JAXBElement<ArrayOfPhone> getPhones(String[] phones) throws Exception {
@@ -174,9 +206,11 @@ public class CommonLib {
 
 /**
 * Преобразование Даты в XMLGregorianCalendar
-* @param date
+* Заполняется транспортный объект для хранения данных типа Date приводя их к ныжным типам<br>
+* @param date - Дата в Java формате
 * @return XMLGregorianCalendar
 * @throws Exception в случае провала выполение
+* @see XMLGregorianCalendar
 */ 
     
     
@@ -193,8 +227,9 @@ public class CommonLib {
 
 /**
 * Логгирование XML запросов к серверу
-* @param x
-
+* Ключевой момент если у класса нет аннотации @XmlRootElement вызывает JAXBException поэтому использовать надо очень осторожно. 
+* Возможно придется править автогенерированные классы
+* @param x - JAXB запрос
 */ 
     
     public static void printXml(Object x)

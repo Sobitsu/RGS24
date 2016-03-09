@@ -5,9 +5,11 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
+import com.grs24.mt.RemittanceException;
 import com.grs24.mt.unistream.BaseDataParser;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
+import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.ObjectStatus;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.DocumentType;
@@ -29,137 +31,134 @@ public class GetDocumentType {
                 WebServiceSingl ws = WebServiceSingl.getInstance();
                 return ws.service.getDocumentTypeChanges(requestMessage);
             }
-        catch (IOException ex) 
-            {
-                throw new IOException("Ошибка доступа к Unistream",ex); 
-            }
+        catch (IOException|WebServiceException ex)
+            {throw new IOException("Ошибка доступа к Unistream",ex);}
     }
    
     /**
-* Выполнение запроса на получение ID типа документа
-* @param code. Поддерживаемые типы документов:
-* Военный билет
-Вид на жительство
-Паспорт моряка
-Водительские права
-Удостоверение МВД
-UK Driving Licence
-Карточка иностранца
-ИНН
-Кредитная карта
-Миграционная карта
-Виза
-Приглашение
-Иной документ
-Свидетельство о предоставлении временного убежища
-Свидетельство на возвращение в страну гражданства
-Текущий запрос о выписке налогооблажения
-Общегражданский заграничный паспорт
-Временное удостоверение личности
-Удостоверение личности военнослужащего
-Идентификационная карта СНГ
-Идентификационная карта
-Государственное удостоверение личности
-Сертификат о натурализации
-Номер социального обеспечения
-Паспорт иностранного гражданина
-Счет за коммунальные услуги
-Текущая выписка из банковского счета
-Выписка с кредитной/дебетной карты
-Текущий запрос о выписке налогооблажения
-Судебная повестка
-Свидетельство  органов  ЗАГС
-Разрешение на временное проживание
-Свид-во о рассмотрении признания лица беженцем
-Удостоверение беженца
-Паспорт гражданина РФ
-Временное удостоверение личности гражданина РФ
-Вид на жительство в РФ
-Дипломатический паспорт
-Разрешение на временное проживание в РФ
-Свидетельство на возвращение в страну гражданства
-Удостоверение личности гражданина иностр. гос-ва
-Свидетельство о предоставлении временного убежища
-Св-во о предоставлении вр. убежища на терр. РФ
-Другой документ
-Паспорт
-Временное удостоверение личности
-Вид на жительство (Украина)
-Разрешение на временное проживание в РФ (без гр.)
-Вид на жительство (Белоруссия)
-Разр. на временное проживание в РФ (лиц без гр.)
-Вид на жительство (Белоруссия)
-Паспорт (Белоруссия)
-Удостоверение беженца (Белоруссия)
-Виза (Белоруссия)
-Паспорт (Казахстан)
-Удостоверение личности (Казахстан)
-Вид на жительство иностранного граждан. Казахстан
-Паспорт лица без гражданства (Казахстан)
-Вид на жительство лица без гражданства в РФ
-Справка об освобождении из мест лишения свободы
-* English variant
-* Military ID
-Residence permit
-Overseas Passport
-Driving Licence
-Home Office Ind
-UK Driving Licence
-Alien Card
-Tax Id
-Credit Card
-Immigration Permit
-Visa
-Invitation
-Other ID
-Certificate of laissez-passer  citizenship
-Current council tax demand letter, or statement
-foreign passport
-Pink Slip
-ID
-CIS Card
-ID Card
-State Identification Card
-Naturalization Certificate
-Social Security
-Foreign passport
-Utility Bill
-Current bank statement
-Credit /debit card statement
-Current council tax demand letter, or statement
-Instrument of a court appointment
-Registry office certificate
-Sojourn permit
-Certificate of consideration of refugee status rec
-Refugee Certificate
-Russian Federation Passport
-Russian Federation temporary identity card
-Residence permit in Russian Federation
-Diplomatic passport
-Temporary residence permit in Russia
-Certificate of laissez-passer  citizenship
-Foreign country ID
-.
-Certificate for temporary asylum in Russian Federa
-Another document
-Passport
-Interim Certificate
-Residence permit in Ukraine
-Temporary residence permit in Russia (stless)
-Residence permit (Belarus)
-Temp. residence permit in Russ (stateless pers.)
-Residence permit (Belarus)
-Passport (Belarus)
-Refugee certificate (Belarus)
-Visa (Belarus)
-Passport (Kazakhstan)
-Id (Kazakhstan)
-ResidencePermit (Kazakhstan)
-StatelessPassport (Kazakhstan)
-Stateless person residence permit in Russian
-Inprisonment release certificate in Russian
+* Получение ID типа документа
+*@param code - код документа
+<p>Поддерживаемые типы документов:</p>
+Военный билет<br>
+Вид на жительство<br>
+Паспорт моряка<br>
+Водительские права<br>
+Удостоверение МВД<br>
+UK Driving Licence<br>
+Карточка иностранца<br>
+ИНН<br>
+Кредитная карта<br>
+Миграционная карта<br>
+Виза<br>
+Приглашение<br>
+Иной документ<br>
+Свидетельство о предоставлении временного убежища<br>
+Свидетельство на возвращение в страну гражданства<br>
+Текущий запрос о выписке налогооблажения<br>
+Общегражданский заграничный паспорт<br>
+Временное удостоверение личности<br>
+Удостоверение личности военнослужащего<br>
+Идентификационная карта СНГ<br>
+Идентификационная карта<br>
+Государственное удостоверение личности<br>
+Сертификат о натурализации<br>
+Номер социального обеспечения<br>
+Паспорт иностранного гражданина<br>
+Счет за коммунальные услуги<br>
+Текущая выписка из банковского счета<br>
+Выписка с кредитной/дебетной карты<br>
+Текущий запрос о выписке налогооблажения<br>
+Судебная повестка<br>
+Свидетельство  органов  ЗАГС<br>
+Разрешение на временное проживание<br>
+Свид-во о рассмотрении признания лица беженцем<br>
+Удостоверение беженца<br>
+Паспорт гражданина РФ<br>
+Временное удостоверение личности гражданина РФ<br>
+Вид на жительство в РФ<br>
+Дипломатический паспорт<br>
+Разрешение на временное проживание в РФ<br>
+Свидетельство на возвращение в страну гражданства<br>
+Удостоверение личности гражданина иностр. гос-ва<br>
+Свидетельство о предоставлении временного убежища<br>
+Св-во о предоставлении вр. убежища на терр. РФ<br>
+Другой документ<br>
+Паспорт<br>
+Временное удостоверение личности<br>
+Вид на жительство (Украина)<br>
+Разрешение на временное проживание в РФ (без гр.)<br>
+Вид на жительство (Белоруссия)<br>
+Разр. на временное проживание в РФ (лиц без гр.)<br>
+Вид на жительство (Белоруссия)<br>
+Паспорт (Белоруссия)<br>
+Удостоверение беженца (Белоруссия)<br>
+Виза (Белоруссия)<br>
+Паспорт (Казахстан)<br>
+Удостоверение личности (Казахстан)<br>
+Вид на жительство иностранного граждан. Казахстан<br>
+Паспорт лица без гражданства (Казахстан)<br>
+Вид на жительство лица без гражданства в РФ<br>
+Справка об освобождении из мест лишения свободы<br>
+* English variant<br>
+* Military ID<br>
+Residence permit<br>
+Overseas Passport<br>
+Driving Licence<br>
+Home Office Ind<br>
+UK Driving Licence<br>
+Alien Card<br>
+Tax Id<br>
+Credit Card<br>
+Immigration Permit<br>
+Visa<br>
+Invitation<br>
+Other ID<br>
+Certificate of laissez-passer  citizenship<br>
+Current council tax demand letter, or statement<br>
+foreign passport<br>
+Pink Slip<br>
+ID<br>
+CIS Card<br>
+ID Card<br>
+State Identification Card<br>
+Naturalization Certificate<br>
+Social Security<br>
+Foreign passport<br>
+Utility Bill<br>
+Current bank statement<br>
+Credit /debit card statement<br>
+Current council tax demand letter, or statement<br>
+Instrument of a court appointment<br>
+Registry office certificate<br>
+Sojourn permit<br>
+Certificate of consideration of refugee status rec<br>
+Refugee Certificate<br>
+Russian Federation Passport<br>
+Russian Federation temporary identity card<br>
+Residence permit in Russian Federation<br>
+Diplomatic passport<br>
+Temporary residence permit in Russia<br>
+Certificate of laissez-passer  citizenship<br>
+Foreign country ID<br>
+Certificate for temporary asylum in Russian Federa<br>
+Another document<br>
+Passport<br>
+Interim Certificate<br>
+Residence permit in Ukraine<br>
+Temporary residence permit in Russia (stless)<br>
+Residence permit (Belarus)<br>
+Temp. residence permit in Russ (stateless pers.)<br>
+Residence permit (Belarus)<br>
+Passport (Belarus)<br>
+Refugee certificate (Belarus)<br>
+Visa (Belarus)<br>
+Passport (Kazakhstan)<br>
+Id (Kazakhstan)<br>
+ResidencePermit (Kazakhstan)<br>
+StatelessPassport (Kazakhstan)<br>
+Stateless person residence permit in Russian<br>
+Inprisonment release certificate in Russian<br>
 * @return ID тпа документа
-* 
 * @throws Exception в случае провала выполение
 */ 
     public static Integer getDocumentsID(String code)throws Exception {
@@ -183,7 +182,14 @@ Inprisonment release certificate in Russian
         return res;
      }
     
-    public static String getDocumentTypeList() throws Exception {
+/**
+*Получение справочника типов удостоверений личности
+* @return справочник типов удостоверений личности
+* @throws com.grs24.mt.RemittanceException в случае отрицательного разбора сообщения от UniStream
+* @throws java.io.IOException  - в случае недоступности UniStream
+**/
+   
+    public static String getDocumentTypeList() throws RemittanceException, IOException {
         GetDocumentTypeChangesResponseMessage rm = getDocumentTypeChanges();
         CommonLib.CheckFault(rm);
         if (rm.getDocumentTypes().isNil()) return null;
@@ -201,8 +207,4 @@ Inprisonment release certificate in Russian
                 }    
         return str.toString();
     }
-     private static void debug(GetDocumentTypeChangesResponseMessage fprm)
-        {
-            CommonLib.printXml(fprm);
-        }   
 }

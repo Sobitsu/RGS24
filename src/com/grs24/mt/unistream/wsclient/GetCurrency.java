@@ -8,6 +8,7 @@ package com.grs24.mt.unistream.wsclient;
 import com.grs24.mt.RemittanceException;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
+import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.Currency;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCurrenciesChangesResponseMessage;
@@ -18,12 +19,11 @@ import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCurrenci
  */
 public class GetCurrency {
 /**
-* Выполнение запроса на получение ID валюты
+* Получение ID валюты из справочника
 * @param сode - ISO 4217 символьный код валюты
 * @return ID валюты
-* 
-* @throws IOException в случае провала выполение
-     * @throws com.grs24.mt.RemittanceException
+* @throws com.grs24.mt.RemittanceException в случае отрицательного разбора сообщения от UniStream
+* @throws java.io.IOException  - в случае недоступности UniStream
 */ 
     public static Integer getCurrencyID(String сode) throws IOException, RemittanceException {
         GetCurrenciesChangesResponseMessage rm = getCurrenciesChanges();
@@ -36,21 +36,15 @@ public class GetCurrency {
                 }
         return null;
      }
+
 /**
+* Получение кода валюты по ее ID из справочника
 * Выполнение запроса на получение кода валюты
 * @param currencyId - ID валюты
 * @return ISO 4217 символьный код валюты
-* 
-* @throws IOException в случае провала выполение
-*/ 
-
-    /**
-     * Выполнение запроса на получение кода валюты
-     * @param currencyId - ID валюты
-     * @return ISO 4217 символьный код валюты
-     * @throws IOException в случае провала выполение
-     * @throws com.grs24.mt.RemittanceException
-     */
+* @throws com.grs24.mt.RemittanceException в случае отрицательного разбора сообщения от UniStream
+* @throws java.io.IOException  - в случае недоступности UniStream
+*/
     public static String getCurrencyCode(Integer currencyId) throws IOException, RemittanceException {
         GetCurrenciesChangesResponseMessage rm = getCurrenciesChanges();
         CommonLib.CheckFault(rm);
@@ -73,7 +67,7 @@ public class GetCurrency {
                 WebServiceSingl ws = WebServiceSingl.getInstance();
                 return ws.service.getCurrenciesChanges(requestMessage);
         }
-        catch (IOException ex) 
+        catch (IOException|WebServiceException ex) 
             {
                 throw new IOException("Ошибка доступа к Unistream",ex); 
             }

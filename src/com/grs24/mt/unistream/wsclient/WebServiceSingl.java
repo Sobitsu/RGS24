@@ -9,11 +9,20 @@ import javax.xml.ws.BindingProvider;
 /**
  *
  * @author Dale
+ * Класс singletone для текущего экземпляра WebService
  */
 public class WebServiceSingl {
     private static volatile WebServiceSingl instance;
     public volatile IWebService service = null;
-
+/**
+ * Конструктор. Так как открытие канала с UniStream достаточно долгая операция то заменил постоянное 
+ * открытие закрытие на единовременное поднятие при инициализации класса
+ * при этом происходит настройка WebService и установка его таймингов.
+ * @throws UnsupportedOperationException
+ * @throws IOException 
+ * @see MtUnistreamAdapter#KEY_SERVER_REQUEST_TUMEOUT
+ * @see MtUnistreamAdapter#KEY_SERVER_CONNECT_TUMEOUT
+ */
     
     WebServiceSingl() throws UnsupportedOperationException, IOException {
         Integer request_timeout = MtUnistreamAdapter.KEY_SERVER_REQUEST_TUMEOUT;
@@ -23,6 +32,13 @@ public class WebServiceSingl {
         requestContext.put(BindingProviderProperties.REQUEST_TIMEOUT, request_timeout); // Timeout in millis
         requestContext.put(BindingProviderProperties.CONNECT_TIMEOUT, connect_timeout); // Timeout in millis
     }
+    
+    /**
+     * Инициализация синглтона
+     * @return Экземпляр инициализированного WebService провайдера
+     * @throws UnsupportedOperationException
+     * @throws IOException 
+     */
     
     public static WebServiceSingl getInstance() throws UnsupportedOperationException, IOException {
 		WebServiceSingl localInstance = instance;

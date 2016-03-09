@@ -3,8 +3,8 @@
     <wsp1:Policy wsu:Id="WS2007HttpBinding_IWebServicePolicy">
         <wsp1:ExactlyOne>
             <wsp1:All>
-                <sc:KeyStore wspp:visibility="private" alias="6583c384-94e1-4b26-ad40-f88dc77b14e0" keypass="1234567890" storepass="123456" type="JKS" location="xws-security/client.jks"/>
-                <sc:TrustStore wspp:visibility="private" peeralias="server" storepass="123456" type="JKS" location="xws-security/server.jks"/>
+                <sc:KeyStore wspp:visibility="private" callbackHandler="com.grs24.mt.security.KeyStoreHandler"/>
+                <sc:TrustStore wspp:visibility="private" callbackHandler="com.grs24.mt.security.TrustStoreHandler"/>
             </wsp1:All>
         </wsp1:ExactlyOne>
     </wsp1:Policy>
