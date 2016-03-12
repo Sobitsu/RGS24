@@ -63,11 +63,11 @@ public class CreatePersonTest {
         Person person = new Person();
         PersonHolder payee = new PersonHolder();
         payee.setCitizenCountry("RUS");
-        payee.setBirthday(DateTimeUtils.parseDate("07.10.1977",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
+        payee.setBirthday(DateTimeUtils.parseDate("07.10.1987",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
         FullNameTypeHolder fullName_ = new FullNameTypeHolder();
         IndividualHolder individual_ = new IndividualHolder();
-        individual_.setFirst("Владимир");
-        individual_.setLast("Резин");
+        individual_.setFirst("Володимир");
+        individual_.setLast("Петров");
         individual_.setMiddle("Сергеевич");
         fullName_.setIndividual(individual_);
         payee.setFullName(fullName_);
@@ -79,13 +79,13 @@ public class CreatePersonTest {
         identification_.setSerialNumber("5404");
         payee.setIdentification(identification_);
         String[] phone_ = new String[1];
-        phone_[0] = "+79139222200";
+        phone_[0] = "+7 (913) 922-22-00";
         payee.setPhone(phone_);
         AddressHolder registration_ = new AddressHolder();
         registration_.setCountry("RUS");
         registration_.setCity("Новосибирск");
         registration_.setStreet1("Большивисткая");
-        registration_.setStreet2("101");
+        registration_.setStreet2("0");
         registration_.setZipCode("630090");
         payee.setRegistration(registration_);
         payee.setResidentCountry("RUS");
@@ -111,7 +111,7 @@ public class CreatePersonTest {
         assertFalse(result.getPerson().getValue().getLastName().isNil());
         assertFalse(result.getPerson().getValue().getMiddleName().isNil());
         assertFalse(result.getPerson().getValue().getLastNameLat().isNil());
-        assertEquals(result.getPerson().getValue().getFirstNameLat().getValue(),"Vladimir");
+        assertEquals(result.getPerson().getValue().getFirstNameLat().getValue(),"Volodimir");
         System.out.println("CreatePersonJAXb OK");    
     }
     

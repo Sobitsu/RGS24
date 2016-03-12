@@ -26,12 +26,12 @@ import org.springframework.ui.ModelMap;
 public class MtUniAdapterLoadtest {
 
 	private final ApplicationContext ctx;
-	private final ReportCreater reportCreater;
+	private final MtUnistreamAdapter mtAdapter;
 
 	private MtUniAdapterLoadtest(ApplicationContext ctx)
 	{
 		this.ctx = ctx;
-		reportCreater = ctx.getBean(ReportCreater.class);
+		mtAdapter = ctx.getBean(MtUnistreamAdapter.class);
 	}
 
 	public static void main(String[] args) throws Exception
@@ -140,10 +140,10 @@ public class MtUniAdapterLoadtest {
 			long start = System.currentTimeMillis();
 			String tName = Thread.currentThread().getName();
 			try {
-				FileManager fileManager = new FileManager(reportCreater.getTmpDir());
-				String fileName = FileUtils.generateTmpFileName(templateName, FileFormat.pdf, System.currentTimeMillis());
-				File outFile = fileManager.getFile(fileName);
-				reportCreater.generatePdf("/test/test.odt", modelMap, PdfConverterTypeVia.XDOC, outFile);
+			//	FileManager fileManager = new FileManager(reportCreater.getTmpDir());
+				String fileName = "";// FileUtils.generateTmpFileName(templateName, FileFormat.pdf, System.currentTimeMillis());
+			//	File outFile = fileManager.getFile(fileName);
+			//	reportCreater.generatePdf("/test/test.odt", modelMap, PdfConverterTypeVia.XDOC, outFile);
 				System.out.println("Generated new pdf: " + fileName);
 
 			} catch (Throwable e) {

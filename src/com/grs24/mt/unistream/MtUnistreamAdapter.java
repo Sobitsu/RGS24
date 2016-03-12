@@ -16,6 +16,7 @@ import com.grs24.mt.unistream.wsclient.CreatePerson;
 import com.grs24.mt.unistream.wsclient.FindPerson;
 import com.grs24.mt.unistream.wsclient.FindTransfer;
 import com.grs24.mt.unistream.wsclient.GetCurrency;
+import com.grs24.mt.unistream.wsclient.GetDocumentType;
 import com.grs24.mt.unistream.wsclient.GetTransferByID;
 import com.grs24.mt.unistream.wsclient.PayOutTransfer;
 import org.slf4j.Logger;
@@ -193,8 +194,17 @@ public class MtUnistreamAdapter implements MtAdapter
                 logger.error("Не указан номер удостоверения личности получателя перевода"); 
                 throw new RemittanceException("Не указан номер удостоверения личности получателя перевода", 50008, "","");
             }
+            if (payee.getIdentification().getSerialNumber() == null) {
+                logger.error("Не указана серия удостоверения личности получателя перевода"); 
+                throw new RemittanceException("Не указана серия удостоверения личности получателя перевода", 50012, "","");
+            }
+            if (payee.getIdentification().getCredType() == GetDocumentType.CODE_PASSPORT_RF && payee.getIdentification().getIssuerCode() == null) {
+                logger.error("Не указана код подразделения длял паспорта РФ"); 
+                throw new RemittanceException("Не указана код подразделения длял паспорта РФ", 50013, "","");
+            }
+            
             if (payee.getPhone() == null) {
-                logger.error("Не указан номер удостоверения личности получателя перевода"); 
+                logger.error("\"Не указан телефон получателя перевода"); 
                 throw new RemittanceException("Не указан телефон получателя перевода", 50009, "","");
             }
             if (payee.getRegistration() == null) {
@@ -209,6 +219,18 @@ public class MtUnistreamAdapter implements MtAdapter
                 logger.error("Не указан город регистрации получателя перевода"); 
                 throw new RemittanceException("Не указан город регистрации получателя перевода", 50010, "","");
             }
+
+            if (payee.getRegistration().getZipCode() == null) {
+                logger.error("Не указан почтовый индекс адреса регистрации получателя перевода"); 
+                throw new RemittanceException("Не указан почтовый индекс адреса регистрации получателя перевода", 50010, "","");
+            }
+
+            if (payee.getRegistration().getStreet1() == null) {
+                logger.error("Не указан адресс регистрации получателя перевода"); 
+                throw new RemittanceException("Не указан адресс регистрации получателя перевода", 50010, "","");
+            }
+            
+            
         }
         
  /**
@@ -563,7 +585,7 @@ public class MtUnistreamAdapter implements MtAdapter
             retval.setOrgCountry(orgCountry);
             retval.setMtID(rettransfer.getID().toString());
             retval.setMtcn(rettransfer.getControlNumber().getValue());
-            retval.setDstFunds(getFundsHolder(rettransfer.getAmounts().getValue().getAmount(),AmountType.ESTIMATED_PAIDOUT));
+            retval.setDstFunds(getFundsHolder(rettransfer.getAmounts().getValue().getAmount(),AmountType.MAIN));
             retval.setOrgFunds(getFundsHolder(rettransfer.getAmounts().getValue().getAmount(),AmountType.MAIN));
             retval.setPayer(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.SENDER));
             retval.setPayee(getConsumer(rettransfer.getConsumers().getValue().getConsumer(),ConsumerRole.EXPECTED_RECEIVER));
@@ -642,9 +664,11 @@ public class MtUnistreamAdapter implements MtAdapter
 * code 50005: Не указан получатель перевода<br>
 * code 50006: Не указаны ФИО получателя перевода<br>
 * code 50007: Не указанна дата рождения получателя перевода<br>
-* code 50008: Не указанны реквизиты удостоверения личности получателя перевода<br>
+* code 50008: Не указан номер удостоверения личности получателя перевода<br>
 * code 50009: Не указан телефон получателя перевода<br>
 * code 50010: Не указан адресс регистрации получателя перевода<br>
+* code 50012: Не указана серия удостоверения личности получателя перевода<br>
+* code 50013: Не указана код подразделения длял паспорта РФ<br>
 */ 
         @Override
         public void moneyPay(String mtID, String mtcn, PersonHolder payee, String docID, String docDate) throws RemittanceException, IOException {
@@ -715,14 +739,23 @@ public class MtUnistreamAdapter implements MtAdapter
             transfer.getParticipators().getValue().getParticipator().add(part);
             PayoutTransferResponseMessage retval;
             logger.debug("Оплата перевода");
-            retval = PayOutTransfer.payoutTransfer(transfer);
-            CommonLib.CheckFault(retval);
-            if (retval.getTransfer().isNil())
-            {
-                logger.error("Ошибка при оплате перевода");
-                throw new RemittanceException("Ошибка при оплате перевода", 40004, "",""); 
+            try {
+                retval = PayOutTransfer.payoutTransfer(transfer);
+                CommonLib.CheckFault(retval);
+                if (retval.getTransfer().isNil())
+                {
+                    logger.error("Ошибка при оплате перевода");
+                    throw new RemittanceException("Ошибка при оплате перевода", 40004, "",""); 
+                }
+                transfer= retval.getTransfer().getValue();
             }
-            transfer= retval.getTransfer().getValue();
+            catch (IOException ex) {
+                gtrm = GetTransferByID.getTransferByID(id);
+                CommonLib.CheckFault(gtrm);
+                if (!gtrm.getTransfer().isNil()) {
+                    transfer = gtrm.getTransfer().getValue();
+                    }
+            }
             logger.debug("moneyPay finish");
             checkTransferStatus(transfer);
         }

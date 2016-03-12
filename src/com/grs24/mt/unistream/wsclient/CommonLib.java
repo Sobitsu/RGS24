@@ -167,11 +167,16 @@ public class CommonLib {
     public static JAXBElement<PersonAddress> getAdressElem(AddressHolder registr) throws Exception {
         QName _PersonAddress_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Address");
         logger.debug("Create JAXBElement<PersonAddress>");
+        String streetval = null;
         ObjectFactory factoryp = new ObjectFactory();
         PersonAddress value = factoryp.createPersonAddress();
         if (registr.getCity() != null) value.setCity(CommonLib.MakeString(_PACity_QNAME,registr.getCity()));
-        if (registr.getStreet2() != null) value.setHouse(CommonLib.MakeString(_House_QNAME,registr.getStreet2()));
-        if (registr.getStreet1() != null) value.setStreet(CommonLib.MakeString(_Street_QNAME,registr.getStreet1()));
+        if (registr.getStreet1() != null) streetval = registr.getStreet1();
+        if (registr.getStreet2() != null) streetval = streetval + " " + registr.getStreet1();
+        if (streetval != null) {
+            value.setStreet(CommonLib.MakeString(_Street_QNAME,streetval));
+            value.setHouse(CommonLib.MakeString(_House_QNAME,"0"));
+        }
         if (registr.getZipCode() != null) value.setPostalCode(CommonLib.MakeString(_PostalCode_QNAME,registr.getZipCode()));
         if (registr.getCountry() != null) value.setCountryID(GetCountry.getCountriesID(registr.getCountry()));
         JAXBElement<PersonAddress> result = new JAXBElement<PersonAddress>(_PersonAddress_QNAME, PersonAddress.class, Person.class, value);

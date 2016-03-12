@@ -20,7 +20,7 @@ import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetDocument
  * @author Dale
  */
 public class GetDocumentType {
-
+    public static final String CODE_PASSPORT_RF = "35";
     private static GetDocumentTypeChangesResponseMessage getDocumentTypeChanges() throws UnsupportedOperationException, IOException {
         try {
                 JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
