@@ -34,7 +34,7 @@ public class FindPerson {
                     logger.debug("findPersonJAXb <- fprm='"+fprm.toString());
             }  
             //org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
-            JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+            JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
             fprm.setAuthenticationHeader(ahh);
             //IWebService service = new WebService().getWS2007HttpBindingIWebService();
             WebServiceSingl ws = WebServiceSingl.getInstance();

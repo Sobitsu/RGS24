@@ -97,9 +97,9 @@ public class CreatePersonTest {
         person.setDocuments(CommonLib.getDocuments(payee.getIdentification()));
         person.setPhones(CommonLib.getPhones(payee.getPhone()));
         person.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
-        person.setFirstName(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
-        person.setLastName(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
-        person.setMiddleName(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
+        person.setFirstName(CommonLib.makeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
+        person.setLastName(CommonLib.makeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
+        person.setMiddleName(CommonLib.makeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
         
         CreatePersonResponseMessage result = CreatePerson.createPersonJAXb(person);
         CommonLib.checkFault(result,logger,"");
@@ -157,9 +157,9 @@ public class CreatePersonTest {
         person.setDocuments(CommonLib.getDocuments(payee.getIdentification()));
         person.setPhones(CommonLib.getPhones(payee.getPhone()));
         person.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
-        person.setFirstName(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
-        person.setLastName(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
-        person.setMiddleName(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
+        person.setFirstName(CommonLib.makeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
+        person.setLastName(CommonLib.makeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
+        person.setMiddleName(CommonLib.makeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
         CreatePersonResponseMessage result = CreatePerson.createPersonJAXb(person);
         try {
                 CommonLib.checkFault(result,logger,"10");

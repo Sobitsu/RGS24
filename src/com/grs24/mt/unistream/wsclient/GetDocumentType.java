@@ -26,7 +26,7 @@ public class GetDocumentType {
      private static final Logger logger = LoggerFactory.getLogger(GetDocumentType.class);
     private static GetDocumentTypeChangesResponseMessage getDocumentTypeChanges() throws UnsupportedOperationException, IOException {
         try {
-                JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+                JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
                 org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetDocumentTypeChangesRequestMessage requestMessage = new org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetDocumentTypeChangesRequestMessage();
                 requestMessage.setAuthenticationHeader(ahh);
                 requestMessage.setUpdateCount(0L);

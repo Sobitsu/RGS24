@@ -483,7 +483,6 @@ RUB
         }*/
     @Test
     public void testMoneySearch() throws Exception {
-        System.out.println("moneySearch");
         RemittanceHolder[] result = null;
         String mtcn = "743818837598";
         FundsHolder approxOrgFunds = null;
@@ -587,7 +586,6 @@ RUB
                  assertEquals(ex.getCode(), 50011);
                 }
 
-        System.out.println("moneySearch OK");
     }
 
     /**
@@ -647,7 +645,6 @@ RUB
     
     @Test
     public void testMoneyPay1() throws Exception {
-        System.out.println("moneyPay");
         PersonHolder payee = setpayee();
         String mtID = "16016056";
         String docID = "";
@@ -656,16 +653,13 @@ RUB
             TestLib.instance.moneyPay(mtID, "", payee, docID, docDate);
         }
         catch (RemittanceException ex) {
-            if (ex.getCode() == 30000)  {System.out.println("moneyHold OK");}
-            else
-            {fail(" Ошибка оплаты перевода");}
+            if (ex.getCode() != 30000)  fail(" Ошибка оплаты перевода");
         }
     }
 
     
     @Test
     public void testMoneyPay() throws Exception {
-        System.out.println("moneyPay");
         String mtcn = "012234500911";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
@@ -698,7 +692,6 @@ RUB
      */
     @Test
     public void testMoneyHold() throws Exception {
-        System.out.println("moneyHold");
         String mtID = "";
         String mtcn = "";
         PersonHolder payee = null;
@@ -707,7 +700,6 @@ RUB
         catch (RemittanceException ex) {
             assertEquals(ex.getCode(), 30001);
         }
-        System.out.println("moneyHold OK");
     }
 
     /**
@@ -715,7 +707,6 @@ RUB
      */
     @Test
     public void testMoneyUnhold() throws Exception {
-        System.out.println("moneyUnhold");
         String mtID = "";
         String mtcn = "";
         PersonHolder payee = null;
@@ -725,6 +716,5 @@ RUB
         catch (RemittanceException ex) {
             assertEquals(ex.getCode(), 30001);
         }
-        System.out.println("moneyUnhold OK");
         }
 }

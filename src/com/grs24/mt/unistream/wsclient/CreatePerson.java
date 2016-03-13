@@ -37,7 +37,7 @@ private static final Logger logger = LoggerFactory.getLogger(CreatePerson.class)
         }  
         CreatePersonRequestMessage cprm = new CreatePersonRequestMessage();
         ObjectFactory factory = new ObjectFactory();
-        JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+        JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
         JAXBElement<Person> persel = factory.createPerson(persh);
         cprm.setAuthenticationHeader(ahh);
         cprm.setPerson(persel);

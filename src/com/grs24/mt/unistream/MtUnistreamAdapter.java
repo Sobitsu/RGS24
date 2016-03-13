@@ -407,13 +407,13 @@ public class MtUnistreamAdapter implements MtAdapter
                 logger.error("getpersshot: Error transforming date:" + DateTimeUtils.formatDate(payee.getBirthday()), ex);
                 throw new RemittanceException("getpersshot: Error transforming date:" + DateTimeUtils.formatDate(payee.getBirthday()), 20001, "","");                
             }
-            if (payee.getFullName().getIndividual().getFirst() != null) fprm.setFirstname(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
-            if (payee.getFullName().getIndividual().getLast() != null) fprm.setLastname(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
-            if (payee.getFullName().getIndividual().getMiddle() != null) fprm.setMiddlename(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
-            if (payee.getPhone()[0] != null) fprm.setPhone(CommonLib.MakeString(_Phone_QNAME,payee.getPhone()[0]));
+            if (payee.getFullName().getIndividual().getFirst() != null) fprm.setFirstname(CommonLib.makeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
+            if (payee.getFullName().getIndividual().getLast() != null) fprm.setLastname(CommonLib.makeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
+            if (payee.getFullName().getIndividual().getMiddle() != null) fprm.setMiddlename(CommonLib.makeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
+            if (payee.getPhone()[0] != null) fprm.setPhone(CommonLib.makeString(_Phone_QNAME,payee.getPhone()[0]));
             if (payee.getIdentification() != null) {
-                if (payee.getIdentification().getCredNumber() != null) fprm.setDocNumber(CommonLib.MakeString(_DocNumber_QNAME,payee.getIdentification().getCredNumber()));
-                if (payee.getIdentification().getSerialNumber() != null) fprm.setDocSeries(CommonLib.MakeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
+                if (payee.getIdentification().getCredNumber() != null) fprm.setDocNumber(CommonLib.makeString(_DocNumber_QNAME,payee.getIdentification().getCredNumber()));
+                if (payee.getIdentification().getSerialNumber() != null) fprm.setDocSeries(CommonLib.makeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
                 if (payee.getIdentification().getIssueDate() != null) try {
                     fprm.setDocIssueDate(CommonLib.GetGregorianDate(payee.getIdentification().getIssueDate()));
                 } catch (Exception ex) {
@@ -469,9 +469,9 @@ public class MtUnistreamAdapter implements MtAdapter
                 logger.error("getPerson: Error transforming date:" + DateTimeUtils.formatDate(payee.getBirthday()), ex);
                 throw new RemittanceException("getPerson: Error transforming date", 20001, "",ex.getMessage());
             }
-               if (payee.getFullName().getIndividual().getFirst() != null) person.setFirstName(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
-               if (payee.getFullName().getIndividual().getLast() != null) person.setLastName(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
-               if (payee.getFullName().getIndividual().getMiddle() != null) person.setMiddleName(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
+               if (payee.getFullName().getIndividual().getFirst() != null) person.setFirstName(CommonLib.makeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
+               if (payee.getFullName().getIndividual().getLast() != null) person.setLastName(CommonLib.makeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
+               if (payee.getFullName().getIndividual().getMiddle() != null) person.setMiddleName(CommonLib.makeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
             if (logger.isDebugEnabled()) {
                 logger.debug("getPerson: -> person='"+person.toString());
             }   

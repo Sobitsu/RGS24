@@ -43,10 +43,10 @@ public class FindTransfer {
             }  
         FindTransferRequestMessage ftrm = new FindTransferRequestMessage();
         //org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
-        JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+        JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
         ftrm.setAuthenticationHeader(ahh);
         ftrm.setBankID(bankId); 
-        ftrm.setControlNumber(CommonLib.MakeString(_ControlNumber_QNAME, controlNumber));
+        ftrm.setControlNumber(CommonLib.makeString(_ControlNumber_QNAME, controlNumber));
         ftrm.setCurrencyID(val);
         ftrm.setSum(sum);
         if (logger.isDebugEnabled()) debug(ftrm);

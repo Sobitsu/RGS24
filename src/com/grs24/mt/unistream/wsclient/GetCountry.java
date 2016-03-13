@@ -23,7 +23,7 @@ public class GetCountry {
     private static final Logger logger = LoggerFactory.getLogger(GetCountry.class);
     private static GetCountriesChangesResponseMessage getCountriesChanges( ) throws UnsupportedOperationException, IOException {
         try {
-                JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+                JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
                 org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCountriesChangesRequestMessage requestMessage = new org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCountriesChangesRequestMessage();
                 requestMessage.setAuthenticationHeader(ahh);
                 requestMessage.setUpdateCount(0L);

@@ -78,7 +78,7 @@ public class GetCurrency {
 
     private static GetCurrenciesChangesResponseMessage getCurrenciesChanges() throws UnsupportedOperationException, IOException {
         try {
-                JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+                JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
                 org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCurrenciesChangesRequestMessage requestMessage = new org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCurrenciesChangesRequestMessage();
                 requestMessage.setAuthenticationHeader(ahh);
                 requestMessage.setUpdateCount(1L);

@@ -33,7 +33,7 @@ private static final Logger logger = LoggerFactory.getLogger(PayOutTransfer.clas
             }              
             ObjectFactory factory = new ObjectFactory();
             PayoutTransferRequestMessage ptrm = factory.createPayoutTransferRequestMessage();
-            JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+            JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
             JAXBElement<Transfer> tr = factory.createTransfer(transfer);
             ptrm.setAuthenticationHeader(ahh);
             ptrm.setTransfer(tr);

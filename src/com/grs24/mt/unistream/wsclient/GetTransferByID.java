@@ -35,7 +35,7 @@ private static final Logger logger = LoggerFactory.getLogger(GetTransferByID.cla
                             + "'");
             }  
             GetTransferByIDRequestMessage gtrm = new GetTransferByIDRequestMessage();
-            JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
+            JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
             gtrm.setAuthenticationHeader(ahh);
             gtrm.setTransferID(transferId);
             //IWebService service = new WebService().getWS2007HttpBindingIWebService();

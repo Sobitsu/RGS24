@@ -109,15 +109,20 @@ public class CommonLib {
 * @return заголовок
 */ 
 
-    public static JAXBElement<AuthenticationHeader> MakeAuthHead()
+    public static JAXBElement<AuthenticationHeader> makeAuthHead()
         {
-            logger.debug("Create AuthenticationHeader");
+            if (logger.isDebugEnabled()) {
+                logger.debug("makeAuthHead: <- start" );
+            }
             ObjectFactory factory = new ObjectFactory();
             AuthenticationHeader ah = factory.createAuthenticationHeader();
             JAXBElement<AuthenticationHeader> ahh = factory.createWsRequestAuthenticationHeader(ah);
             ah.setAppKey(factory.createAuthenticationHeaderAppKey(MtUnistreamAdapter.KEY_USER_AUTHED_APIKEY));
             ah.setUsername(factory.createAuthenticationHeaderUsername(MtUnistreamAdapter.KEY_USER_AUTHED_LOGIN));
             ah.setPassword(factory.createAuthenticationHeaderPassword(MtUnistreamAdapter.KEY_USER_AUTHED_PASSWORD));
+            if (logger.isDebugEnabled()) {
+                logger.debug("makeAuthHead: -> ahh = " + ahh.toString() );
+            }
             return ahh;
         }
 
@@ -129,7 +134,7 @@ public class CommonLib {
 * @see QName
 */ 
     
-    public static JAXBElement<String> MakeString(QName qname, String value)
+    public static JAXBElement<String> makeString(QName qname, String value)
         {
             return new JAXBElement<String>(qname, String.class, null, value);
         }
@@ -145,21 +150,26 @@ public class CommonLib {
 */ 
     public static JAXBElement<ArrayOfDocument> getDocuments(CredentialsHolder credholder) throws Exception {
         QName _ArrayOfDocument_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Documents");
-        logger.debug("Create JAXBElement<ArrayOfDocument>");
+        if (logger.isDebugEnabled()) {
+            logger.debug("getDocuments: <- credholder = '"+ credholder.toString() +"'" );
+        }
         ObjectFactory factory = new ObjectFactory();
         ArrayOfDocument valuearr = factory.createArrayOfDocument();
         if (credholder != null) {
             Document valdoc = factory.createDocument();
-            if (credholder.getCredNumber() != null) valdoc.setNumber(CommonLib.MakeString(_DocNumber_QNAME,credholder.getCredNumber()));
-            if (credholder.getSerialNumber() != null) valdoc.setSeries(CommonLib.MakeString(_DocSeries_QNAME,credholder.getSerialNumber()));
+            if (credholder.getCredNumber() != null) valdoc.setNumber(CommonLib.makeString(_DocNumber_QNAME,credholder.getCredNumber()));
+            if (credholder.getSerialNumber() != null) valdoc.setSeries(CommonLib.makeString(_DocSeries_QNAME,credholder.getSerialNumber()));
             if (credholder.getIssueDate() != null) valdoc.setIssueDate(CommonLib.GetGregorianDate(credholder.getIssueDate()));
             if (credholder.getExpiryDate() != null) valdoc.setExpiryDate(CommonLib.GetGregorianDate(credholder.getExpiryDate()));
-            if (credholder.getIssuer() != null) valdoc.setIssuer(CommonLib.MakeString(_Issuer_QNAME,credholder.getIssuer()));
-            if (credholder.getIssuerCode() != null) valdoc.setIssuerCode(CommonLib.MakeString(_IssuerCode_QNAME,credholder.getIssuerCode()));
+            if (credholder.getIssuer() != null) valdoc.setIssuer(CommonLib.makeString(_Issuer_QNAME,credholder.getIssuer()));
+            if (credholder.getIssuerCode() != null) valdoc.setIssuerCode(CommonLib.makeString(_IssuerCode_QNAME,credholder.getIssuerCode()));
             if (credholder.getCredType() != null) valdoc.setTypeID(GetDocumentType.getDocumentsID(credholder.getCredType()));
             valuearr.getDocument().add(valdoc);
         }
         JAXBElement<ArrayOfDocument> result = new JAXBElement<ArrayOfDocument>(_ArrayOfDocument_QNAME, ArrayOfDocument.class, null, valuearr);
+        if (logger.isDebugEnabled()) {
+            logger.debug("getDocuments: -> result = '"+ result.toString() +"'" );
+        }
         return result;
     }
 /**
@@ -173,20 +183,25 @@ public class CommonLib {
 */ 
     public static JAXBElement<PersonAddress> getAdressElem(AddressHolder registr) throws Exception {
         QName _PersonAddress_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Address");
-        logger.debug("Create JAXBElement<PersonAddress>");
+        if (logger.isDebugEnabled()) {
+            logger.debug("getAdressElem: <- registr = '"+ registr.toString() +"'" );
+        }
         String streetval = null;
         ObjectFactory factoryp = new ObjectFactory();
         PersonAddress value = factoryp.createPersonAddress();
-        if (registr.getCity() != null) value.setCity(CommonLib.MakeString(_PACity_QNAME,registr.getCity()));
+        if (registr.getCity() != null) value.setCity(CommonLib.makeString(_PACity_QNAME,registr.getCity()));
         if (registr.getStreet1() != null) streetval = registr.getStreet1();
         if (registr.getStreet2() != null) streetval = streetval + " " + registr.getStreet1();
         if (streetval != null) {
-            value.setStreet(CommonLib.MakeString(_Street_QNAME,streetval));
-            value.setHouse(CommonLib.MakeString(_House_QNAME,"0"));
+            value.setStreet(CommonLib.makeString(_Street_QNAME,streetval));
+            value.setHouse(CommonLib.makeString(_House_QNAME,"0"));
         }
-        if (registr.getZipCode() != null) value.setPostalCode(CommonLib.MakeString(_PostalCode_QNAME,registr.getZipCode()));
+        if (registr.getZipCode() != null) value.setPostalCode(CommonLib.makeString(_PostalCode_QNAME,registr.getZipCode()));
         if (registr.getCountry() != null) value.setCountryID(GetCountry.getCountriesID(registr.getCountry()));
         JAXBElement<PersonAddress> result = new JAXBElement<PersonAddress>(_PersonAddress_QNAME, PersonAddress.class, Person.class, value);
+        if (logger.isDebugEnabled()) {
+            logger.debug("getAdressElem: -> result = '"+ result.toString() +"'" );
+        }
         return result;
     }
 
@@ -201,18 +216,23 @@ public class CommonLib {
     
     public static JAXBElement<ArrayOfPhone> getPhones(String[] phones) throws Exception {
         QName _ArrayOfPhone_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib.Clients", "Phones");
-        logger.debug("Create JAXBElement<ArrayOfPhone>");
+        if (logger.isDebugEnabled()) {
+            logger.debug("getPhones: <- phones = '"+ phones +"'" );
+        }
         ObjectFactory factoryp = new ObjectFactory();
         ArrayOfPhone valuearr = factoryp.createArrayOfPhone();
         if (phones != null &&  phones.length>0) {
             for(int i=0; i<phones.length; i++) {
                 Phone valphone = factoryp.createPhone();
-                if (phones[i] != null) valphone.setNumber(CommonLib.MakeString(_PhoneNumber_QNAME,phones[i]));
+                if (phones[i] != null) valphone.setNumber(CommonLib.makeString(_PhoneNumber_QNAME,phones[i]));
                 valphone.setType(PhoneType.MOBILE);
                 valuearr.getPhone().add(valphone);
             }
         }
         JAXBElement<ArrayOfPhone> result = new JAXBElement<ArrayOfPhone>(_ArrayOfPhone_QNAME, ArrayOfPhone.class, null, valuearr);
+        if (logger.isDebugEnabled()) {
+            logger.debug("getPhones: -> result = '"+ result.toString() +"'" );
+        }      
         return result;
     }
 
@@ -227,13 +247,18 @@ public class CommonLib {
     
     
     public static XMLGregorianCalendar GetGregorianDate(Date date) throws Exception {
-        logger.debug("Create XMLGregorianCalendar");
+        if (logger.isDebugEnabled()) {
+            logger.debug("GetGregorianDate: <- date = '"+ date.toString() +"'" );
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         GregorianCalendar gregory = new GregorianCalendar();
         gregory.setTime(calendar.getTime());
         XMLGregorianCalendar gcalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
         gcalendar.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+        if (logger.isDebugEnabled()) {
+            logger.debug("GetGregorianDate: -> gcalendar = '"+ gcalendar.toString() +"'" );
+        }
         return gcalendar;
     }
 

@@ -79,12 +79,12 @@ public class FindPersonTest {
         payee.setPhone(phone_);
 
         fprm.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
-        fprm.setFirstname(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
-        fprm.setLastname(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
-        fprm.setMiddlename(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
-        fprm.setPhone(CommonLib.MakeString(_Phone_QNAME,payee.getPhone()[0]));
-        fprm.setDocNumber(CommonLib.MakeString(_DocNumber_QNAME,payee.getIdentification().getCredNumber()));
-        fprm.setDocSeries(CommonLib.MakeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
+        fprm.setFirstname(CommonLib.makeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
+        fprm.setLastname(CommonLib.makeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
+        fprm.setMiddlename(CommonLib.makeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
+        fprm.setPhone(CommonLib.makeString(_Phone_QNAME,payee.getPhone()[0]));
+        fprm.setDocNumber(CommonLib.makeString(_DocNumber_QNAME,payee.getIdentification().getCredNumber()));
+        fprm.setDocSeries(CommonLib.makeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
         fprm.setDocIssueDate(CommonLib.GetGregorianDate(payee.getIdentification().getIssueDate()));
         
         FindPersonResponseMessage result = FindPerson.findPersonJAXb(fprm);
