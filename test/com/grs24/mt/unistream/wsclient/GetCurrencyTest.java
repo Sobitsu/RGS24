@@ -19,12 +19,13 @@ import static org.junit.Assert.*;
  */
 public class GetCurrencyTest {
     
-    private final TestLib tl = new TestLib();
     private final GetCurrency gc = new GetCurrency();
+    private final static TestLib tl = new TestLib();
     @BeforeClass
-    public void setUpClass() throws IOException {
+    public static void setUpClass() throws IOException {
         tl.setUpClass();
     }
+
     
     @AfterClass
     public static void tearDownClass() {

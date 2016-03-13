@@ -61,7 +61,6 @@ public class KeyToolsTest {
      */
     @Test
     public void testGetPrivateKeyPKCS12() throws Exception {
-        System.out.println("getPrivateKeyPKCS12");
         File file = new File(KEYSTOREPATH);
         String keyBody = computeB64(file);
         String keyStorePassword = KEYSTOREPASS;
@@ -84,7 +83,6 @@ public class KeyToolsTest {
      */
     @Test
     public void testGetPrivateKeyPKCS12file() throws Exception {
-        System.out.println("getPrivateKeyPKCS12file");
         String filename = KEYSTOREPATH;
         String keyStorePassword = KEYSTOREPASS;
         String keyPassword = KEYPASS;
@@ -98,7 +96,6 @@ public class KeyToolsTest {
      */
     @Test
     public void testGetCertificatesJKS() throws Exception {
-        System.out.println("getCertificatesJKS");
         String keyBody = computeB64(new File(TRUSTSTOREPATH));
         String keyStorePassword = TRUSTSTOREPASS;
         Certificate[] expResult = null;
@@ -113,11 +110,9 @@ public class KeyToolsTest {
      */
     @Test
     public void testGetCertificatesPKCS12file() throws Exception {
-        System.out.println("getCertificatesPKCS12file");
         String filename = TRUSTSTOREPATH;
         String keyStorePassword = TRUSTSTOREPASS;
         Certificate[] result = KeyTools.getCertificatesPKCS12file(filename, keyStorePassword);
-        //System.out.println(result[0].toString());
         assertEquals(result[0].getType(),"X.509");
         assertEquals(result[0].getPublicKey().getAlgorithm(),"RSA");
         assertNotNull(result[0]);

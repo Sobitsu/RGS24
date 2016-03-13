@@ -20,12 +20,13 @@ import org.junit.Ignore;
  */
 public class GetDocumentTypeTest {
  
-    private final TestLib tl = new TestLib();
     private final GetDocumentType gdt = new GetDocumentType();
+    private final static TestLib tl = new TestLib();
     @BeforeClass
-    public void setUpClass() throws IOException {
+    public static void setUpClass() throws IOException {
         tl.setUpClass();
     }
+
 
     @AfterClass
     public static void tearDownClass() {

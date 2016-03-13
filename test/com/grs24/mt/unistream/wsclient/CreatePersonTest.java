@@ -36,11 +36,12 @@ public class CreatePersonTest {
     private final static QName _MiddleName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "MiddleName");
 
     
-    private final TestLib tl = new TestLib();
+    private final static TestLib tl = new TestLib();
     @BeforeClass
-    public void setUpClass() throws IOException {
+    public static void setUpClass() throws IOException {
         tl.setUpClass();
     }
+
      private static final Logger logger = LoggerFactory.getLogger(CreatePersonTest.class);
 
     public CreatePersonTest() {

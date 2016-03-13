@@ -19,9 +19,9 @@ import static org.junit.Assert.*;
  * @author Dale
  */
 public class GetTransferByIDTest {
-    private final TestLib tl = new TestLib();
+    private final static TestLib tl = new TestLib();
     @BeforeClass
-    public void setUpClass() throws IOException {
+    public static void setUpClass() throws IOException {
         tl.setUpClass();
     }
 
