@@ -5,6 +5,7 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
+import com.unistream.test.wcflib.IWebService;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
 import javax.xml.ws.WebServiceException;
@@ -21,40 +22,41 @@ import org.slf4j.LoggerFactory;
  * @author Dale
  */
 public class CreatePerson {
-private static final Logger logger = LoggerFactory.getLogger(CreatePerson.class);
+private final Logger logger = LoggerFactory.getLogger(CreatePerson.class);
     /**
 * Выполнение запроса на создание клиента в базе Unistream
 * @param persh Параметр типа Person c заполнеными реквизитами клиента
+* @param ahh - Подготовленный авторизационный заголовок
+* @param service - текущий коннект к ВебСервису
 * @return Созданный клиент
 * @throws IOException в случае обрыва связи
 * @see Person
 */ 
     
-    public static CreatePersonResponseMessage createPersonJAXb(Person persh) throws UnsupportedOperationException, IOException {
+    public CreatePersonResponseMessage createPersonJAXb(Person persh,JAXBElement<AuthenticationHeader> ahh, IWebService service) throws UnsupportedOperationException, IOException {
     try {    
         if (logger.isDebugEnabled()) {
                 logger.debug("createPersonJAXb <- persh='"+persh.toString());
         }  
         CreatePersonRequestMessage cprm = new CreatePersonRequestMessage();
         ObjectFactory factory = new ObjectFactory();
-        JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
+        CommonLib cl = new CommonLib();
         JAXBElement<Person> persel = factory.createPerson(persh);
         cprm.setAuthenticationHeader(ahh);
         cprm.setPerson(persel);
         //IWebService service = new WebService().getWS2007HttpBindingIWebService();
-        WebServiceSingl ws = WebServiceSingl.getInstance();
-        CreatePersonResponseMessage rm = ws.service.createPerson(cprm);
+        CreatePersonResponseMessage rm = service.createPerson(cprm);
         if (logger.isDebugEnabled()) {
                 com.unistream.test.wcflib.CreatePerson ftxml = new com.unistream.test.wcflib.CreatePerson();
                 ftxml.setRequestMessage(factory.createCreatePersonRequestMessage(cprm));
-                logger.debug("createPersonJAXb -> cprm='"+ CommonLib.printXml(ftxml));
+                logger.debug("createPersonJAXb -> cprm='" + cl.printXml(ftxml));
                 com.unistream.test.wcflib.CreatePersonResponse cpr = new com.unistream.test.wcflib.CreatePersonResponse();
                 cpr.setCreatePersonResult(factory.createCreatePersonResponseMessage(rm));
-                logger.debug("createPersonJAXb -> rm='"+CommonLib.printXml(cpr));
+                logger.debug("createPersonJAXb -> rm='" + cl.printXml(cpr));
         }  
         return rm;
     }
-    catch (IOException|WebServiceException ex)
+    catch (WebServiceException ex)
         {throw new IOException("createPersonJAXb:Connection Unistream error",ex);}
     }
 }

@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  * @author Dale
  */
 public abstract class CallbackHandler implements javax.security.auth.callback.CallbackHandler {
-  private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CallbackHandler.class);
+  private final org.slf4j.Logger logger = LoggerFactory.getLogger(CallbackHandler.class);
 
 /**
 * Метод обработки CallBack от системы безопасности на подмену ключей и хранилищ с ключами<br>
@@ -80,14 +80,14 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
                 KeyStoreCallback kscb = (KeyStoreCallback) callback;
                 String keystoretype = null;
                 if (this instanceof KeyStoreHandler) {
-                          keystoretype = MtUnistreamAdapter.KEY_KEYSTORE_TYPE;
-                          keystorebody = MtUnistreamAdapter.KEY_KEYSTORE_PKCS12_BODY;
-                          keystorepassword = MtUnistreamAdapter.KEY_KEYSTORE_PASSWORD;
+                          keystoretype = MtUnistreamAdapter.get_keystoreType();
+                          keystorebody = MtUnistreamAdapter.get_keystoreBody();
+                          keystorepassword = MtUnistreamAdapter.get_keystorePassword();
                       }
                 if (this instanceof TrustStoreHandler) {
-                          keystoretype = MtUnistreamAdapter.KEY_TRUSTSTORE_TYPE;
-                          keystorebody = MtUnistreamAdapter.KEY_TRUSTSTORE_JKS_BODY;
-                          keystorepassword = MtUnistreamAdapter.KEY_TRUSTSTORE_PASSWORD;
+                          keystoretype = MtUnistreamAdapter.get_truststoreType();
+                          keystorebody = MtUnistreamAdapter.get_truststoreBody();
+                          keystorepassword = MtUnistreamAdapter.get_truststorePassword();
                       }
                 try {
                     ks = KeyStore.getInstance(keystoretype);
@@ -120,7 +120,7 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
                 PrivateKeyCallback pkcb = (PrivateKeyCallback) callback;
                 KeyStore ks = pkcb.getKeystore();
                 Key key;
-                String keypassword = MtUnistreamAdapter.KEY_KEY_PASSWORD;
+                String keypassword = MtUnistreamAdapter.get_keyPassword();
                 Enumeration<String> aliases;
                 try {
                     aliases = ks.aliases();

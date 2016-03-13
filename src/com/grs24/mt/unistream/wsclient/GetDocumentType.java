@@ -5,14 +5,11 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
-import com.grs24.mt.RemittanceException;
 import com.grs24.mt.unistream.BaseDataParser;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
 import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
-import org.datacontract.schemas._2004._07.wcfservicelib.ObjectStatus;
-import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.DocumentType;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetDocumentTypeChangesResponseMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +19,10 @@ import org.slf4j.LoggerFactory;
  * @author Dale
  */
 public class GetDocumentType {
-    public static final String CODE_PASSPORT_RF = "35";
-     private static final Logger logger = LoggerFactory.getLogger(GetDocumentType.class);
-    private static GetDocumentTypeChangesResponseMessage getDocumentTypeChanges() throws UnsupportedOperationException, IOException {
+    private final Logger logger = LoggerFactory.getLogger(GetDocumentType.class);
+/*    private GetDocumentTypeChangesResponseMessage getDocumentTypeChanges(JAXBElement<AuthenticationHeader> ahh) throws UnsupportedOperationException, IOException {
         try {
-                JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
+                CommonLib cl = new CommonLib();
                 org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetDocumentTypeChangesRequestMessage requestMessage = new org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetDocumentTypeChangesRequestMessage();
                 requestMessage.setAuthenticationHeader(ahh);
                 requestMessage.setUpdateCount(0L);
@@ -36,7 +32,7 @@ public class GetDocumentType {
             }
         catch (IOException|WebServiceException ex)
             {throw new IOException("Ошибка доступа к Unistream",ex);}
-    }
+    }*/
    
     /**
 * Получение ID типа документа
@@ -164,7 +160,7 @@ Inprisonment release certificate in Russian<br>
 * @return ID тпа документа
 * @throws Exception в случае провала выполение
 */ 
-    public static Integer getDocumentsID(String code)throws Exception {
+    public Integer getDocumentsID(String code)throws Exception {
        /* GetDocumentTypeChangesResponseMessage rm = getDocumentTypeChanges();
         CommonLib.CheckFault(rm);
         debug(rm);
@@ -192,9 +188,10 @@ Inprisonment release certificate in Russian<br>
 * @throws java.io.IOException  - в случае недоступности UniStream
 **/
    
-    public static String getDocumentTypeList() throws RemittanceException, IOException {
+ /*   public String getDocumentTypeList() throws RemittanceException, IOException {
         GetDocumentTypeChangesResponseMessage rm = getDocumentTypeChanges();
-        CommonLib.checkFault(rm,logger,"");
+        CommonLib cl = new CommonLib();
+        cl.checkFault(rm,logger,"");
         if (rm.getDocumentTypes().isNil()) return null;
         StringBuilder str = new StringBuilder();
         str.append("ID").append(",").append("English Names").append(",").append("Russian Names").append(System.getProperty("line.separator"));
@@ -209,5 +206,5 @@ Inprisonment release certificate in Russian<br>
                     }
                 }    
         return str.toString();
-    }
+    }*/
 }

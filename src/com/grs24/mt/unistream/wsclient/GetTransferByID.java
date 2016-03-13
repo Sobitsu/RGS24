@@ -5,6 +5,7 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
+import com.unistream.test.wcflib.IWebService;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
 import javax.xml.ws.WebServiceException;
@@ -19,40 +20,41 @@ import org.slf4j.LoggerFactory;
  * @author Dale
  */
 public class GetTransferByID {
-private static final Logger logger = LoggerFactory.getLogger(GetTransferByID.class);
+private final Logger logger = LoggerFactory.getLogger(GetTransferByID.class);
 /**
 * Выполнение запроса на получение перевода по ID
 * @param transferId - ID перевода в СДП
+* @param ahh - Подготовленный авторизационный заголовок
+* @param service - текущий коннект к ВебСервису
 * @return Найденный перевод
 * 
 * @throws IOException в случае провала выполение
 */   
     
-    public static GetTransferByIDResponseMessage getTransferByID(Integer transferId) throws UnsupportedOperationException, IOException {
+    public GetTransferByIDResponseMessage getTransferByID(Integer transferId,JAXBElement<AuthenticationHeader> ahh, IWebService service) throws UnsupportedOperationException, IOException {
         try {
             if (logger.isDebugEnabled()) {
                     logger.debug("getTransferByID <- transferId='"+transferId.toString()
                             + "'");
             }  
             GetTransferByIDRequestMessage gtrm = new GetTransferByIDRequestMessage();
-            JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
             gtrm.setAuthenticationHeader(ahh);
             gtrm.setTransferID(transferId);
             //IWebService service = new WebService().getWS2007HttpBindingIWebService();
-            WebServiceSingl ws = WebServiceSingl.getInstance();
-            GetTransferByIDResponseMessage rm = ws.service.getTransferByID(gtrm);
+            GetTransferByIDResponseMessage rm = service.getTransferByID(gtrm);
             if (logger.isDebugEnabled()) {
                 org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
                 com.unistream.test.wcflib.GetTransferByID gtbixml = new com.unistream.test.wcflib.GetTransferByID();
                 gtbixml.setRequestMessage(factory.createGetTransferByIDRequestMessage(gtrm));
-                logger.debug("getTransferByID -> gtrm='"+CommonLib.printXml(gtbixml)+"'");
+                CommonLib cl = new CommonLib();
+                logger.debug("getTransferByID -> gtrm='"+cl.printXml(gtbixml)+"'");
                 com.unistream.test.wcflib.GetTransferByIDResponse ftrxml = new com.unistream.test.wcflib.GetTransferByIDResponse();
                 ftrxml.setGetTransferByIDResult(factory.createGetTransferByIDResponseMessage(rm));
-                logger.debug("getTransferByID -> rm='"+CommonLib.printXml(ftrxml)+"'");
+                logger.debug("getTransferByID -> rm='"+cl.printXml(ftrxml)+"'");
             }  
             return rm;
         }
-    catch (IOException|WebServiceException ex)
+    catch (WebServiceException ex)
         {throw new IOException("getTransferByID:Connection Unistream error",ex);}
     }
 }

@@ -22,8 +22,8 @@ import org.slf4j.LoggerFactory;
  * @author Dale
  */
 public class GetBanks {
-    private static final Logger logger = LoggerFactory.getLogger(GetBanks.class);
-    private static GetBanksChangesResponseMessage getBanksChanges() throws IOException {
+    private final Logger logger = LoggerFactory.getLogger(GetBanks.class);
+    /*private GetBanksChangesResponseMessage getBanksChanges() throws IOException {
         try {
             JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
             org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetBanksChangesRequestMessage requestMessage = new org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetBanksChangesRequestMessage();
@@ -35,7 +35,7 @@ public class GetBanks {
         catch (WebServiceException ex) {
         throw new IOException("getBanksChanges:Connection Unistream error",ex);
         }
-    }
+    }*/
 /**
 * Выполнение запроса на получение ID точки доступа
 * @param parrentID - ID банка предка
@@ -43,7 +43,7 @@ public class GetBanks {
 * @throws com.grs24.mt.RemittanceException в случае отрицательного разбора сообщения от UniStream
 * @throws java.io.IOException  - в случае недоступности UniStream
 */ 
-    public static Integer getBankId(Integer parrentID) throws RemittanceException, IOException {
+  /*  public Integer getBankId(Integer parrentID) throws RemittanceException, IOException {
         GetBanksChangesResponseMessage listBankXml = getBanksChanges();
         CommonLib.checkFault(listBankXml,logger,parrentID.toString());
         for (Bank i : listBankXml.getBanks().getValue().getBank())
@@ -53,5 +53,5 @@ public class GetBanks {
                     }
                 }
         return null;
-    } 
+    } */
 }

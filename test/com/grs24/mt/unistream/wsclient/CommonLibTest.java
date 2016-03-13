@@ -58,7 +58,8 @@ public class CommonLibTest {
         credholder.setIssueDate(DateTimeUtils.parseDate("07.10.1977",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
         credholder.setIssuer("Ра рас");
         credholder.setSerialNumber("адын");
-        JAXBElement<ArrayOfDocument> result = CommonLib.getDocuments(credholder);
+        CommonLib cl = new CommonLib();
+        JAXBElement<ArrayOfDocument> result = cl.getDocuments(credholder);
         assertFalse(result.isNil());
         assertNotNull(result.getValue());
         assertEquals(result.getValue().getDocument().size(),1L);
@@ -79,7 +80,8 @@ public class CommonLibTest {
         registr.setZipCode("630000");
         registr.setStreet1("<kf ,kf ,kf");
         registr.setStreet2("blu blu blu");
-        JAXBElement<PersonAddress> result = CommonLib.getAdressElem(registr);
+        CommonLib cl = new CommonLib();
+        JAXBElement<PersonAddress> result = cl.getAdressElem(registr);
         assertFalse(result.isNil());
         assertNotNull(result.getValue());
         assertEquals(result.getValue().getCountryID().intValue(),18);

@@ -5,6 +5,7 @@
  */
 package com.grs24.mt.unistream.wsclient;
 
+import com.unistream.test.wcflib.IWebService;
 import java.io.IOException;
 import javax.xml.bind.JAXBElement;
 import javax.xml.ws.WebServiceException;
@@ -19,37 +20,37 @@ import org.slf4j.LoggerFactory;
  * @author Dale
  */
 public class FindPerson {
- private static final Logger logger = LoggerFactory.getLogger(FindPerson.class);
-    /**
+ private final Logger logger = LoggerFactory.getLogger(FindPerson.class);
+/**
 * Выполнение запроса на поиск клиента
 * @param fprm Подготовленный транспортный объект
+* @param ahh - Подготовленный авторизационный заголовок
+* @param service - текущий коннект к ВебСервису
 * @return Найденный клиент
 * @throws IOException в случае провала выполение
 * @see FindPersonRequestMessage
 * @see FindPersonResponseMessage
 */ 
-    public static FindPersonResponseMessage findPersonJAXb(FindPersonRequestMessage fprm) throws UnsupportedOperationException,IOException {
+    public FindPersonResponseMessage findPersonJAXb(FindPersonRequestMessage fprm,JAXBElement<AuthenticationHeader> ahh, IWebService service) throws UnsupportedOperationException,IOException {
         try {
             if (logger.isDebugEnabled()) {
                     logger.debug("findPersonJAXb <- fprm='"+fprm.toString());
             }  
+            CommonLib cl = new CommonLib();
             org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
-            JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
             fprm.setAuthenticationHeader(ahh);
-            //IWebService service = new WebService().getWS2007HttpBindingIWebService();
-            WebServiceSingl ws = WebServiceSingl.getInstance();
-            FindPersonResponseMessage rm = ws.service.findPerson(fprm);
+            FindPersonResponseMessage rm = service.findPerson(fprm);
             if (logger.isDebugEnabled()) {
                 com.unistream.test.wcflib.FindPerson ftxml = new com.unistream.test.wcflib.FindPerson();
                 ftxml.setRequestMessage(factory.createFindPersonRequestMessage(fprm));
-                logger.debug("findPersonJAXb -> fprm='"+CommonLib.printXml(ftxml)+"'");
+                logger.debug("findPersonJAXb -> fprm='"+cl.printXml(ftxml)+"'");
                 com.unistream.test.wcflib.FindPersonResponse fprxml = new com.unistream.test.wcflib.FindPersonResponse();
                 fprxml.setFindPersonResult(factory.createFindPersonResponseMessage(rm));
-                logger.debug("findPersonJAXb -> rm='"+CommonLib.printXml(fprxml)+"'");
+                logger.debug("findPersonJAXb -> rm='"+cl.printXml(fprxml)+"'");
             }  
             return rm;
         }
-        catch (IOException|WebServiceException ex) 
+        catch (WebServiceException ex) 
             {
                 throw new IOException("findPersonJAXb:Connection Unistream error",ex); 
             }
