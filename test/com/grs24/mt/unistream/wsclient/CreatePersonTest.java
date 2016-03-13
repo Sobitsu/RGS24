@@ -62,7 +62,6 @@ public class CreatePersonTest {
      */
     @Test
     public void testCreatePersonJAXb() throws Exception {
-        System.out.println("CreatePersonJAXb");
         Person person = new Person();
         PersonHolder payee = new PersonHolder();
         payee.setCitizenCountry("RUS");
@@ -115,7 +114,6 @@ public class CreatePersonTest {
         assertFalse(result.getPerson().getValue().getMiddleName().isNil());
         assertFalse(result.getPerson().getValue().getLastNameLat().isNil());
         assertEquals(result.getPerson().getValue().getFirstNameLat().getValue(),"Volodimir");
-        System.out.println("CreatePersonJAXb OK");    
     }
     
     /**
@@ -123,7 +121,6 @@ public class CreatePersonTest {
      */
     @Test
     public void testCreatePersonJAXb1() throws Exception {
-        System.out.println("CreatePersonJAXb");
         Person person = new Person();
         PersonHolder payee = new PersonHolder();
         payee.setCitizenCountry("RUS");
@@ -172,7 +169,6 @@ public class CreatePersonTest {
             assertEquals(ex.getStane(),"10");
             assertEquals(ex.getMtError(),"FieldDataNotValid:Incorrect issuance date of the document");
         }
-        System.out.println("CreatePersonJAXb OK");    
     }
     
 }

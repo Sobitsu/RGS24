@@ -41,24 +41,20 @@ private static final Logger logger = LoggerFactory.getLogger(CreatePerson.class)
         JAXBElement<Person> persel = factory.createPerson(persh);
         cprm.setAuthenticationHeader(ahh);
         cprm.setPerson(persel);
-        if (logger.isDebugEnabled()) debug(cprm);
         //IWebService service = new WebService().getWS2007HttpBindingIWebService();
         WebServiceSingl ws = WebServiceSingl.getInstance();
         CreatePersonResponseMessage rm = ws.service.createPerson(cprm);
         if (logger.isDebugEnabled()) {
-                logger.debug("createPersonJAXb -> rm='"+rm.toString());
+                com.unistream.test.wcflib.CreatePerson ftxml = new com.unistream.test.wcflib.CreatePerson();
+                ftxml.setRequestMessage(factory.createCreatePersonRequestMessage(cprm));
+                logger.debug("createPersonJAXb -> cprm='"+ CommonLib.printXml(ftxml));
+                com.unistream.test.wcflib.CreatePersonResponse cpr = new com.unistream.test.wcflib.CreatePersonResponse();
+                cpr.setCreatePersonResult(factory.createCreatePersonResponseMessage(rm));
+                logger.debug("createPersonJAXb -> rm='"+CommonLib.printXml(cpr));
         }  
         return rm;
     }
     catch (IOException|WebServiceException ex)
         {throw new IOException("createPersonJAXb:Connection Unistream error",ex);}
     }
-   private static void debug(CreatePersonRequestMessage cprm)
-        {
-            org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
-            com.unistream.test.wcflib.CreatePerson ftxml = new com.unistream.test.wcflib.CreatePerson();
-            ftxml.setRequestMessage(factory.createCreatePersonRequestMessage(cprm));
-            CommonLib.printXml(ftxml);
-        }
 }
-

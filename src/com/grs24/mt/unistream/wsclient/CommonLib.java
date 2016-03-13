@@ -269,33 +269,31 @@ public class CommonLib {
 * @param x - JAXB запрос
 */ 
     
-    public static void printXml(Object x)
+    public static String printXml(Object x)
         {
                 JAXBContext context = null;
         try {
             context = JAXBContext.newInstance(x.getClass());
         } catch (JAXBException ex) {
-            logger.debug( null, ex);
+            logger.error( "printXml: Error creating xml", ex);
         }
                 StringWriter writer = new StringWriter();
                 Marshaller marshaller = null;
         try {
             marshaller = context.createMarshaller();
         } catch (JAXBException ex) {
-            logger.debug( null, ex);
+            logger.error( "printXml: Error creating xml", ex);
         }
         try {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         } catch (PropertyException ex) {
-            logger.debug( null, ex);
+            logger.error( "printXml: Error creating xml", ex);
         }
         try {
             marshaller.marshal(x,writer);
         } catch (JAXBException ex) {
-            logger.debug( null, ex);
+            logger.error( "printXml: Error creating xml", ex);
         }
-                String stringXML = writer.toString();
-                logger.debug("XMLResult:");
-                logger.debug(stringXML);
+            return writer.toString();
         }
      }
