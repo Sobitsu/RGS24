@@ -234,7 +234,7 @@ public class MtUnistreamAdapterTest {
     
     @Test
     public void testMoneyPay() throws Exception {
-        String mtcn = "646345367262";
+        String mtcn = "622049723662";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
         BigDecimal bd = new BigDecimal("50000");
