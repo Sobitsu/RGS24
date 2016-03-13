@@ -267,6 +267,7 @@ public class CommonLib {
 * Ключевой момент если у класса нет аннотации @XmlRootElement вызывает JAXBException поэтому использовать надо очень осторожно. 
 * Возможно придется править автогенерированные классы
 * @param x - JAXB запрос
+* @return строка с xml документов по входящему запросу
 */ 
     
     public static String printXml(Object x)
