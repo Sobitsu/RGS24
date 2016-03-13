@@ -14,6 +14,8 @@ import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib.ObjectStatus;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.DocumentType;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetDocumentTypeChangesResponseMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -21,6 +23,7 @@ import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetDocument
  */
 public class GetDocumentType {
     public static final String CODE_PASSPORT_RF = "35";
+     private static final Logger logger = LoggerFactory.getLogger(GetDocumentType.class);
     private static GetDocumentTypeChangesResponseMessage getDocumentTypeChanges() throws UnsupportedOperationException, IOException {
         try {
                 JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
@@ -191,7 +194,7 @@ Inprisonment release certificate in Russian<br>
    
     public static String getDocumentTypeList() throws RemittanceException, IOException {
         GetDocumentTypeChangesResponseMessage rm = getDocumentTypeChanges();
-        CommonLib.CheckFault(rm);
+        CommonLib.checkFault(rm,logger,"");
         if (rm.getDocumentTypes().isNil()) return null;
         StringBuilder str = new StringBuilder();
         str.append("ID").append(",").append("English Names").append(",").append("Russian Names").append(System.getProperty("line.separator"));

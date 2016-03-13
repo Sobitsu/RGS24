@@ -32,9 +32,15 @@ public class FindTransfer {
 * @return Найденный перевод
 * @throws IOException в случае провала выполение
 */   
-    public static FindTransferResponseMessage FindTransfer(String controlNumber, Double sum, Integer val, Integer bankId) throws UnsupportedOperationException, IOException {
+    public static FindTransferResponseMessage findTransfer(String controlNumber, Double sum, Integer val, Integer bankId) throws UnsupportedOperationException, IOException {
     try {
-        logger.debug("Start FindTransferResponseMessage");
+            if (logger.isDebugEnabled()) {
+                    logger.debug("findTransfer <- controlNumber='"+controlNumber
+                            + "', sum="+sum.toString()
+                            + ", val="+val.toString()
+                            + ", bankId="+bankId.toString()
+                    );
+            }  
         FindTransferRequestMessage ftrm = new FindTransferRequestMessage();
         //org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
         JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
@@ -47,11 +53,14 @@ public class FindTransfer {
         WebServiceSingl ws = WebServiceSingl.getInstance();
         //IWebService service = new WebService().getWS2007HttpBindingIWebService();
         FindTransferResponseMessage rm = ws.service.findTransfer(ftrm);
-        logger.debug("Finish FindTransferResponseMessage");        
+            if (logger.isDebugEnabled()) {
+                    logger.debug("findTransfer -> rm='"+rm.toString()+"'"
+                    );
+            }  
         return rm;
     }
     catch (IOException|WebServiceException ex)
-        {throw new IOException("Ошибка доступа к Unistream",ex);}
+        {throw new IOException("findTransfer:Connection Unistream error",ex);}
     }
     private static void debug(FindTransferRequestMessage ftrm)
         {

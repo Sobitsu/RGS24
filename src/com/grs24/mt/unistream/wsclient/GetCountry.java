@@ -12,13 +12,15 @@ import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.Country;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetCountriesChangesResponseMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Dale
  */
 public class GetCountry {
-
+    private static final Logger logger = LoggerFactory.getLogger(GetCountry.class);
     private static GetCountriesChangesResponseMessage getCountriesChanges( ) throws UnsupportedOperationException, IOException {
         try {
                 JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
@@ -30,7 +32,7 @@ public class GetCountry {
                 return ws.service.getCountriesChanges(requestMessage);
             }
         catch (IOException|WebServiceException ex)
-            {throw new IOException("Ошибка доступа к Unistream",ex);
+            {throw new IOException("getCountriesChanges:Connection Unistream error",ex);
         }
     }
     
@@ -42,12 +44,20 @@ public class GetCountry {
 * @throws java.io.IOException  - в случае недоступности UniStream
 */ 
     public static Integer getCountriesID(String code)throws IOException, RemittanceException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("getCountriesID <- сode='"+code
+                    + "'");
+        }  
         GetCountriesChangesResponseMessage rm = getCountriesChanges();
-        CommonLib.CheckFault(rm);
+        CommonLib.checkFault(rm,logger,code);
         if (rm.getCountries().isNil()) return null;
         for (Country i : rm.getCountries().getValue().getCountry())
                 {
                     if (i.getLatin3().getValue().equals(code) ) {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("getCountriesID -> id='"+i.getID().toString()
+                                    + "'");
+                        }  
                         return i.getID();
                     }
                 }
@@ -64,12 +74,20 @@ public class GetCountry {
 */ 
 
     public static String getCuntryCode(Integer cuntryId) throws IOException, RemittanceException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("getCuntryCode <- cuntryId='"+cuntryId.toString()
+                    + "'");
+        }          
         GetCountriesChangesResponseMessage rm = getCountriesChanges();
-        CommonLib.CheckFault(rm);
+        CommonLib.checkFault(rm,logger,cuntryId.toString());
         if (rm.getCountries().isNil()) return null;
         for (Country i : rm.getCountries().getValue().getCountry())
                 {
                     if (i.getID().equals(cuntryId) ) {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("getCuntryCode -> code='"+ i.getLatin3().getValue()
+                                    + "'");
+                        }          
                         return i.getLatin3().getValue();
                     }
                 }

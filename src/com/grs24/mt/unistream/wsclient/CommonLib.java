@@ -68,24 +68,31 @@ public class CommonLib {
 * stan - код ошибки в Unistream <br>
 * mtError - расшифровка ошибки в Unistream <br>
 * @param response - ответ сервера<br>
+* @param logger1 - логгер в который писать отладку<br>
+* @param stan - System Trace Audit Number (Stan) of the request.
+     * Идентификатор либо запроса, либо перевода. Использование MTCN 
+     * (контрльного номера) в качестве такового НЕ РЕКОМЕНДУЕТСЯ ввиду нарушения
+     * безопасности в случае логгирования.<br>
 * @throws RemittanceException в случае провала выполение
 * @see Fault
 */ 
-    public static void CheckFault(WsResponse response) throws RemittanceException {
+    public static void checkFault(WsResponse response, Logger logger1, String stan) throws RemittanceException {
         if(!response.getFault().isNil())
         {
-            logger.error("Unistream returned error:", response.getFault().getValue().getMessage().getValue());
+            if (logger1 == null) logger1=logger;
+            logger1.error("checkFault: Unistream returned error:", response.getFault().getValue().getMessage().getValue());
             Fault fault = response.getFault().getValue();
             int code = 0;
-            String stan = null;
+            //String stan = null;
             String mtError = null;
             if (fault.getCode() != null) 
                 {
-                    stan = fault.getCode().value();
+                    //stan = fault.getCode().value();
                     code = fault.getCode().ordinal();
+                    mtError = fault.getCode().value() +":";
                 }
-            if (!fault.getMessage().isNil()) mtError = fault.getMessage().getValue();
-            throw new RemittanceException("Unistream returned error", code, stan,mtError);
+            if (!fault.getMessage().isNil()) mtError = mtError + fault.getMessage().getValue();
+            throw new RemittanceException("checkFault: Unistream returned error", code, stan, mtError);
         }
     }  
 

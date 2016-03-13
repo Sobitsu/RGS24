@@ -28,9 +28,11 @@ public class FindPerson {
 * @see FindPersonRequestMessage
 * @see FindPersonResponseMessage
 */ 
-    public static FindPersonResponseMessage FindPersonJAXb(FindPersonRequestMessage fprm) throws UnsupportedOperationException,IOException {
+    public static FindPersonResponseMessage findPersonJAXb(FindPersonRequestMessage fprm) throws UnsupportedOperationException,IOException {
         try {
-            logger.debug("Start FindPersonResponseMessage");
+            if (logger.isDebugEnabled()) {
+                    logger.debug("findPersonJAXb <- fprm='"+fprm.toString());
+            }  
             //org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
             JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
             fprm.setAuthenticationHeader(ahh);
@@ -38,12 +40,14 @@ public class FindPerson {
             WebServiceSingl ws = WebServiceSingl.getInstance();
             FindPersonResponseMessage rm = ws.service.findPerson(fprm);
             if (logger.isDebugEnabled()) debug(fprm);
-            logger.debug("Finish FindPersonResponseMessage");
+            if (logger.isDebugEnabled()) {
+                    logger.debug("findPersonJAXb -> rm='"+rm.toString());
+            }  
             return rm;
         }
         catch (IOException|WebServiceException ex) 
             {
-                throw new IOException("Ошибка доступа к Unistream",ex); 
+                throw new IOException("findPersonJAXb:Connection Unistream error",ex); 
             }
     }
     private static void debug(FindPersonRequestMessage fprm)

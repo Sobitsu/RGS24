@@ -30,9 +30,11 @@ private static final Logger logger = LoggerFactory.getLogger(CreatePerson.class)
 * @see Person
 */ 
     
-    public static CreatePersonResponseMessage CreatePersonJAXb(Person persh) throws UnsupportedOperationException, IOException {
+    public static CreatePersonResponseMessage createPersonJAXb(Person persh) throws UnsupportedOperationException, IOException {
     try {    
-        logger.debug("Start CreatePersonResponseMessage");
+        if (logger.isDebugEnabled()) {
+                logger.debug("createPersonJAXb <- persh='"+persh.toString());
+        }  
         CreatePersonRequestMessage cprm = new CreatePersonRequestMessage();
         ObjectFactory factory = new ObjectFactory();
         JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
@@ -43,11 +45,13 @@ private static final Logger logger = LoggerFactory.getLogger(CreatePerson.class)
         //IWebService service = new WebService().getWS2007HttpBindingIWebService();
         WebServiceSingl ws = WebServiceSingl.getInstance();
         CreatePersonResponseMessage rm = ws.service.createPerson(cprm);
-        logger.debug("Finish CreatePersonResponseMessage");
+        if (logger.isDebugEnabled()) {
+                logger.debug("createPersonJAXb -> rm='"+rm.toString());
+        }  
         return rm;
     }
     catch (IOException|WebServiceException ex)
-        {throw new IOException("Ошибка доступа к Unistream",ex);}
+        {throw new IOException("createPersonJAXb:Connection Unistream error",ex);}
     }
    private static void debug(CreatePersonRequestMessage cprm)
         {

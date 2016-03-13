@@ -30,7 +30,10 @@ private static final Logger logger = LoggerFactory.getLogger(GetTransferByID.cla
     
     public static GetTransferByIDResponseMessage getTransferByID(Integer transferId) throws UnsupportedOperationException, IOException {
         try {
-            logger.debug("Start GetTransferByIDResponseMessage");
+            if (logger.isDebugEnabled()) {
+                    logger.debug("getTransferByID <- transferId='"+transferId.toString()
+                            + "'");
+            }  
             GetTransferByIDRequestMessage gtrm = new GetTransferByIDRequestMessage();
             JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
             gtrm.setAuthenticationHeader(ahh);
@@ -38,10 +41,13 @@ private static final Logger logger = LoggerFactory.getLogger(GetTransferByID.cla
             //IWebService service = new WebService().getWS2007HttpBindingIWebService();
             WebServiceSingl ws = WebServiceSingl.getInstance();
             GetTransferByIDResponseMessage rm = ws.service.getTransferByID(gtrm);
-            logger.debug("Finish GetTransferByIDResponseMessage");        
+            if (logger.isDebugEnabled()) {
+                    logger.debug("getTransferByID -> rm='"+rm.toString()
+                            + "'");
+            }  
             return rm;
         }
     catch (IOException|WebServiceException ex)
-        {throw new IOException("Ошибка доступа к Unistream",ex);}
+        {throw new IOException("getTransferByID:Connection Unistream error",ex);}
     }
 }

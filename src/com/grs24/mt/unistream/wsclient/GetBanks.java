@@ -14,13 +14,15 @@ import javax.xml.ws.WebServiceException;
 import org.datacontract.schemas._2004._07.wcfservicelib.AuthenticationHeader;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.Bank;
 import org.datacontract.schemas._2004._07.wcfservicelib_dictionaries.GetBanksChangesResponseMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Dale
  */
 public class GetBanks {
-
+    private static final Logger logger = LoggerFactory.getLogger(GetBanks.class);
     private static GetBanksChangesResponseMessage getBanksChanges() throws IOException {
         try {
             JAXBElement<AuthenticationHeader> ahh = CommonLib.MakeAuthHead();
@@ -31,7 +33,7 @@ public class GetBanks {
             return service.getBanksChanges(requestMessage);
         }
         catch (WebServiceException ex) {
-        throw new IOException("Ошибка доступа к Unistream",ex);
+        throw new IOException("getBanksChanges:Connection Unistream error",ex);
         }
     }
 /**
@@ -43,7 +45,7 @@ public class GetBanks {
 */ 
     public static Integer getBankId(Integer parrentID) throws RemittanceException, IOException {
         GetBanksChangesResponseMessage listBankXml = getBanksChanges();
-        CommonLib.CheckFault(listBankXml);
+        CommonLib.checkFault(listBankXml,logger,parrentID.toString());
         for (Bank i : listBankXml.getBanks().getValue().getBank())
                 {
                     if (i.getParentID().equals(parrentID)) {

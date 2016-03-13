@@ -477,6 +477,10 @@ RUB
 900
 RUB
     */
+   /* private RemittanceHolder[] resulttest()
+        {
+            
+        }*/
     @Test
     public void testMoneySearch() throws Exception {
         System.out.println("moneySearch");
