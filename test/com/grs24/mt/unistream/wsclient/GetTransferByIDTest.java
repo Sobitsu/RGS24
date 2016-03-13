@@ -19,10 +19,10 @@ import static org.junit.Assert.*;
  * @author Dale
  */
 public class GetTransferByIDTest {
-   
+    private final TestLib tl = new TestLib();
     @BeforeClass
-    public static void setUpClass() throws IOException {
-        TestLib.setUpClass();
+    public void setUpClass() throws IOException {
+        tl.setUpClass();
     }
 
     
@@ -44,7 +44,9 @@ public class GetTransferByIDTest {
     @Test
     public void testGetTransferByID() throws Exception {
         Integer transferId = 16015170;
-        GetTransferByIDResponseMessage result = GetTransferByID.getTransferByID(transferId);
+        
+        GetTransferByID gtbi = new GetTransferByID();
+        GetTransferByIDResponseMessage result = gtbi.getTransferByID(transferId, tl.instance.ahh,tl.instance.service);
         assertTrue(result.getFault().isNil());
         assertFalse(result.getTransfer().isNil());
         assertNotNull(result.getTransfer().getValue());

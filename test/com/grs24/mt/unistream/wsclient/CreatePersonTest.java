@@ -36,9 +36,10 @@ public class CreatePersonTest {
     private final static QName _MiddleName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "MiddleName");
 
     
+    private final TestLib tl = new TestLib();
     @BeforeClass
-    public static void setUpClass() throws IOException {
-        TestLib.setUpClass();
+    public void setUpClass() throws IOException {
+        tl.setUpClass();
     }
      private static final Logger logger = LoggerFactory.getLogger(CreatePersonTest.class);
 
@@ -91,17 +92,17 @@ public class CreatePersonTest {
         registration_.setZipCode("630090");
         payee.setRegistration(registration_);
         payee.setResidentCountry("RUS");
-
-        person.setAddress(CommonLib.getAdressElem(payee.getRegistration()));
-        person.setDocuments(CommonLib.getDocuments(payee.getIdentification()));
-        person.setPhones(CommonLib.getPhones(payee.getPhone()));
-        person.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
-        person.setFirstName(CommonLib.makeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
-        person.setLastName(CommonLib.makeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
-        person.setMiddleName(CommonLib.makeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
-        
-        CreatePersonResponseMessage result = CreatePerson.createPersonJAXb(person);
-        CommonLib.checkFault(result,logger,"");
+        CommonLib cl = new CommonLib();
+        person.setAddress(cl.getAdressElem(payee.getRegistration(),tl.instance.ahh,tl.instance.service));
+        person.setDocuments(cl.getDocuments(payee.getIdentification()));
+        person.setPhones(cl.getPhones(payee.getPhone()));
+        person.setBirthDate(cl.GetGregorianDate(payee.getBirthday()));
+        person.setFirstName(cl.makeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
+        person.setLastName(cl.makeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
+        person.setMiddleName(cl.makeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
+        CreatePerson cp = new CreatePerson();
+        CreatePersonResponseMessage result = cp.createPersonJAXb(person,tl.instance.ahh,tl.instance.service);
+        cl.checkFault(result,logger,"");
         assertTrue(result.getFault().isNil());
         assertFalse(result.getPerson().isNil());
         assertNotNull(result.getPerson().getValue());
@@ -150,16 +151,18 @@ public class CreatePersonTest {
         registration_.setStreet1("moya_ulitsa");
         registration_.setZipCode("220068");
         payee.setRegistration(registration_);
-        person.setAddress(CommonLib.getAdressElem(payee.getRegistration()));
-        person.setDocuments(CommonLib.getDocuments(payee.getIdentification()));
-        person.setPhones(CommonLib.getPhones(payee.getPhone()));
-        person.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
-        person.setFirstName(CommonLib.makeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
-        person.setLastName(CommonLib.makeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
-        person.setMiddleName(CommonLib.makeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
-        CreatePersonResponseMessage result = CreatePerson.createPersonJAXb(person);
+        CommonLib cl = new CommonLib();
+        person.setAddress(cl.getAdressElem(payee.getRegistration(), tl.instance.ahh,tl.instance.service));
+        person.setDocuments(cl.getDocuments(payee.getIdentification()));
+        person.setPhones(cl.getPhones(payee.getPhone()));
+        person.setBirthDate(cl.GetGregorianDate(payee.getBirthday()));
+        person.setFirstName(cl.makeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
+        person.setLastName(cl.makeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
+        person.setMiddleName(cl.makeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
+        CreatePerson cp = new CreatePerson();
+        CreatePersonResponseMessage result = cp.createPersonJAXb(person,tl.instance.ahh,tl.instance.service);
         try {
-                CommonLib.checkFault(result,logger,"10");
+                cl.checkFault(result,logger,"10");
             }
         catch (RemittanceException ex) {
             assertNotNull(ex.getCode());

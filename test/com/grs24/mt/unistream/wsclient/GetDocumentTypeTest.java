@@ -20,9 +20,11 @@ import org.junit.Ignore;
  */
 public class GetDocumentTypeTest {
  
+    private final TestLib tl = new TestLib();
+    private final GetDocumentType gdt = new GetDocumentType();
     @BeforeClass
-    public static void setUpClass() throws IOException {
-        TestLib.setUpClass();
+    public void setUpClass() throws IOException {
+        tl.setUpClass();
     }
 
     @AfterClass
@@ -45,18 +47,7 @@ public class GetDocumentTypeTest {
         System.out.println("getDocumentsID");
         String code = "35";
         Integer expResult = 35;
-        Integer result = GetDocumentType.getDocumentsID(code);
-        assertEquals(expResult, result);
-        System.out.println("getDocumentsID OK");
-    }
-    
-    @Ignore
-    @Test
-    public void testgetDocumentTypeList() throws Exception {
-        System.out.println("getDocumentsID");
-        Integer expResult = 35;
-        String result = GetDocumentType.getDocumentTypeList();
-        System.out.println(result);
+        Integer result = gdt.getDocumentsID(code);
         assertEquals(expResult, result);
         System.out.println("getDocumentsID OK");
     }

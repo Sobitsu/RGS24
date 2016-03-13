@@ -36,9 +36,10 @@ public class FindPersonTest {
     private final static QName _DocSeries_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "DocSeries");
     private final static QName _Phone_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Phone");
     private static final Logger logger = LoggerFactory.getLogger(FindPersonTest.class);
+    private final TestLib tl = new TestLib();
     @BeforeClass
-    public static void setUpClass() throws IOException {
-        TestLib.setUpClass();
+    public void setUpClass() throws IOException {
+        tl.setUpClass();
     }
     
     @AfterClass
@@ -76,17 +77,17 @@ public class FindPersonTest {
         String[] phone_ = new String[1];
         phone_[0] = "+79151231212";
         payee.setPhone(phone_);
-
-        fprm.setBirthDate(CommonLib.GetGregorianDate(payee.getBirthday()));
-        fprm.setFirstname(CommonLib.makeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
-        fprm.setLastname(CommonLib.makeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
-        fprm.setMiddlename(CommonLib.makeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
-        fprm.setPhone(CommonLib.makeString(_Phone_QNAME,payee.getPhone()[0]));
-        fprm.setDocNumber(CommonLib.makeString(_DocNumber_QNAME,payee.getIdentification().getCredNumber()));
-        fprm.setDocSeries(CommonLib.makeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
-        fprm.setDocIssueDate(CommonLib.GetGregorianDate(payee.getIdentification().getIssueDate()));
-        
-        FindPersonResponseMessage result = FindPerson.findPersonJAXb(fprm);
+        CommonLib cl = new CommonLib();
+        fprm.setBirthDate(cl.GetGregorianDate(payee.getBirthday()));
+        fprm.setFirstname(cl.makeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
+        fprm.setLastname(cl.makeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
+        fprm.setMiddlename(cl.makeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
+        fprm.setPhone(cl.makeString(_Phone_QNAME,payee.getPhone()[0]));
+        fprm.setDocNumber(cl.makeString(_DocNumber_QNAME,payee.getIdentification().getCredNumber()));
+        fprm.setDocSeries(cl.makeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
+        fprm.setDocIssueDate(cl.GetGregorianDate(payee.getIdentification().getIssueDate()));
+        FindPerson fp = new FindPerson();
+        FindPersonResponseMessage result = fp.findPersonJAXb(fprm,tl.instance.ahh,tl.instance.service);
         assertTrue(result.getFault().isNil());
         assertFalse(result.getPersons().isNil());
         assertNotNull(result.getPersons().getValue());

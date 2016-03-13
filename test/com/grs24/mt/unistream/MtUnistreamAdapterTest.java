@@ -29,9 +29,10 @@ import java.math.BigDecimal;
  */
 public class MtUnistreamAdapterTest {
     
+    private final TestLib tl = new TestLib();
     @BeforeClass
-    public static void setUpClass() throws IOException {
-        TestLib.setUpClass();
+    public void setUpClass() throws IOException {
+        tl.setUpClass();
     }
     public MtUnistreamAdapterTest() {
     }
@@ -492,7 +493,7 @@ RUB
         approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
         String dstCountry = "Russia";
-        result = TestLib.instance.moneySearch(mtcn, approxDstFunds, approxDstFunds, orgCountry, dstCountry);
+        result = tl.instance.moneySearch(mtcn, approxDstFunds, approxDstFunds, orgCountry, dstCountry);
         assertNotNull(result[0]);
         assertEquals(result[0].getMtID(),"16016603");
 
@@ -505,7 +506,7 @@ RUB
         orgCountry = "RUS";
         dstCountry = "RUS";
         try {
-                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                result = tl.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
                 }
         catch (RemittanceException ex) 
                 {
@@ -521,7 +522,7 @@ RUB
         orgCountry = "RUS";
         dstCountry = "RUS";
         try {
-                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                result = tl.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
                 }
         catch (RemittanceException ex) 
                 {
@@ -534,7 +535,7 @@ RUB
         approxDstFunds.setAmount(bd);
         approxDstFunds.setCur("RUB");
         try {
-                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                result = tl.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
                 }
         catch (RemittanceException ex) 
                 {
@@ -547,7 +548,7 @@ RUB
         orgCountry = "RUS";
         dstCountry = "RUS";
         try {
-                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                result = tl.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
                 }
         catch (RemittanceException ex) 
                 {
@@ -563,7 +564,7 @@ RUB
         orgCountry = "RUS";
         dstCountry = "RUS";
         try {
-                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                result = tl.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
                 }
         catch (RemittanceException ex) 
                 {
@@ -579,7 +580,7 @@ RUB
         orgCountry = "RUS";
         dstCountry = "RUS";
         try {
-                result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+                result = tl.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
                 }
         catch (RemittanceException ex) 
                 {
@@ -650,7 +651,7 @@ RUB
         String docID = "";
         String docDate = "";
         try{
-            TestLib.instance.moneyPay(mtID, "", payee, docID, docDate);
+            tl.instance.moneyPay(mtID, "", payee, docID, docDate);
         }
         catch (RemittanceException ex) {
             if (ex.getCode() != 30000)  fail(" Ошибка оплаты перевода");
@@ -668,7 +669,7 @@ RUB
         approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
         String dstCountry = "Russia";
-        RemittanceHolder[] result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+        RemittanceHolder[] result = tl.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
         assertNotNull(result[0]);
         String mtID = result[0].getMtID();
         PersonHolder payee = setpayee();
@@ -677,7 +678,7 @@ RUB
         String docID = "";
         String docDate = "";
         try{
-            TestLib.instance.moneyPay(mtID, mtcn, payee, docID, docDate);
+            tl.instance.moneyPay(mtID, mtcn, payee, docID, docDate);
         }
         catch (RemittanceException ex) {
             if (ex.getCode() == 30000)  {System.out.println("moneyHold OK");}
@@ -696,7 +697,7 @@ RUB
         String mtcn = "";
         PersonHolder payee = null;
         try {
-            TestLib.instance.moneyHold(mtID, mtcn, payee);}
+            tl.instance.moneyHold(mtID, mtcn, payee);}
         catch (RemittanceException ex) {
             assertEquals(ex.getCode(), 30001);
         }
@@ -711,7 +712,7 @@ RUB
         String mtcn = "";
         PersonHolder payee = null;
         try {
-            TestLib.instance.moneyUnhold(mtID, mtcn, payee);
+            tl.instance.moneyUnhold(mtID, mtcn, payee);
             }
         catch (RemittanceException ex) {
             assertEquals(ex.getCode(), 30001);

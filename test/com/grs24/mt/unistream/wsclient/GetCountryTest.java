@@ -19,9 +19,11 @@ import static org.junit.Assert.*;
  */
 public class GetCountryTest {
     
+    private final TestLib tl = new TestLib();
+    private final GetCountry gc = new GetCountry();
     @BeforeClass
-    public static void setUpClass() throws IOException {
-        TestLib.setUpClass();
+    public void setUpClass() throws IOException {
+        tl.setUpClass();
     }
     
     @AfterClass
@@ -44,7 +46,7 @@ public class GetCountryTest {
         System.out.println("getCountriesID");
         String code = "RUS";
         Integer expResult = 18;
-        Integer result = GetCountry.getCountriesID(code);
+        Integer result = gc.getCountriesID(code,tl.instance.ahh,tl.instance.service);
         assertEquals(expResult, result);
         System.out.println("getCountriesID OK");
     }
@@ -57,7 +59,7 @@ public class GetCountryTest {
         System.out.println("getCuntryCode");
         Integer cuntryId = 18;
         String expResult = "RUS";
-        String result = GetCountry.getCuntryCode(cuntryId);
+        String result = gc.getCuntryCode(cuntryId,tl.instance.ahh,tl.instance.service);
         assertEquals(expResult, result);
         System.out.println("getCuntryCode OK");
     }

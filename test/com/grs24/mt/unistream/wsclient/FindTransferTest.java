@@ -20,9 +20,10 @@ import static org.junit.Assert.*;
  */
 public class FindTransferTest {
     
+    private final TestLib tl = new TestLib();
     @BeforeClass
-    public static void setUpClass() throws IOException {
-        TestLib.setUpClass();
+    public void setUpClass() throws IOException {
+        tl.setUpClass();
     }
     
     @AfterClass
@@ -44,9 +45,11 @@ public class FindTransferTest {
     public void testFindTransfer() throws Exception {
         String controlNumber = "743818837598";
         Double sum = 50000D;
-        Integer val = GetCurrency.getCurrencyID("RUB");
-        Integer bankId = TestLib.instance.KEY_BANK_ID;
-        FindTransferResponseMessage result = FindTransfer.findTransfer(controlNumber, sum, val, bankId);
+        GetCurrency gcur = new GetCurrency();
+        Integer val = gcur.getCurrencyID("RUB",tl.instance.ahh,tl.instance.service);
+        Integer bankId = tl.instance.get_bankID();
+        FindTransfer ft = new FindTransfer();
+        FindTransferResponseMessage result = ft.findTransfer(controlNumber, sum, val, bankId,tl.instance.ahh,tl.instance.service);
         assertTrue(result.getFault().isNil());
         assertFalse(result.getTransfer().isNil());
         assertNotNull(result.getTransfer().getValue());

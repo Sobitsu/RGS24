@@ -60,8 +60,8 @@ public class MtUnistreamAdapter implements MtAdapter
         
 {    
         private final Logger logger = LoggerFactory.getLogger(MtUnistreamAdapter.class);
-        private IWebService service;
-        private JAXBElement<AuthenticationHeader> ahh; 
+        public IWebService service;
+        public JAXBElement<AuthenticationHeader> ahh; 
         private String KEY_USER_AUTHED_APIKEY;// = "1wwteyFGFew624";
         /** Свойство APIKEY для автризационного заголовка
         * @return value of KEY_USER_AUTHED_APIKEY**/

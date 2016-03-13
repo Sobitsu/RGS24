@@ -19,9 +19,11 @@ import static org.junit.Assert.*;
  */
 public class GetCurrencyTest {
     
+    private final TestLib tl = new TestLib();
+    private final GetCurrency gc = new GetCurrency();
     @BeforeClass
-    public static void setUpClass() throws IOException {
-        TestLib.setUpClass();
+    public void setUpClass() throws IOException {
+        tl.setUpClass();
     }
     
     @AfterClass
@@ -41,16 +43,14 @@ public class GetCurrencyTest {
      */
     @Test
     public void testGetCurrencyID() throws Exception {
-        System.out.println("getCurrencyID");
         String сode = "USD";
         Integer expResult = 2;
-        Integer result = GetCurrency.getCurrencyID(сode);
+        Integer result = gc.getCurrencyID(сode,tl.instance.ahh,tl.instance.service);
         assertEquals(expResult, result);
         сode = "RUB";
         expResult = 1;
-        result = GetCurrency.getCurrencyID(сode);
+        result = gc.getCurrencyID(сode,tl.instance.ahh,tl.instance.service);
         assertEquals(expResult, result);
-        System.out.println("getCurrencyID OK");
     }
 
     /**
@@ -58,12 +58,9 @@ public class GetCurrencyTest {
      */
     @Test
     public void testGetCurrencyCode() throws Exception {
-        System.out.println("getCurrencyCode");
         Integer currencyId = 1;
         String expResult = "RUB";
-        String result = GetCurrency.getCurrencyCode(currencyId);
+        String result = gc.getCurrencyCode(currencyId,tl.instance.ahh,tl.instance.service);
         assertEquals(expResult, result);
-        System.out.println("getCurrencyCode OK");
     }
-    
 }

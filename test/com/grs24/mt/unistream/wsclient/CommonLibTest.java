@@ -25,9 +25,10 @@ import static org.junit.Assert.*;
  */
 public class CommonLibTest {
 
+    private final TestLib tl = new TestLib();
     @BeforeClass
-    public static void setUpClass() throws IOException {
-        TestLib.setUpClass();
+    public void setUpClass() throws IOException {
+        tl.setUpClass();
     }
     public CommonLibTest() {
     }
@@ -81,7 +82,7 @@ public class CommonLibTest {
         registr.setStreet1("<kf ,kf ,kf");
         registr.setStreet2("blu blu blu");
         CommonLib cl = new CommonLib();
-        JAXBElement<PersonAddress> result = cl.getAdressElem(registr);
+        JAXBElement<PersonAddress> result = cl.getAdressElem(registr,tl.instance.ahh,tl.instance.service);
         assertFalse(result.isNil());
         assertNotNull(result.getValue());
         assertEquals(result.getValue().getCountryID().intValue(),18);

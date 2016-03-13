@@ -17,24 +17,24 @@ import java.util.Properties;
  * @author Dale
  */
 public class TestLib {
-    private static final String KEY_USER_AUTHED_APIKEY = "1wwteyFGFew624";
-    private static final String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
-    private static final String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
-    private static final Integer KEY_BANK_ID = 383589;
-    private static final Integer KEY_PARTICIPATOR_ID = 383589;
-    private static final Integer KEY_SERVER_REQUEST_TUMEOUT = 3000;
-    private static final Integer KEY_SERVER_CONNECT_TUMEOUT = 1000;
-    private static final String KEY_KEYSTORE_PASSWORD = "123456";
+    private final String KEY_USER_AUTHED_APIKEY = "1wwteyFGFew624";
+    private final String KEY_USER_AUTHED_LOGIN = "g2.grstwentyfour.rus";
+    private final String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
+    private final Integer KEY_BANK_ID = 383589;
+    private final Integer KEY_PARTICIPATOR_ID = 383589;
+    private final Integer KEY_SERVER_REQUEST_TUMEOUT = 3000;
+    private final Integer KEY_SERVER_CONNECT_TUMEOUT = 1000;
+    private final String KEY_KEYSTORE_PASSWORD = "123456";
    // private static final String KEY_KEY_PASSWORD = "123456";
-    private static final String KEY_TRUSTSTORE_PASSWORD = "123456";
-    private static final String KEYSTOREPATH = "xws-security/prv_key_unistream.pfx";//"xws-security/client.jks";
-    private static final String TRUSTSTOREPATH = "xws-security/server.jks";
+    private final String KEY_TRUSTSTORE_PASSWORD = "123456";
+    private final String KEYSTOREPATH = "xws-security/prv_key_unistream.pfx";//"xws-security/client.jks";
+    private final String TRUSTSTOREPATH = "xws-security/server.jks";
 //    private static final String KEY_TRUSTSTORE_TYPE = "JKS";
 //    private static final String KEY_KEYSTORE_TYPE = "JKS";
     
-    public static MtUnistreamAdapter instance;
+    public MtUnistreamAdapter instance;
     
-    private static String computeB64(String filename) throws IOException {
+    private String computeB64(String filename) throws IOException {
         File target = new File(filename);
         FileInputStream stream = (new FileInputStream(target));
         byte[] buffer = new byte[stream.available()];
@@ -42,7 +42,7 @@ public class TestLib {
         return Base64.getEncoder().encodeToString(buffer);
     }
 
-    public static void setUpClass() throws IOException {
+    public void setUpClass() throws IOException {
         Properties cfg = new Properties();
         cfg.setProperty("APIKEY", KEY_USER_AUTHED_APIKEY);
         cfg.setProperty("LOGIN", KEY_USER_AUTHED_LOGIN);
