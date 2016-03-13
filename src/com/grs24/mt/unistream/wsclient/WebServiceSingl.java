@@ -36,8 +36,8 @@ public class WebServiceSingl {
     /**
      * Инициализация синглтона
      * @return Экземпляр инициализированного WebService провайдера
-     * @throws UnsupportedOperationException
-     * @throws IOException 
+     * @throws UnsupportedOperationException 
+     * @throws IOException - в случае разрыва связи с сервером
      */
     
     public static WebServiceSingl getInstance() throws UnsupportedOperationException, IOException {
