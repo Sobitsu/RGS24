@@ -492,7 +492,7 @@ RUB
         approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
         String dstCountry = "Russia";
-        result = TestLib.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
+        result = TestLib.instance.moneySearch(mtcn, approxDstFunds, approxDstFunds, orgCountry, dstCountry);
         assertNotNull(result[0]);
         assertEquals(result[0].getMtID(),"16016603");
 

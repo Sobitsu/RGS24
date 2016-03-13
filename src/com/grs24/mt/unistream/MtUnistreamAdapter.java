@@ -127,7 +127,6 @@ public class MtUnistreamAdapter implements MtAdapter
         {
             if (logger.isDebugEnabled()) {
                     logger.debug("mscheckInparam: <- mtcn='"+mtcn.replace(".", "*")
-                            +", approxOrgFunds="+approxOrgFunds.toString()
                             +", approxDstFunds="+approxDstFunds.toString()
                     );
             }         
@@ -602,8 +601,7 @@ public class MtUnistreamAdapter implements MtAdapter
         @Override
         public RemittanceHolder[] moneySearch(String mtcn, FundsHolder approxOrgFunds, FundsHolder approxDstFunds, String orgCountry, String dstCountry) throws RemittanceException, IOException {
             if (logger.isDebugEnabled()) {
-			logger.debug("moneySearch: <- mtcn='"+mtcn+"', approxOrgFunds="
-                                +approxOrgFunds.toString() + "', approxDstFunds=" 
+			logger.debug("moneySearch: <- mtcn='" + mtcn + "', approxDstFunds=" 
                                 +approxDstFunds.toString());
 		}
             mscheckInparam(mtcn,approxOrgFunds,approxDstFunds,orgCountry,dstCountry);
@@ -626,8 +624,7 @@ public class MtUnistreamAdapter implements MtAdapter
             else
             {
                  if (logger.isDebugEnabled()) {
-			logger.debug("moneySearch: <- can't find transfer mtcn='"+mtcn+"', approxOrgFunds="
-                                +approxOrgFunds.toString() + "', approxDstFunds=" 
+			logger.debug("moneySearch: <- can't find transfer mtcn='"+mtcn + "', approxDstFunds=" 
                                 +approxDstFunds.toString());
 		}
                 return expResult;
@@ -644,7 +641,7 @@ public class MtUnistreamAdapter implements MtAdapter
             //retval.setDstCountry(getCountry(rettransfer, ParticipatorRole.EXPECTED_RECEIVER_POS));
             expResult[0] = retval;
                  if (logger.isDebugEnabled()) {
-			logger.debug("moneySearch: -> RemittanceHolder="+expResult.toString());
+			logger.debug("moneySearch: -> RemittanceHolder="+retval.toString());
 		}
             return expResult;
         }
