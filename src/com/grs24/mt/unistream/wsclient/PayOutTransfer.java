@@ -37,12 +37,17 @@ private static final Logger logger = LoggerFactory.getLogger(PayOutTransfer.clas
             JAXBElement<Transfer> tr = factory.createTransfer(transfer);
             ptrm.setAuthenticationHeader(ahh);
             ptrm.setTransfer(tr);
-            if (logger.isDebugEnabled()) debug(ptrm);
             WebServiceSingl ws = WebServiceSingl.getInstance();
             //IWebService service = new WebService().getWS2007HttpBindingIWebService();
             PayoutTransferResponseMessage rm = ws.service.payoutTransfer(ptrm);
             if (logger.isDebugEnabled()) {
-                    logger.debug("payoutTransfer -> rm='"+rm.toString()
+                com.unistream.test.wcflib.PayoutTransfer ftxml = new com.unistream.test.wcflib.PayoutTransfer();
+                ftxml.setRequestMessage(factory.createPayoutTransferRequestMessage(ptrm));
+                logger.debug("payoutTransfer -> ptrm='"+CommonLib.printXml(ftxml)
+                            + "'");
+                com.unistream.test.wcflib.PayoutTransferResponse ftrxml = new com.unistream.test.wcflib.PayoutTransferResponse();
+                ftrxml.setPayoutTransferResult(factory.createPayoutTransferResponseMessage(rm));
+                logger.debug("payoutTransfer -> rm='"+CommonLib.printXml(ftxml)
                             + "'");
             }              
             return rm;
@@ -52,11 +57,4 @@ private static final Logger logger = LoggerFactory.getLogger(PayOutTransfer.clas
                 throw new IOException("payoutTransfer:Connection Unistream error",ex);
         }
     }
-    private static void debug(PayoutTransferRequestMessage ptrm)
-        {
-            org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
-            com.unistream.test.wcflib.PayoutTransfer ftxml = new com.unistream.test.wcflib.PayoutTransfer();
-            ftxml.setRequestMessage(factory.createPayoutTransferRequestMessage(ptrm));
-            CommonLib.printXml(ftxml);
-        }
     }

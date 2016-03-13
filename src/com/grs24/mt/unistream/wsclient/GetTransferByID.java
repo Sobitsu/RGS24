@@ -42,8 +42,13 @@ private static final Logger logger = LoggerFactory.getLogger(GetTransferByID.cla
             WebServiceSingl ws = WebServiceSingl.getInstance();
             GetTransferByIDResponseMessage rm = ws.service.getTransferByID(gtrm);
             if (logger.isDebugEnabled()) {
-                    logger.debug("getTransferByID -> rm='"+rm.toString()
-                            + "'");
+                org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
+                com.unistream.test.wcflib.GetTransferByID gtbixml = new com.unistream.test.wcflib.GetTransferByID();
+                gtbixml.setRequestMessage(factory.createGetTransferByIDRequestMessage(gtrm));
+                logger.debug("getTransferByID -> gtrm='"+CommonLib.printXml(gtbixml)+"'");
+                com.unistream.test.wcflib.GetTransferByIDResponse ftrxml = new com.unistream.test.wcflib.GetTransferByIDResponse();
+                ftrxml.setGetTransferByIDResult(factory.createGetTransferByIDResponseMessage(rm));
+                logger.debug("getTransferByID -> rm='"+CommonLib.printXml(ftrxml)+"'");
             }  
             return rm;
         }

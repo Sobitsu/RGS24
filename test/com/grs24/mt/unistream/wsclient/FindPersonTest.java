@@ -58,7 +58,6 @@ public class FindPersonTest {
      */
     @Test
     public void testFindPersonJAXb() throws Exception {
-        System.out.println("FindPersonJAXb");
         FindPersonRequestMessage fprm = new FindPersonRequestMessage();
         PersonHolder payee = new PersonHolder();
         payee.setBirthday(DateTimeUtils.parseDate("23.10.1985",DateTimeUtils.ORACLE_DATE_FORMAT_STRING));
@@ -100,6 +99,5 @@ public class FindPersonTest {
         assertFalse(result.getPersons().getValue().getPerson().get(0).getMiddleName().isNil());
         assertFalse(result.getPersons().getValue().getPerson().get(0).getLastNameLat().isNil());
         assertEquals(result.getPersons().getValue().getPerson().get(0).getFirstNameLat().getValue(),"Roman");
-        System.out.println("FindPersonJAXb Ok");    
     }
 }

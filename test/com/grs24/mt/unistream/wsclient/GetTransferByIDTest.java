@@ -43,7 +43,6 @@ public class GetTransferByIDTest {
      */
     @Test
     public void testGetTransferByID() throws Exception {
-        System.out.println("getTransferByID");
         Integer transferId = 16015170;
         GetTransferByIDResponseMessage result = GetTransferByID.getTransferByID(transferId);
         assertTrue(result.getFault().isNil());
@@ -51,6 +50,5 @@ public class GetTransferByIDTest {
         assertNotNull(result.getTransfer().getValue());
         assertFalse(result.getTransfer().getValue().getAmounts().isNil());
         assertEquals(result.getTransfer().getValue().getControlNumber().getValue(),"828105025765");
-        System.out.println("getTransferByID OK");
     }
 }

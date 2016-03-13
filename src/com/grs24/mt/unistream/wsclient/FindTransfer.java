@@ -42,21 +42,25 @@ public class FindTransfer {
                     );
             }  
         FindTransferRequestMessage ftrm = new FindTransferRequestMessage();
-        //org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
+        org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
         JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
         ftrm.setAuthenticationHeader(ahh);
         ftrm.setBankID(bankId); 
         ftrm.setControlNumber(CommonLib.makeString(_ControlNumber_QNAME, controlNumber));
         ftrm.setCurrencyID(val);
         ftrm.setSum(sum);
-        if (logger.isDebugEnabled()) debug(ftrm);
         WebServiceSingl ws = WebServiceSingl.getInstance();
         //IWebService service = new WebService().getWS2007HttpBindingIWebService();
         FindTransferResponseMessage rm = ws.service.findTransfer(ftrm);
-            if (logger.isDebugEnabled()) {
-                    logger.debug("findTransfer -> rm='"+rm.toString()+"'"
-                    );
-            }  
+        if (logger.isDebugEnabled()) {
+                com.unistream.test.wcflib.FindTransfer ftxml = new com.unistream.test.wcflib.FindTransfer();
+                ftxml.setRequestMessage(factory.createFindTransferRequestMessage(ftrm));
+                logger.debug("findTransfer -> ftrm='"+CommonLib.printXml(ftxml)+"'");
+                com.unistream.test.wcflib.FindTransferResponse ftrxml = new com.unistream.test.wcflib.FindTransferResponse();
+                ftrxml.setFindTransferResult(factory.createFindTransferResponseMessage(rm));
+                logger.debug("findTransfer -> rm='"+CommonLib.printXml(ftrxml)+"'"
+                );
+        }  
         return rm;
     }
     catch (IOException|WebServiceException ex)
@@ -65,8 +69,6 @@ public class FindTransfer {
     private static void debug(FindTransferRequestMessage ftrm)
         {
             org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
-            com.unistream.test.wcflib.FindTransfer ftxml = new com.unistream.test.wcflib.FindTransfer();
-            ftxml.setRequestMessage(factory.createFindTransferRequestMessage(ftrm));
-            CommonLib.printXml(ftxml);
+            ;
         }
  }

@@ -33,15 +33,19 @@ public class FindPerson {
             if (logger.isDebugEnabled()) {
                     logger.debug("findPersonJAXb <- fprm='"+fprm.toString());
             }  
-            //org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
+            org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
             JAXBElement<AuthenticationHeader> ahh = CommonLib.makeAuthHead();
             fprm.setAuthenticationHeader(ahh);
             //IWebService service = new WebService().getWS2007HttpBindingIWebService();
             WebServiceSingl ws = WebServiceSingl.getInstance();
             FindPersonResponseMessage rm = ws.service.findPerson(fprm);
-            if (logger.isDebugEnabled()) debug(fprm);
             if (logger.isDebugEnabled()) {
-                    logger.debug("findPersonJAXb -> rm='"+rm.toString());
+                com.unistream.test.wcflib.FindPerson ftxml = new com.unistream.test.wcflib.FindPerson();
+                ftxml.setRequestMessage(factory.createFindPersonRequestMessage(fprm));
+                logger.debug("findPersonJAXb -> fprm='"+CommonLib.printXml(ftxml)+"'");
+                com.unistream.test.wcflib.FindPersonResponse fprxml = new com.unistream.test.wcflib.FindPersonResponse();
+                fprxml.setFindPersonResult(factory.createFindPersonResponseMessage(rm));
+                logger.debug("findPersonJAXb -> rm='"+CommonLib.printXml(fprxml)+"'");
             }  
             return rm;
         }
@@ -50,12 +54,5 @@ public class FindPerson {
                 throw new IOException("findPersonJAXb:Connection Unistream error",ex); 
             }
     }
-    private static void debug(FindPersonRequestMessage fprm)
-        {
-            org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory factory = new org.datacontract.schemas._2004._07.wcfservicelib.ObjectFactory();
-            com.unistream.test.wcflib.FindPerson ftxml = new com.unistream.test.wcflib.FindPerson();
-            ftxml.setRequestMessage(factory.createFindPersonRequestMessage(fprm));
-            CommonLib.printXml(ftxml);
-        }
 }
 
