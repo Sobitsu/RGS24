@@ -20,6 +20,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -33,7 +35,7 @@ public class FindPersonTest {
     private final static QName _DocNumber_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "DocNumber");
     private final static QName _DocSeries_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "DocSeries");
     private final static QName _Phone_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "Phone");
-  
+    private static final Logger logger = LoggerFactory.getLogger(FindPersonTest.class);
     @BeforeClass
     public static void setUpClass() throws IOException {
         TestLib.setUpClass();
@@ -85,7 +87,7 @@ public class FindPersonTest {
         fprm.setDocSeries(CommonLib.MakeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
         fprm.setDocIssueDate(CommonLib.GetGregorianDate(payee.getIdentification().getIssueDate()));
         
-        FindPersonResponseMessage result = FindPerson.FindPersonJAXb(fprm);
+        FindPersonResponseMessage result = FindPerson.findPersonJAXb(fprm);
         assertTrue(result.getFault().isNil());
         assertFalse(result.getPersons().isNil());
         assertNotNull(result.getPersons().getValue());
@@ -100,5 +102,4 @@ public class FindPersonTest {
         assertEquals(result.getPersons().getValue().getPerson().get(0).getFirstNameLat().getValue(),"Roman");
         System.out.println("FindPersonJAXb Ok");    
     }
-    
 }

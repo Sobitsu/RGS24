@@ -22,6 +22,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -38,6 +40,7 @@ public class CreatePersonTest {
     public static void setUpClass() throws IOException {
         TestLib.setUpClass();
     }
+     private static final Logger logger = LoggerFactory.getLogger(CreatePersonTest.class);
 
     public CreatePersonTest() {
     }
@@ -98,8 +101,8 @@ public class CreatePersonTest {
         person.setLastName(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
         person.setMiddleName(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
         
-        CreatePersonResponseMessage result = CreatePerson.CreatePersonJAXb(person);
-        CommonLib.CheckFault(result);
+        CreatePersonResponseMessage result = CreatePerson.createPersonJAXb(person);
+        CommonLib.checkFault(result,logger,"");
         assertTrue(result.getFault().isNil());
         assertFalse(result.getPerson().isNil());
         assertNotNull(result.getPerson().getValue());
@@ -157,9 +160,9 @@ public class CreatePersonTest {
         person.setFirstName(CommonLib.MakeString(_FirstName_QNAME, payee.getFullName().getIndividual().getFirst()));
         person.setLastName(CommonLib.MakeString(_LastName_QNAME, payee.getFullName().getIndividual().getLast()));
         person.setMiddleName(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
-        CreatePersonResponseMessage result = CreatePerson.CreatePersonJAXb(person);
+        CreatePersonResponseMessage result = CreatePerson.createPersonJAXb(person);
         try {
-                CommonLib.CheckFault(result);
+                CommonLib.checkFault(result,logger,"");
             }
         catch (RemittanceException ex) {
             assertNotNull(ex.getCode());

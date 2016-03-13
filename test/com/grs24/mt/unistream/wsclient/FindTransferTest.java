@@ -47,7 +47,7 @@ public class FindTransferTest {
         Double sum = 50000D;
         Integer val = GetCurrency.getCurrencyID("RUB");
         Integer bankId = TestLib.instance.KEY_BANK_ID;
-        FindTransferResponseMessage result = FindTransfer.FindTransfer(controlNumber, sum, val, bankId);
+        FindTransferResponseMessage result = FindTransfer.findTransfer(controlNumber, sum, val, bankId);
         assertTrue(result.getFault().isNil());
         assertFalse(result.getTransfer().isNil());
         assertNotNull(result.getTransfer().getValue());
