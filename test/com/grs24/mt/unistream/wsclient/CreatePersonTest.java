@@ -162,15 +162,15 @@ public class CreatePersonTest {
         person.setMiddleName(CommonLib.MakeString(_MiddleName_QNAME, payee.getFullName().getIndividual().getMiddle()));
         CreatePersonResponseMessage result = CreatePerson.createPersonJAXb(person);
         try {
-                CommonLib.checkFault(result,logger,"");
+                CommonLib.checkFault(result,logger,"10");
             }
         catch (RemittanceException ex) {
             assertNotNull(ex.getCode());
             assertNotNull(ex.getMtError());
             assertNotNull(ex.getStane());
             assertEquals(ex.getCode(),39);
-            assertEquals(ex.getStane(),"FieldDataNotValid");
-            assertEquals(ex.getMtError(),"Incorrect issuance date of the document");
+            assertEquals(ex.getStane(),"10");
+            assertEquals(ex.getMtError(),"FieldDataNotValid:Incorrect issuance date of the document");
         }
         System.out.println("CreatePersonJAXb OK");    
     }
