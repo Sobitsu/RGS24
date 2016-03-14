@@ -5,6 +5,7 @@
  */
 package com.grs24.mt.security;
 
+import com.grs24.mt.unistream.Constants;
 import com.grs24.mt.unistream.MtUnistreamAdapter;
 import javax.security.auth.callback.Callback;
 import com.sun.xml.wss.impl.callback.KeyStoreCallback;
@@ -20,6 +21,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.Base64;
 import java.util.Enumeration;
+import java.util.Map;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import org.slf4j.LoggerFactory;
 /**
@@ -78,16 +80,18 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
                 String keystorepassword = null;
                 String keystorebody = null;
                 KeyStoreCallback kscb = (KeyStoreCallback) callback;
+                Map res = kscb.getRuntimeProperties();
+                
                 String keystoretype = null;
                 if (this instanceof KeyStoreHandler) {
-                          keystoretype = MtUnistreamAdapter.get_keystoreType();
-                          keystorebody = MtUnistreamAdapter.get_keystoreBody();
-                          keystorepassword = MtUnistreamAdapter.get_keystorePassword();
+                          keystoretype = (String)res.get(Constants.PROPERTY_KEY_JKS_KEYSTORE_TYPE);
+                          keystorebody = (String)res.get(Constants.PROPERTY_KEY_JKS_KEYSTORE_KEY);
+                          keystorepassword = (String)res.get(Constants.PROPERTY_KEY_JKS_KEYSTORE_PASSWORD);;
                       }
                 if (this instanceof TrustStoreHandler) {
-                          keystoretype = MtUnistreamAdapter.get_truststoreType();
-                          keystorebody = MtUnistreamAdapter.get_truststoreBody();
-                          keystorepassword = MtUnistreamAdapter.get_truststorePassword();
+                          keystoretype = (String)res.get(Constants.PROPERTY_KEY_JKS_TRUSTSTORE_TYPE);
+                          keystorebody = (String)res.get(Constants.PROPERTY_KEY_JKS_TRUSTSTORE_KEY);
+                          keystorepassword = (String)res.get(Constants.PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD);
                       }
                 try {
                     ks = KeyStore.getInstance(keystoretype);
@@ -120,7 +124,8 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
                 PrivateKeyCallback pkcb = (PrivateKeyCallback) callback;
                 KeyStore ks = pkcb.getKeystore();
                 Key key;
-                String keypassword = MtUnistreamAdapter.get_keyPassword();
+                Map res = pkcb.getRuntimeProperties();
+                String keypassword =(String)res.get(Constants.PROPERTY_KEY_JKS_KEY_PASSWORD);
                 Enumeration<String> aliases;
                 try {
                     aliases = ks.aliases();

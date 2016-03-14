@@ -48,7 +48,7 @@ public class FindTransferTest {
         Double sum = 50000D;
         GetCurrency gcur = new GetCurrency();
         Integer val = gcur.getCurrencyID("RUB",tl.instance.ahh,tl.instance.service);
-        Integer bankId = tl.instance.get_bankID();
+        Integer bankId = tl.instance.KEY_PARTICIPATOR_ID;//.get_bankID();
         FindTransfer ft = new FindTransfer();
         FindTransferResponseMessage result = ft.findTransfer(controlNumber, sum, val, bankId,tl.instance.ahh,tl.instance.service);
         assertTrue(result.getFault().isNil());

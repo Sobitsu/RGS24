@@ -90,9 +90,9 @@ public class MtUnistreamAdapter implements MtAdapter
         * Свойство BANKID для автризационного заголовка
         * @return KEY_BANK_ID
         */
-        public Integer get_bankID(){
+        /*public Integer get_bankID(){
             return KEY_BANK_ID;
-        }
+        }*/
 
         public Integer KEY_PARTICIPATOR_ID;
         /** Свойство PARTID для автризационного заголовка**/
@@ -101,9 +101,9 @@ public class MtUnistreamAdapter implements MtAdapter
         * Свойство PARTID для автризационного заголовка
         * @return KEY_PARTICIPATOR_ID
         */
-        public Integer get_partID(){
+        /*public Integer get_partID(){
             return KEY_PARTICIPATOR_ID;
-        }
+        }*/
 
 
         private Integer KEY_SERVER_REQUEST_TUMEOUT;
@@ -113,77 +113,77 @@ public class MtUnistreamAdapter implements MtAdapter
         * Свойство таймаут ожидания ответа сервера в милисекундах
         * @return KEY_SERVER_REQUEST_TUMEOUT
         */
-        public Integer get_reqTimeOut(){
+        /*public Integer get_reqTimeOut(){
             return KEY_SERVER_REQUEST_TUMEOUT;
-        }
+        }*/
 
 
 
         private Integer KEY_SERVER_CONNECT_TUMEOUT;
                 /** Свойство таймаут ожидания соединения с сервером в миллисекундах 
         * @return KEY_SERVER_CONNECT_TUMEOUT**/
-        public Integer get_connTimeOut(){
+        /*public Integer get_connTimeOut(){
             return KEY_SERVER_CONNECT_TUMEOUT;
-        }
+        }*/
 
 
 
-        private static String KEY_KEYSTORE_PASSWORD;
+        private String KEY_KEYSTORE_PASSWORD;
         /** Свойство пароль доступа к хранилищу ключей
         * @return KEY_KEYSTORE_PASSWORD**/
-        public static String get_keystorePassword(){
+        /*public String get_keystorePassword(){
             return KEY_KEYSTORE_PASSWORD;
-        }
+        }*/
 
 
-        private static String KEY_KEYSTORE_TYPE;
+        private String KEY_KEYSTORE_TYPE;
         /** Свойство тип хранилища ключей PRCS12
         * @return KEY_KEYSTORE_TYPE**/
-        public static String get_keystoreType(){
+        /*public String get_keystoreType(){
             return KEY_KEYSTORE_TYPE;
-        }
+        }*/
 
 
-        private static String KEY_KEY_PASSWORD;
+        private String KEY_KEY_PASSWORD;
         /** Свойство пароль доступа к клдючу в хранилищу ключей, по умолчанию равен
         * @return KEY_KEY_PASSWORD
          *@see MtUnistreamAdapter#KEY_KEYSTORE_PASSWORD **/
-        public static String get_keyPassword(){
+        /*public String get_keyPassword(){
             return KEY_KEY_PASSWORD;
-        }
+        }*/
 
 
 
-        private static String KEY_KEYSTORE_PKCS12_BODY;
+        private String KEY_KEYSTORE_PKCS12_BODY;
         /** Свойство строка в base64 с хранилищем ключей в формате PKCS12
         * @return KEY_KEYSTORE_PKCS12_BODY**/
-        public static String get_keystoreBody(){
+        /*public String get_keystoreBody(){
             return KEY_KEYSTORE_PKCS12_BODY;
-        }
+        }*/
 
 
-        private static String KEY_TRUSTSTORE_JKS_BODY;
+        private String KEY_TRUSTSTORE_JKS_BODY;
         /**
         * Свойство строка в base64 с доверенным хранилищем в формате JKS
         * @return KEY_TRUSTSTORE_JKS_BODY
         */
-        public static String get_truststoreBody(){
+        /*public String get_truststoreBody(){
             return KEY_TRUSTSTORE_JKS_BODY;
-        }
+        }*/
 
-        private static String KEY_TRUSTSTORE_PASSWORD;
+        private String KEY_TRUSTSTORE_PASSWORD;
         /** Свойство пароль доступа к доверенному хранилищу ключей
         * @return KEY_TRUSTSTORE_PASSWORD**/
-        public static String get_truststorePassword(){
+        /*public String get_truststorePassword(){
             return KEY_TRUSTSTORE_PASSWORD;
-        }
+        }*/
 
-        private static String KEY_TRUSTSTORE_TYPE;
+        private String KEY_TRUSTSTORE_TYPE;
         /** Свойство тип доверенного хранилища ключей JKS
         * @return KEY_TRUSTSTORE_TYPE**/
-        public static String get_truststoreType(){
+        /*public String get_truststoreType(){
             return KEY_TRUSTSTORE_TYPE;
-        }
+        }*/
 
 
         private void makeService() throws IOException{
@@ -194,8 +194,17 @@ public class MtUnistreamAdapter implements MtAdapter
             try{
             service = new WebService().getWS2007HttpBindingIWebService();
             Map<String, Object> requestContext = ((BindingProvider)service).getRequestContext();
-            requestContext.put(BindingProviderProperties.REQUEST_TIMEOUT, get_reqTimeOut()); // Timeout in millis
-            requestContext.put(BindingProviderProperties.CONNECT_TIMEOUT, get_connTimeOut()); // Timeout in millis
+            requestContext.put(BindingProviderProperties.REQUEST_TIMEOUT, this.KEY_SERVER_REQUEST_TUMEOUT); // Timeout in millis
+            requestContext.put(BindingProviderProperties.CONNECT_TIMEOUT, this.KEY_SERVER_CONNECT_TUMEOUT); // Timeout in millis
+            requestContext.put(Constants.PROPERTY_KEY_JKS_KEYSTORE_KEY,this.KEY_KEYSTORE_PKCS12_BODY);
+            requestContext.put(Constants.PROPERTY_KEY_JKS_KEYSTORE_PASSWORD,this.KEY_KEYSTORE_PASSWORD);
+            requestContext.put(Constants.PROPERTY_KEY_JKS_KEY_PASSWORD,this.KEY_KEY_PASSWORD);
+            requestContext.put(Constants.PROPERTY_KEY_JKS_TRUSTSTORE_KEY,this.KEY_TRUSTSTORE_JKS_BODY);
+            requestContext.put(Constants.PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD,this.KEY_TRUSTSTORE_PASSWORD);
+            requestContext.put(Constants.PROPERTY_KEY_JKS_KEYSTORE_TYPE,this.KEY_KEYSTORE_TYPE);
+            requestContext.put(Constants.PROPERTY_KEY_JKS_TRUSTSTORE_TYPE,this.KEY_TRUSTSTORE_TYPE);
+            
+            
             }
             catch (Exception ex) {
                 logger.error("makeService:Error while creatin connection",ex);

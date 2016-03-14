@@ -8,6 +8,7 @@ import javax.xml.namespace.QName;
  */
 public interface Constants 
 {
+
         public final QName _FirstName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "FirstName");
         public final QName _LastName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "LastName");
         public final QName _MiddleName_QNAME = new QName("http://schemas.datacontract.org/2004/07/WcfServiceLib", "MiddleName");
@@ -44,6 +45,9 @@ public interface Constants
         public final String PROPERTY_KEY_JKS_KEY_PASSWORD = "KEY.PASSWORD";
         public final String PROPERTY_KEY_JKS_TRUSTSTORE_KEY = "TRUSTSTORE.JKS";
         public final String PROPERTY_KEY_JKS_TRUSTSTORE_PASSWORD = "TRUSTSTORE.PASSWORD";
+        public final String PROPERTY_KEY_JKS_KEYSTORE_TYPE = "KEYSTORE.TYPE";
+        public final String PROPERTY_KEY_JKS_TRUSTSTORE_TYPE = "TRUSTSTORE.TYPE";
+
         public final String PROPERTY_KEY_BANK_ID = "BANKID";
         public final String PROPERTY_KEY_PART_ID = "PARTID";
         public final Integer DEFAULT_REQUEST_TIMEOUT = 3000;
