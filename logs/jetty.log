@@ -12,3 +12,67 @@
 01.03.2016 13:59:39 [ERROR] .mt.unistream.wsclient.CommonLib - Unistream returned error: {0}
 03.03.2016 15:55:55 [ERROR] .mt.unistream.MtUnistreamAdapter - Сумма перевода меньше нуля
 03.03.2016 16:02:22 [ERROR] .mt.unistream.MtUnistreamAdapter - Сумма перевода меньше нуля
+14.03.2016 10:47:52 [DEBUG] .mt.unistream.MtUnistreamAdapter - init: <- init='{BANKID=383589, TRUSTSTORE.PASSWORD=123456, KEYSTORE.PKCS12=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, TRUSTSTORE.JKS=/u3+7QAAAAIAAAABAAAAAgAGc2VydmVyAAABUnxPp6YABVguNTA5AAABtTCCAbEwggEaoAMCAQICEHv2qfm2/duhSvJfEhbT8DMwDQYJKoZIhvcNAQEFBQAwFzEVMBMGA1UEAxMMVVBsdXNTZXJ2aWNlMB4XDTExMTEyMzIxMDAwMFoXDTIxMTEzMDIxMDAwMFowFzEVMBMGA1UEAxMMVVBsdXNTZXJ2aWNlMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDq5oBhVwZHw9YMolmcGkKGhNf6aNLD3uuCUyf6ixasFDrroj3lM+KkYy5xUTSofmFheyiP+licRGRjiC8taKv0dmEJs5BSoUCJmDw4SQrmBwXtacN2lVOBEy+JzQ+2y8jBM1FkePv2SBBWwOGd3ElzQOF2FX1Pc71rBScOUDTRZQIDAQABMA0GCSqGSIb3DQEBBQUAA4GBAHdCt/wZijuECfGYqeraL7VHxlYVgWfgjBSB4DtXkk25OwTY/7qfhZPbxCOhhjnWaKGOoyihNwnOG18IhF9mjN2hpZWDqJG5l0D4d26plY0Ta1/a4gt0HoYUCx7tndC4hVoj0Utw11NLuD3+rusrCA6Zh1q4Te6YPQxAtw/i1ONv6QpAI00Zx2fS6+dk0gdPsDPTuAw=, APIKEY=1wwteyFGFew624, LOGIN=g2.grstwentyfour.rus, PARTID=383589, KEYSTORE.PASSWORD=123456, SERVER.CONNECT_TIMEOUT=3000, SERVER.REQUEST_TIMEOUT=10000, PASSWORD=7!LrO7i7}
+14.03.2016 10:47:52 [DEBUG] .mt.unistream.wsclient.CommonLib - makeAuthHead: <- start
+14.03.2016 10:47:52 [DEBUG] .mt.unistream.wsclient.CommonLib - makeAuthHead: -> ahh = javax.xml.bind.JAXBElement@2b4a2ec7
+14.03.2016 10:47:52 [DEBUG] .mt.unistream.MtUnistreamAdapter - makeService: start
+14.03.2016 10:49:38 [ERROR] .mt.unistream.MtUnistreamAdapter - makeService:Error while creatin connection
+javax.xml.ws.WebServiceException: Failed to access the WSDL at: http://test2.unistream.com:82/wcflib-tc/service.svc?wsdl. It failed with: 
+	Connection refused: connect.
+	at com.sun.xml.ws.wsdl.parser.RuntimeWSDLParser.tryWithMex(RuntimeWSDLParser.java:265)
+	at com.sun.xml.ws.wsdl.parser.RuntimeWSDLParser.parse(RuntimeWSDLParser.java:246)
+	at com.sun.xml.ws.wsdl.parser.RuntimeWSDLParser.parse(RuntimeWSDLParser.java:209)
+	at com.sun.xml.ws.wsdl.parser.RuntimeWSDLParser.parse(RuntimeWSDLParser.java:178)
+	at com.sun.xml.ws.client.WSServiceDelegate.parseWSDL(WSServiceDelegate.java:363)
+	at com.sun.xml.ws.client.WSServiceDelegate.<init>(WSServiceDelegate.java:321)
+	at com.sun.xml.ws.client.WSServiceDelegate.<init>(WSServiceDelegate.java:230)
+	at com.sun.xml.ws.client.WSServiceDelegate.<init>(WSServiceDelegate.java:211)
+	at com.sun.xml.ws.client.WSServiceDelegate.<init>(WSServiceDelegate.java:207)
+	at com.sun.xml.ws.spi.ProviderImpl.createServiceDelegate(ProviderImpl.java:114)
+	at javax.xml.ws.Service.<init>(Service.java:77)
+	at com.unistream.test.wcflib.WebService.<init>(WebService.java:42)
+	at com.grs24.mt.unistream.MtUnistreamAdapter.makeService(MtUnistreamAdapter.java:195)
+	at com.grs24.mt.unistream.MtUnistreamAdapter.init(MtUnistreamAdapter.java:667)
+	at com.grs24.mt.unistream.wsclient.TestLib.setUpClass(TestLib.java:62)
+	at com.grs24.mt.unistream.wsclient.FindPersonTest.setUpClass(FindPersonTest.java:42)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:24)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at junit.framework.JUnit4TestAdapter.run(JUnit4TestAdapter.java:38)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.run(JUnitTestRunner.java:532)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.launch(JUnitTestRunner.java:1179)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.main(JUnitTestRunner.java:1030)
+Caused by: java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at java.net.Socket.connect(Socket.java:538)
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180)
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432)
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527)
+	at sun.net.www.http.HttpClient.<init>(HttpClient.java:211)
+	at sun.net.www.http.HttpClient.New(HttpClient.java:308)
+	at sun.net.www.http.HttpClient.New(HttpClient.java:326)
+	at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:1169)
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1105)
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:999)
+	at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:933)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1513)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+	at java.net.URL.openStream(URL.java:1038)
+	at com.sun.xml.ws.wsdl.parser.RuntimeWSDLParser.createReader(RuntimeWSDLParser.java:999)
+	at com.sun.xml.ws.wsdl.parser.RuntimeWSDLParser.resolveWSDL(RuntimeWSDLParser.java:400)
+	at com.sun.xml.ws.wsdl.parser.RuntimeWSDLParser.parse(RuntimeWSDLParser.java:231)
+	... 28 more
