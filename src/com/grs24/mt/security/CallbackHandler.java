@@ -20,6 +20,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.Base64;
 import java.util.Enumeration;
+import java.util.Map;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import org.slf4j.LoggerFactory;
 /**
@@ -78,6 +79,8 @@ public abstract class CallbackHandler implements javax.security.auth.callback.Ca
                 String keystorepassword = null;
                 String keystorebody = null;
                 KeyStoreCallback kscb = (KeyStoreCallback) callback;
+                Map runtimeproperty = kscb.getRuntimeProperties();
+                
                 String keystoretype = null;
                 if (this instanceof KeyStoreHandler) {
                           keystoretype = MtUnistreamAdapter.get_keystoreType();
