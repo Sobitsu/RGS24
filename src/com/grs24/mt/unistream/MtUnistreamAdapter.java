@@ -841,6 +841,7 @@ public class MtUnistreamAdapter implements MtAdapter
 */ 
         @Override
         public void moneyPay(String mtID, String mtcn, PersonHolder payee, String docID, String docDate) throws RemittanceException, IOException {
+            try {
             CommonLib cl = new CommonLib();
             makeAhh();
             makeService();
@@ -947,5 +948,9 @@ public class MtUnistreamAdapter implements MtAdapter
                    logger.debug("moneyPay: finish -> transfer.status = "+transfer.getStatus().toString());
             }
             checkTransferStatus(transfer);
+            }
+            catch (RemittanceException ex) { 
+                if (ex.getCode() != 30000)  throw ex;
+            }
         }
 }
