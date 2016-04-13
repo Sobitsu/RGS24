@@ -171,7 +171,7 @@ public class CreatePersonTest {
             assertNotNull(ex.getStane());
             assertEquals(ex.getCode(),39);
             assertEquals(ex.getStane(),"10");
-            assertEquals(ex.getMtError(),"FieldDataNotValid:Incorrect issuance date of the document");
+            assertEquals(ex.getMtError(),"FieldDataNotValid:Wrong value in ExpiryDate field.");
         }
     }
     

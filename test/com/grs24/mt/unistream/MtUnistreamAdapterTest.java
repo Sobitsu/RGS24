@@ -22,6 +22,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.math.BigDecimal;
+import org.junit.Ignore;
 
 /**
  *
@@ -58,17 +59,17 @@ public class MtUnistreamAdapterTest {
     @Test
     public void testMoneySearch() throws Exception {
         RemittanceHolder[] result = null;
-        String mtcn = "743818837598";
+        String mtcn = "784555934685";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
-        BigDecimal bd = new BigDecimal("50000");
+        BigDecimal bd = new BigDecimal("150");
         approxDstFunds.setAmount(bd);
-        approxDstFunds.setCur("RUB");
+        approxDstFunds.setCur("USD");
         String orgCountry = "Russia";
         String dstCountry = "Russia";
         result = tl.instance.moneySearch(mtcn, approxDstFunds, approxDstFunds, orgCountry, dstCountry);
         assertNotNull(result[0]);
-        assertEquals(result[0].getMtID(),"16016603");
+        assertEquals(result[0].getMtID(),"16015653");
 
         mtcn = "036530144512";
         approxOrgFunds = null;
@@ -220,21 +221,16 @@ public class MtUnistreamAdapterTest {
     @Test
     public void testMoneyPay1() throws Exception {
         PersonHolder payee = setpayee();
-        String mtID = "16016056";
+        String mtID = "16015653";
         String docID = "";
         String docDate = "";
-        try{
-            tl.instance.moneyPay(mtID, "", payee, docID, docDate);
-        }
-        catch (RemittanceException ex) {
-            if (ex.getCode() != 30000)  fail(" Ошибка оплаты перевода");
-        }
+        tl.instance.moneyPay(mtID, "", payee, docID, docDate);
     }
 
     
     @Test
     public void testMoneyPay() throws Exception {
-        String mtcn = "622049723662";
+        String mtcn = "938959708877";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
         BigDecimal bd = new BigDecimal("50000");
@@ -250,14 +246,7 @@ public class MtUnistreamAdapterTest {
         System.out.println(ident);
         String docID = "";
         String docDate = "";
-        try{
-            tl.instance.moneyPay(mtID, mtcn, payee, docID, docDate);
-        }
-        catch (RemittanceException ex) {
-            if (ex.getCode() == 30000)  {System.out.println("moneyHold OK");}
-            else
-            {fail(" Ошибка оплаты перевода");}
-        }
+        tl.instance.moneyPay(mtID, mtcn, payee, docID, docDate);
     }
 
 

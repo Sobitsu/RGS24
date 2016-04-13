@@ -44,10 +44,10 @@ public class FindTransferTest {
      */
     @Test
     public void testFindTransfer() throws Exception {
-        String controlNumber = "743818837598";
-        Double sum = 50000D;
+        String controlNumber = "784555934685";
+        Double sum = 150D;
         GetCurrency gcur = new GetCurrency();
-        Integer val = gcur.getCurrencyID("RUB",tl.instance.ahh,tl.instance.service);
+        Integer val = gcur.getCurrencyID("USD",tl.instance.ahh,tl.instance.service);
         Integer bankId = tl.instance.KEY_PARTICIPATOR_ID;//.get_bankID();
         FindTransfer ft = new FindTransfer();
         FindTransferResponseMessage result = ft.findTransfer(controlNumber, sum, val, bankId,tl.instance.ahh,tl.instance.service);
@@ -55,6 +55,6 @@ public class FindTransferTest {
         assertFalse(result.getTransfer().isNil());
         assertNotNull(result.getTransfer().getValue());
         assertFalse(result.getTransfer().getValue().getAmounts().isNil());
-        assertEquals(result.getTransfer().getValue().getID().longValue(),16016603L);
+        assertEquals(result.getTransfer().getValue().getID().longValue(),16015653L);
     }
 }
