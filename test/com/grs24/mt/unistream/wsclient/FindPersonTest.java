@@ -88,18 +88,26 @@ public class FindPersonTest {
         fprm.setDocSeries(cl.makeString(_DocSeries_QNAME,payee.getIdentification().getSerialNumber()));
         fprm.setDocIssueDate(cl.GetGregorianDate(payee.getIdentification().getIssueDate()));
         FindPerson fp = new FindPerson();
-        FindPersonResponseMessage result = fp.findPersonJAXb(fprm,tl.instance.ahh,tl.instance.service);
-        assertTrue(result.getFault().isNil());
-        assertFalse(result.getPersons().isNil());
-        assertNotNull(result.getPersons().getValue());
-        assertFalse(result.getPersons().getValue().getPerson().isEmpty());
-        assertTrue(result.getPersons().getValue().getPerson().get(0).getBirthDate().isValid());
-        assertFalse(result.getPersons().getValue().getPerson().get(0).getDocuments().isNil());
-        assertFalse(result.getPersons().getValue().getPerson().get(0).getPhones().isNil());
-        assertFalse(result.getPersons().getValue().getPerson().get(0).getFirstName().isNil());
-        assertFalse(result.getPersons().getValue().getPerson().get(0).getLastName().isNil());
-        assertFalse(result.getPersons().getValue().getPerson().get(0).getMiddleName().isNil());
-        assertFalse(result.getPersons().getValue().getPerson().get(0).getLastNameLat().isNil());
-        assertEquals(result.getPersons().getValue().getPerson().get(0).getFirstNameLat().getValue(),"Roman");
+        logger.debug("testFindPersonJAXb:before");
+        try {
+            FindPersonResponseMessage result = fp.findPersonJAXb(fprm,tl.instance.ahh,tl.instance.service);
+            assertTrue(result.getFault().isNil());
+            assertFalse(result.getPersons().isNil());
+            assertNotNull(result.getPersons().getValue());
+            assertFalse(result.getPersons().getValue().getPerson().isEmpty());
+            assertTrue(result.getPersons().getValue().getPerson().get(0).getBirthDate().isValid());
+            assertFalse(result.getPersons().getValue().getPerson().get(0).getDocuments().isNil());
+            assertFalse(result.getPersons().getValue().getPerson().get(0).getPhones().isNil());
+            assertFalse(result.getPersons().getValue().getPerson().get(0).getFirstName().isNil());
+            assertFalse(result.getPersons().getValue().getPerson().get(0).getLastName().isNil());
+            assertFalse(result.getPersons().getValue().getPerson().get(0).getMiddleName().isNil());
+            assertFalse(result.getPersons().getValue().getPerson().get(0).getLastNameLat().isNil());
+            assertEquals(result.getPersons().getValue().getPerson().get(0).getFirstNameLat().getValue(),"Roman");
+        }
+        catch (Exception ex) 
+        {
+            logger.debug("testFindPersonJAXb:after");
+            fail("Ошибка при выполнении теста" + ex.getMessage());
+        }
     }
 }

@@ -22,8 +22,8 @@ public class TestLib {
     private final String KEY_USER_AUTHED_PASSWORD = "7!LrO7i7";
     private final Integer KEY_BANK_ID = 383589;
     private final Integer KEY_PARTICIPATOR_ID = 383589;
-    private final Integer KEY_SERVER_REQUEST_TUMEOUT = 10000;
-    private final Integer KEY_SERVER_CONNECT_TUMEOUT = 3000;
+    private final Integer KEY_SERVER_REQUEST_TUMEOUT = 8000;
+    private final Integer KEY_SERVER_CONNECT_TUMEOUT = 5000;
     private final String KEY_KEYSTORE_PASSWORD = "123456";
    // private static final String KEY_KEY_PASSWORD = "123456";
     private final String KEY_TRUSTSTORE_PASSWORD = "123456";
