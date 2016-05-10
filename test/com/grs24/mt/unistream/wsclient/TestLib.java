@@ -6,8 +6,11 @@
 package com.grs24.mt.unistream.wsclient;
 
 import com.grs24.mt.unistream.MtUnistreamAdapter;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Properties;
@@ -29,6 +32,7 @@ public class TestLib {
     private final String KEY_TRUSTSTORE_PASSWORD = "123456";
     private final String KEYSTOREPATH = "xws-security/prv_key_unistream.pfx";//"xws-security/client.jks";
     private final String TRUSTSTOREPATH = "xws-security/server.jks";
+    private final String TESTFILENAME = "testdata/testTransfer.csv";
 //    private static final String KEY_TRUSTSTORE_TYPE = "JKS";
 //    private static final String KEY_KEYSTORE_TYPE = "JKS";
     
@@ -60,5 +64,52 @@ public class TestLib {
         //cfg.setProperty("TRUSTSTORE.TYPE",  KEY_TRUSTSTORE_TYPE);
         instance = new MtUnistreamAdapter();
         instance.init(cfg);    
+    }
+    public TestTransferReq getReqSearch() throws FileNotFoundException, IOException {
+        TestTransferReq retval = new TestTransferReq();
+        BufferedReader myfile = new BufferedReader (new FileReader(TESTFILENAME));
+        String line;
+        String buf;
+        while (!(line = myfile.readLine()).isEmpty()) {
+            buf = line.substring(0, line.indexOf(";", 1));
+            if (buf.equals("search")) {
+                int i1;
+                int i2;
+                i1 = line.indexOf(";", 1)+1;
+                i2 = line.indexOf(";", i1);
+                retval.controlNumber = line.substring(i1, i2);
+                i1 = line.indexOf(";", i2)+1;
+                i2 = line.indexOf(";", i1);
+                retval.sum = line.substring(i1, i2);
+                i1 = line.indexOf(";", i2)+1;
+                retval.currency = line.substring(i1);
+                break;
+            }
+        };
+        return retval;
+    }
+
+    public TestTransferReq getReqPay() throws IOException {
+        TestTransferReq retval = new TestTransferReq();
+        BufferedReader myfile = new BufferedReader (new FileReader(TESTFILENAME));
+        String line;
+        String buf;
+        while (!(line = myfile.readLine()).isEmpty()) {
+            buf = line.substring(0, line.indexOf(";", 1));
+            if (buf.equals("pay")) {
+                int i1;
+                int i2;
+                i1 = line.indexOf(";", 1)+1;
+                i2 = line.indexOf(";", i1);
+                retval.controlNumber = line.substring(i1, i2);
+                i1 = line.indexOf(";", i2)+1;
+                i2 = line.indexOf(";", i1);
+                retval.sum = line.substring(i1, i2);
+                i1 = line.indexOf(";", i2)+1;
+                retval.currency = line.substring(i1);
+                break;
+            }
+        }
+     return retval;
     }
 }

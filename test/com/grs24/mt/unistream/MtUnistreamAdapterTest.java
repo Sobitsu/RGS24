@@ -14,6 +14,7 @@ import com.grs24.msg.PersonHolder;
 import com.grs24.mt.RemittanceException;
 import com.grs24.mt.RemittanceHolder;
 import com.grs24.mt.unistream.wsclient.TestLib;
+import com.grs24.mt.unistream.wsclient.TestTransferReq;
 import java.io.IOException;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -59,17 +60,17 @@ public class MtUnistreamAdapterTest {
     @Test
     public void testMoneySearch() throws Exception {
         RemittanceHolder[] result = null;
-        String mtcn = "784555934685";
+        TestTransferReq searchtr = tl.getReqSearch();
+        String mtcn = searchtr.controlNumber;//"784555934685";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
-        BigDecimal bd = new BigDecimal("150");
+        BigDecimal bd = new BigDecimal(searchtr.sum);
         approxDstFunds.setAmount(bd);
-        approxDstFunds.setCur("USD");
+        approxDstFunds.setCur(searchtr.currency);
         String orgCountry = "Russia";
         String dstCountry = "Russia";
         result = tl.instance.moneySearch(mtcn, approxDstFunds, approxDstFunds, orgCountry, dstCountry);
         assertNotNull(result[0]);
-        assertEquals(result[0].getMtID(),"16015653");
 
         mtcn = "036530144512";
         approxOrgFunds = null;
@@ -217,7 +218,7 @@ public class MtUnistreamAdapterTest {
         payee.setResidentCountry("RUS");
         return payee;
     }
-    
+    @Ignore
     @Test
     public void testMoneyPay1() throws Exception {
         PersonHolder payee = setpayee();
@@ -230,12 +231,13 @@ public class MtUnistreamAdapterTest {
     
     @Test
     public void testMoneyPay() throws Exception {
-        String mtcn = "938959708877";
+        TestTransferReq searchtr = tl.getReqPay();
+        String mtcn = searchtr.controlNumber;//"784555934685";
         FundsHolder approxOrgFunds = null;
         FundsHolder approxDstFunds = new FundsHolder();
-        BigDecimal bd = new BigDecimal("50000");
+        BigDecimal bd = new BigDecimal(searchtr.sum);
+        approxDstFunds.setCur(searchtr.currency);
         approxDstFunds.setAmount(bd);
-        approxDstFunds.setCur("RUB");
         String orgCountry = "Russia";
         String dstCountry = "Russia";
         RemittanceHolder[] result = tl.instance.moneySearch(mtcn, approxOrgFunds, approxDstFunds, orgCountry, dstCountry);
