@@ -845,6 +845,10 @@ is divided into following sections:
                     <fileset dir="${build.classes.dir}" excludes="${dist.archive.excludes}"/>
                     <manifest>
                         <attribute name="Class-Path" value="${jar.classpath}"/>
+                        <attribute name="Built-By" value="${user.name}"/>
+                        <attribute name="Implementation-Vendor" value="${impl.vendor}"/>
+                        <attribute name="Implementation-Title" value="${impl.title}"/>
+                        <attribute name="Implementation-Version" value="${impl.version}"/>
                         <customize/>
                     </manifest>
                 </copylibs>
