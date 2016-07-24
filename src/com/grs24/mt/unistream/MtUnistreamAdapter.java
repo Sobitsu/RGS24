@@ -22,6 +22,8 @@ import com.sun.xml.ws.client.BindingProviderProperties;
 import com.unistream.test.wcflib.IWebService;
 import com.unistream.test.wcflib.WebService;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.xml.bind.JAXBElement;
@@ -617,6 +619,20 @@ public class MtUnistreamAdapter implements MtAdapter
                     if (logger.isDebugEnabled()) {
                         logger.debug("init: <- init='"+init.toString());
                     } 
+                    LogManager.getLogManager().readConfiguration(com.grs24.mt.unistream.MtUnistreamAdapter.class.getResourceAsStream("/logging.properties"));
+                                      
+                    //LogManager.getLogManager().readConfiguration(com.sun.xml.ws.policy.parser.PolicyConfigParser.class.getResourceAsStream("logging.properties"));
+                    // Попытка убрать лишние сообщения с логе
+                        //java.util.logging.Logger log;
+                        //log = java.util.logging.Logger.getLogger(com.sun.xml.ws.security.opt.impl.JAXBFilterProcessingContext.class.getName());
+                        //log.setLevel(Level.OFF);
+                        //com.sun.xml.ws.policy.privateutil.PolicyLogger log1;
+                        //log1 = com.sun.xml.ws.policy.privateutil.PolicyLogger.getLogger(com.sun.xml.ws.policy.parser.PolicyConfigParser.class);
+                        //log1.setLevel(Level.OFF);
+                        //log1.entering();
+                        //log1.info("Проверка");
+                    // Попытка убрать лишние сообщения с логе
+                    
                     String val;
                     this.KEY_USER_AUTHED_APIKEY = init.getProperty(Constants.PROPERTY_KEY_USER_AUTHED_APIKEY, String.valueOf(Constants.PROPERTY_KEY_USER_AUTHED_APIKEY));
                     this.KEY_USER_AUTHED_LOGIN = init.getProperty(Constants.PROPERTY_KEY_USER_AUTHED_LOGIN, String.valueOf(Constants.PROPERTY_KEY_USER_AUTHED_LOGIN));
