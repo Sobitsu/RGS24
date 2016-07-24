@@ -620,18 +620,6 @@ public class MtUnistreamAdapter implements MtAdapter
                         logger.debug("init: <- init='"+init.toString());
                     } 
                     LogManager.getLogManager().readConfiguration(com.grs24.mt.unistream.MtUnistreamAdapter.class.getResourceAsStream("/logging.properties"));
-                                      
-                    //LogManager.getLogManager().readConfiguration(com.sun.xml.ws.policy.parser.PolicyConfigParser.class.getResourceAsStream("logging.properties"));
-                    // Попытка убрать лишние сообщения с логе
-                        //java.util.logging.Logger log;
-                        //log = java.util.logging.Logger.getLogger(com.sun.xml.ws.security.opt.impl.JAXBFilterProcessingContext.class.getName());
-                        //log.setLevel(Level.OFF);
-                        //com.sun.xml.ws.policy.privateutil.PolicyLogger log1;
-                        //log1 = com.sun.xml.ws.policy.privateutil.PolicyLogger.getLogger(com.sun.xml.ws.policy.parser.PolicyConfigParser.class);
-                        //log1.setLevel(Level.OFF);
-                        //log1.entering();
-                        //log1.info("Проверка");
-                    // Попытка убрать лишние сообщения с логе
                     
                     String val;
                     this.KEY_USER_AUTHED_APIKEY = init.getProperty(Constants.PROPERTY_KEY_USER_AUTHED_APIKEY, String.valueOf(Constants.PROPERTY_KEY_USER_AUTHED_APIKEY));
